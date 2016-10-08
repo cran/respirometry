@@ -10,7 +10,7 @@ conv_NH4(n_waste, from = "umol_NH4", to = "all")
 \arguments{
 \item{n_waste}{a numeric vector of the ammonia or nitrogen value(s).}
 
-\item{from}{a string describing the unit used to measure \code{n_waste}. Default is "umol_NH4" Options are:\describe{
+\item{from}{a string describing the unit used to measure \code{n_waste}. Default is "umol_NH4" Options are:\itemize{
 \item{umol_NH4}{}
 \item{mg_NH4}{}
 \item{mg_N}{}

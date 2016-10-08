@@ -9,14 +9,15 @@
 #' @param flush_vol volume of the flush reservoir (liter).
 #' @param flush_remain volume of the flush reservoir that will remain after the flush (liter).
 #' @param temp temperature (°C). Default is 25 °C.
-#' @param sal salinity (psu). Default is 35 psu.
+#' @param sal salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.
 #' @param TA (optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
 #' 
 #' @return moles of CO2 gas to be added to the flush reservoir.
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @note It is assummed that the entire reservoir is drained into the respirometer during the flush. It is also assumed that all of the CO2 added dissolves and remains in solution.
+#' @note It is assummed that the entire reservoir is drained into the respirometer during the flush. It is also assumed that all of the CO2 added dissolves and remains in solution. This can be achieved (almost completely) by bubbling CO2 according to Jokiel et al. 2014.
+#' @references Jokiel PL, Bahr KD, Rodgers KS. 2014. Low-cost, high-flow mesocosm system for simulating ocean acidification with CO2 gas. Limnol Oceanogr Methods. 12:313–322.
 #' @seealso \code{\link{co2_rate}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}
 #' 
 #' @examples

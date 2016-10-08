@@ -5,14 +5,16 @@
 \alias{guess_TA}
 \title{Estimate total alkalinity from salinity}
 \usage{
-guess_TA(temp = 25, sal = 35, region = NULL)
+guess_TA(temp = 25, sal = 35, region = NULL, extend = TRUE)
 }
 \arguments{
 \item{temp}{temperature (°C). Default is 25 °C.}
 
 \item{sal}{salinity (psu). Default is 35 psu. 31 \eqn{\le} \code{sal} \eqn{\le} 38; may be narrower for some regions.}
 
-\item{region}{(optional) geographic region. Options are "(Sub)tropics", "Equatorial Upwelling Pacific", "North Atlantic", "North Pacific", and "Southern Ocean". Default is NULL. If undefined, the average from all these regions is used.}
+\item{region}{(optional) geographic region. Options are "(Sub)tropics", "Equatorial Upwelling Pacific", "North Atlantic", "North Pacific", and "Southern Ocean". Default is \code{NULL}. If undefined, the average from all these regions is used.}
+
+\item{extend}{logical. If salinity is \eqn{\le} 5 psu outside of the bounds defined by Lee et al. 2006 (see Details), should a guess be extrapolated? Default is \code{TRUE}.}
 }
 \value{
 An estimate of the total alkalinity (umol / kg). If \code{NA} or \code{NaN} are returned, confirm the \code{temp} and \code{sal} values are within acceptable ranges for the region of interest.
@@ -34,6 +36,11 @@ Estimates total alkalinity using the equations provided by Lee et al. 2006 (Geop
 guess_TA(temp = 22, sal = 33)
 guess_TA(temp = 12, sal = 33, region = "North Atlantic")
 guess_TA(temp = 20, sal = 31:35)
+
+guess_TA(sal = 31) # salinity is within bounds
+guess_TA(sal = 30) # salinity is outside the bounds and TA is extrapolated
+guess_TA(sal = 30, extend = FALSE) # do not extrapolate TA
+guess_TA(sal = 25, extend = TRUE) # will not extrapolate with sal > 5 psu out of bounds
 
 }
 \author{

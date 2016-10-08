@@ -6,7 +6,7 @@
 #' @param init_pH ambient pH of the intake flow (total scale).
 #' @param flow_rate rate of water flow into the respirometer (liters / minute).
 #' @param temp temperature (°C). Default is 25 °C.
-#' @param sal salinity (psu). Default is 35 psu.
+#' @param sal salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.
 #' @param TA (optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
 #' @param MO2 (optional) oxygen consumption rate (umol / hr). If defined, the CO2 to be added is reduced to compensate for the CO2 produced by the organism.
@@ -15,7 +15,7 @@
 #' @return moles of CO2 gas to be added to the intake flow per minute.
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @note It is assumed that all of the CO2 added dissolves and remains in solution.
+#' @note It is assumed that all of the CO2 added dissolves and remains in solution. This can be achieved (almost completely) by bubbling CO2 according to Jokiel et al. 2014.
 #' @references Jokiel PL, Bahr KD, Rodgers KS. 2014. Low-cost, high-flow mesocosm system for simulating ocean acidification with CO2 gas. Limnol Oceanogr Methods. 12:313–322.
 #' @seealso \code{\link{co2_add}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}
 #' 

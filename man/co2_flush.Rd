@@ -23,7 +23,7 @@ co2_flush(goal_pco2, resp_pH, resp_vol, flush_pH, flush_vol, flush_remain = 0,
 
 \item{temp}{temperature (°C). Default is 25 °C.}
 
-\item{sal}{salinity (psu). Default is 35 psu.}
+\item{sal}{salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.}
 
 \item{TA}{(optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.}
 
@@ -36,7 +36,7 @@ moles of CO2 gas to be added to the flush reservoir.
 Calculates the moles of CO2 gas to be added to a seawater reservoir before flushing a respirometer to achieve the desired pCO2 in the respirometer after the flush. Useful for ocean acidification experiments where CO2 treatments are desired.
 }
 \note{
-It is assummed that the entire reservoir is drained into the respirometer during the flush. It is also assumed that all of the CO2 added dissolves and remains in solution.
+It is assummed that the entire reservoir is drained into the respirometer during the flush. It is also assumed that all of the CO2 added dissolves and remains in solution. This can be achieved (almost completely) by bubbling CO2 according to Jokiel et al. 2014.
 }
 \examples{
 # I want the respirometer to have a pCO2 = 1000 uatm. It currently has a pH of 7.6 and is 90 L.
@@ -47,6 +47,9 @@ co2_flush(goal_pco2 = 1000, resp_pH = 7.6, resp_vol = 90, flush_pH = 7.9, flush_
 }
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}
+}
+\references{
+Jokiel PL, Bahr KD, Rodgers KS. 2014. Low-cost, high-flow mesocosm system for simulating ocean acidification with CO2 gas. Limnol Oceanogr Methods. 12:313–322.
 }
 \seealso{
 \code{\link{co2_rate}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}

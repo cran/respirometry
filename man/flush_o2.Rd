@@ -5,7 +5,7 @@
 \alias{flush_o2}
 \title{Estimate dissolved O2 after a flush}
 \usage{
-flush_o2(resp_vol, flow_rate, duration, resp_o2, flush_o2)
+flush_o2(resp_vol, flow_rate, duration, resp_o2, flush_o2, final_o2)
 }
 \arguments{
 \item{resp_vol}{volume of the respirometer (liter).}
@@ -14,19 +14,21 @@ flush_o2(resp_vol, flow_rate, duration, resp_o2, flush_o2)
 
 \item{duration}{duration of the flush (minutes).}
 
-\item{resp_o2}{O2 inside the respirometer before the flush (units do not matter as long as it is consistant with \code{flush_o2}).}
+\item{resp_o2}{O2 inside the respirometer before the flush (units do not matter as long as it is consistant with \code{flush_o2} and \code{final_o2}).}
 
-\item{flush_o2}{O2 of the water used for flushing the respirometer (units do not matter as long as it is consistant with \code{resp_o2}).}
-}
-\value{
-The dissolved O2 in the respirometer after the flush.
+\item{flush_o2}{O2 of the water used for flushing the respirometer (units do not matter as long as it is consistant with \code{resp_o2} and \code{final_o2}).}
+
+\item{final_o2}{O2 of the water in the respirometer at the end of the flush (units do not matter as long as it is consistant with \code{resp_o2} and \code{flush_o2}).}
 }
 \description{
-Given the dissolved O2 inside the respirometer and in the flush reservoir, the new pO2 or [O2] in the respirometer after the flush is estimated.
+Calculate the pO2 or [O2] in a respirometer after a flush. Given 5 of the 6 parameters, the 6th parameter is calculated.
 }
 \examples{
 # What will be the pO2 in the respirometer after this flush?
 flush_o2(resp_vol = 90, flow_rate = 10, duration = 3, resp_o2 = 15, flush_o2 = 21)
+
+# I want to bring the pO2 back up to 95\% air saturation. How long do I need to flush?
+flush_o2(resp_vol = 20, flow_rate = 2, resp_o2 = 75, flush_o2 = 99, final_o2 = 95)
 
 }
 \author{

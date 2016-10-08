@@ -17,7 +17,7 @@ co2_add(goal_pco2, start_pH, vol, temp = 25, sal = 35, TA = NULL,
 
 \item{temp}{temperature (°C). Default is 25 °C.}
 
-\item{sal}{salinity (psu). Default is 35 psu.}
+\item{sal}{salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.}
 
 \item{TA}{(optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.}
 
@@ -30,16 +30,19 @@ moles of CO2 gas to be added to the seawater.
 Calculates the moles of CO2 gas to be added to a volume of seawater to achieve the desired pCO2. Useful for ocean acidification experiments where CO2 treatments are desired.
 }
 \note{
-It is assumed that all of the CO2 added dissolves and remains in solution.
+It is assumed that all of the CO2 added dissolves and remains in solution. This can be achieved (almost completely) by bubbling CO2 according to Jokiel et al. 2014.
 }
 \examples{
-# I want the 50 L respirometer to have a pCO2 = 1000 uatm. It currently has a pH of 7.88.
+# I want the 50 L reservoir to have a pCO2 = 1000 uatm. It currently has a pH of 7.88.
 # How many moles of CO2 gas should be added to the water to reach my desired pCO2?
 co2_add(goal_pco2 = 1000, start_pH = 7.88, vol = 50)
 
 }
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}
+}
+\references{
+Jokiel PL, Bahr KD, Rodgers KS. 2014. Low-cost, high-flow mesocosm system for simulating ocean acidification with CO2 gas. Limnol Oceanogr Methods. 12:313–322.
 }
 \seealso{
 \code{\link{co2_rate}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}

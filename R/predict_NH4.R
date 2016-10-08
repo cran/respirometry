@@ -5,9 +5,6 @@
 #' @details
 #' Given a known amount of oxygen consumed and an estimated O:N ratio, the amount of NH4 produced can be estimated. Production or consumption of ammonium by "background" microbes or conversion of ammonium to nitrite and nitrate is ignored since bacteria in the respirometer are typically sought to be in low levels.
 #' 
-#' o2_unit = "percent_a.s.", o2_nh4_ratio, temp = 25, sal = 35, atm_pres = 1013.25
-#' 
-#' 
 #' @param o2_drop a numeric value or vector describing the change in O2. Default is 10.
 #' @param o2_unit a string describing the unit used to measure \code{o2_drop}. Default is "percent_a.s." Options are from \code{\link{conv_o2}}.
 #' @param o2_nh4_ratio molar ratio of O2 consumed to NH4+ produced.

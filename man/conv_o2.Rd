@@ -11,7 +11,7 @@ conv_o2(o2 = 100, from = "percent_a.s.", to = "all", temp = 25,
 \arguments{
 \item{o2}{a numeric vector of the O2 value(s). Default is 100.}
 
-\item{from}{a string describing the unit used to measure \code{o2}. Default is "percent_a.s." Options are:\describe{
+\item{from}{a string describing the unit used to measure \code{o2}. Default is "percent_a.s." Options are:\itemize{
 \item{percent_a.s. (percent air saturation)}{}
 \item{percent_o2}{}
 \item{hPa}{}
@@ -21,9 +21,11 @@ conv_o2(o2 = 100, from = "percent_a.s.", to = "all", temp = 25,
 \item{inHg}{}
 \item{mg_per_l}{}
 \item{umol_per_l}{}
+\item{mmol_per_l}{}
 \item{ml_per_l}{}
 \item{mg_per_kg}{}
 \item{umol_per_kg}{}
+\item{mmol_per_kg}{}
 \item{ml_per_kg}{}
 }}
 

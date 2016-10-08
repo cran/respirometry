@@ -29,8 +29,6 @@ Predicts the [NH4+] of seawater after a defined amount of oxygen consumption.
 }
 \details{
 Given a known amount of oxygen consumed and an estimated O:N ratio, the amount of NH4 produced can be estimated. Production or consumption of ammonium by "background" microbes or conversion of ammonium to nitrite and nitrate is ignored since bacteria in the respirometer are typically sought to be in low levels.
-
-o2_unit = "percent_a.s.", o2_nh4_ratio, temp = 25, sal = 35, atm_pres = 1013.25
 }
 \examples{
 predict_NH4(o2_drop = 25, o2_nh4_ratio = 10)

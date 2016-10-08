@@ -9,7 +9,7 @@
 #' @param end_o2 pO2 at the end of the measurment (\% air saturation).
 #' @param start_pH seawater pH (total scale) at the start of the measurement.
 #' @param temp temperature (°C). Default is 25 °C.
-#' @param sal salinity (psu). Default is 35 psu.
+#' @param sal salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.
 #' @param RQ respiratory quotient: ratio of CO2 produced / O2 consumed. Default is 1.
 #' @param TA (optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.
 #' @param all_carb logical. Should all carbonate chemistry parameters be returned? Default is FALSE.
@@ -38,7 +38,24 @@ predict_pH = function(start_o2 = 100, end_o2, start_pH, temp = 25, sal = 35, RQ 
   TA = measurements::conv_unit(TA, 'umol', 'mol')
   
   start = seacarb::carb(flag = 8, var1 = start_pH, var2 = TA, S = sal, T = temp)
-  end = tryCatch(seacarb::carb(flag = 15, var1 = TA, var2 = start$DIC + co2_produced, S = sal, T = temp), error = function(e) data.frame(pH = NA, pCO2 = NA))
+###  end = seacarb::carb(flag = 15, var1 = TA, var2 = start$DIC + co2_produced, S = sal, T = temp) # open up when seacarb updates. Make sure to note only seacarb >= 3.1 is compatible
+  
+########## TEMPORARY UNTIL SEACARB V. 3.1 IS RELEASED ###############
+  inter1 = which(!is.na(co2_produced) & !is.na(start$DIC))
+  if(length(TA) > 1) TA = TA[inter1]
+  if(length(temp) > 1) temp = temp[inter1]
+  ifelse(length(inter1) > 0, yes = {
+  	end = seacarb::carb(flag = 15, var1 = TA, var2 = start[inter1, 'DIC'] + co2_produced[inter1], S = sal, T = temp)
+  	end$n = inter1
+  	n = rem = NULL # only to appease R CMD check
+  	end = merge(end, data.frame(n = 1:nrow(start), rem = NA), by = 'n', all = T)
+  	end = subset(end, select = -c(n, rem))
+  }, no = {
+  	end = start
+  	end[] = NA
+  })
+######################################################################
+  
   if(all_carb == FALSE){
   	end = as.list(end[,c('pH', 'pCO2')])
   }

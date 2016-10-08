@@ -8,7 +8,7 @@
 #' @param resp_pH pH inside the respirometer before the flush (total scale).
 #' @param flush_pH pH of the water used for flushing the respirometer (total scale).
 #' @param temp temperature (°C). Default is 25 °C.
-#' @param sal salinity (psu). Default is 35 psu.
+#' @param sal salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.
 #' @param TA (optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
 #' 

@@ -17,7 +17,7 @@ predict_pH(start_o2 = 100, end_o2, start_pH, temp = 25, sal = 35,
 
 \item{temp}{temperature (°C). Default is 25 °C.}
 
-\item{sal}{salinity (psu). Default is 35 psu.}
+\item{sal}{salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.}
 
 \item{RQ}{respiratory quotient: ratio of CO2 produced / O2 consumed. Default is 1.}
 

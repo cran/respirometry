@@ -6,18 +6,19 @@
 #' @param start_pH pH of the water before CO2 is added (total scale).
 #' @param vol volume of the water (liter).
 #' @param temp temperature (°C). Default is 25 °C.
-#' @param sal salinity (psu). Default is 35 psu.
+#' @param sal salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.
 #' @param TA (optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
 #' 
 #' @return moles of CO2 gas to be added to the seawater.
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @note It is assumed that all of the CO2 added dissolves and remains in solution.
+#' @note It is assumed that all of the CO2 added dissolves and remains in solution. This can be achieved (almost completely) by bubbling CO2 according to Jokiel et al. 2014.
+#' @references Jokiel PL, Bahr KD, Rodgers KS. 2014. Low-cost, high-flow mesocosm system for simulating ocean acidification with CO2 gas. Limnol Oceanogr Methods. 12:313–322.
 #' @seealso \code{\link{co2_rate}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}
 #' 
 #' @examples
-#' # I want the 50 L respirometer to have a pCO2 = 1000 uatm. It currently has a pH of 7.88.
+#' # I want the 50 L reservoir to have a pCO2 = 1000 uatm. It currently has a pH of 7.88.
 #' # How many moles of CO2 gas should be added to the water to reach my desired pCO2?
 #' co2_add(goal_pco2 = 1000, start_pH = 7.88, vol = 50)
 #' 

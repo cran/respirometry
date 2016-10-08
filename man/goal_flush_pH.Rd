@@ -21,7 +21,7 @@ goal_flush_pH(goal_pco2, resp_pH, resp_vol, flush_vol, flush_remain = 0,
 
 \item{temp}{temperature (°C). Default is 25 °C.}
 
-\item{sal}{salinity (psu). Default is 35 psu.}
+\item{sal}{salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.}
 
 \item{TA}{(optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.}
 

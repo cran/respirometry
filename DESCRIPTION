@@ -1,8 +1,8 @@
 Package: respirometry
 Type: Package
 Title: Tools for Conducting Respirometry Experiments
-Version: 0.1.0
-Date: 2016-08-22
+Version: 0.2.0
+Date: 2016-10-07
 Author: Matthew A. Birk
 Maintainer: Matthew A. Birk <matthewabirk@gmail.com>
 Description: Provides tools to enable the researcher to more precisely conduct
@@ -12,13 +12,13 @@ Description: Provides tools to enable the researcher to more precisely conduct
     setup, and thus are better created by the researcher individually. This
     package provides tools for intermittent, flow-through, and closed respirometry
     techniques.
-Imports: graphics, lubridate, marelac, measurements, methods, seacarb,
-        stats
+Imports: birk, graphics, lubridate, marelac, measurements, methods,
+        seacarb, stats
 License: GPL-3
 LazyData: TRUE
 Encoding: UTF-8
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2016-08-22 18:00:35 UTC; matthewbirk
+Packaged: 2016-10-08 00:44:02 UTC; matthewbirk
 Repository: CRAN
-Date/Publication: 2016-08-23 02:17:14
+Date/Publication: 2016-10-08 08:48:13

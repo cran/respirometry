@@ -8,7 +8,7 @@
 #' @param flush_vol volume of the flush reservoir (liter).
 #' @param flush_remain volume of the flush reservoir that will remain after the flush (liter).
 #' @param temp temperature (°C). Default is 25 °C.
-#' @param sal salinity (psu). Default is 35 psu.
+#' @param sal salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.
 #' @param TA (optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
 #' 

@@ -1,12 +1,12 @@
 #' @title Find percent of water exchanged after a flush
 #' 
-#' @description Calculate the proportion of water in a respirometer that is new after a flush. Useful for intermittent respirometry.
+#' @description Calculate the proportion of water in a respirometer that is new after a flush. Useful for intermittent respirometry. Given 3 of the first 4 parameters, the 4th parameter is calculated.
 #' 
 #' @param vol volume of the respirometer (liter).
 #' @param flow_rate rate of water flow into the respirometer (liters / minute).
 #' @param duration duration of the flush (minutes).
 #' @param perc_fresh percent of the respirometer volume that is new flushed water.
-#' @param plot logical. Plot the percent exchanged as a function of flow rate and duration to see what effect would result if these rate or duration are changed.
+#' @param plot logical. Plot the percent exchanged as a function of flow rate and duration to see what effect would result if the rate or duration are changed.
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @references Steffensen JF. 1989. Some errors in respirometry of aquatic breathers: How to avoid and correct for them. Fish Physiol Biochem. 6:49–59. Equation 5.
@@ -22,6 +22,16 @@
 #' # Another five minutes would increase exchange by nearly 10%.
 #' # Perhaps that's worth the extra time...
 #' 
+#' # Visualize flushing
+#' vol = 150
+#' flow_rate = seq(0, 10, by = 0.5)
+#' duration = 0:60
+#' perc_fresh = outer(flow_rate, duration, function(flow_rate, duration){
+#' 	flush_water(vol = vol, flow_rate = flow_rate, duration = duration)$perc_fresh
+#' })
+#' persp(flow_rate, duration, perc_fresh, xlab = 'Flow rate (LPM)', ylab = 'Duration (min)',
+#' zlab = '% exchange', theta = 45, phi = 15, expand = 0.5, ticktype = 'detailed', nticks = 10)
+#'
 #' @encoding UTF-8
 #' @export
 

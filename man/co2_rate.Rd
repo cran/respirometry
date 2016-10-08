@@ -17,7 +17,7 @@ co2_rate(goal_pco2, init_pH, flow_rate, temp = 25, sal = 35, TA = NULL,
 
 \item{temp}{temperature (°C). Default is 25 °C.}
 
-\item{sal}{salinity (psu). Default is 35 psu.}
+\item{sal}{salinity (psu). Default is 35 psu. If \code{sal} < 26 psu, then \code{TA} must be provided.}
 
 \item{TA}{(optional) total alkalinity (umol / kg). If undefined TA is estimated from salinity using \code{\link{guess_TA}}.}
 
@@ -34,7 +34,7 @@ moles of CO2 gas to be added to the intake flow per minute.
 Calculates the moles of CO2 gas to be added to a respirometer intake seawater flow to achieve the desired pCO2 in the respirometer. Useful for ocean acidification experiments where CO2 treatments are desired. Can be used for acclimation before a trial begins or for use with flow-through respirometry.
 }
 \note{
-It is assumed that all of the CO2 added dissolves and remains in solution.
+It is assumed that all of the CO2 added dissolves and remains in solution. This can be achieved (almost completely) by bubbling CO2 according to Jokiel et al. 2014.
 }
 \examples{
 # I want the respirometer to have a pCO2 = 1000 uatm. How much CO2 per minute do I need

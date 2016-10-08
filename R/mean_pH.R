@@ -18,5 +18,9 @@
 #' @export
 
 mean_pH = function(pH, na.rm = FALSE, ...){
+	if(is.null(pH)){
+		warning('pH is NULL. Returning NA')
+		return(NA)
+	}
 	-log10(mean(10^-pH, na.rm = na.rm, ...))
 }
