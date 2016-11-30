@@ -16,7 +16,7 @@ flush_water(vol, flow_rate, duration, perc_fresh, plot = FALSE)
 
 \item{perc_fresh}{percent of the respirometer volume that is new flushed water.}
 
-\item{plot}{logical. Plot the percent exchanged as a function of flow rate and duration to see what effect would result if the rate or duration are changed.}
+\item{plot}{logical. Plot the percent exchanged as a function of flow rate and duration to see what effect would result if the rate or duration are changed. All parameters must only have a single value.}
 }
 \description{
 Calculate the proportion of water in a respirometer that is new after a flush. Useful for intermittent respirometry. Given 3 of the first 4 parameters, the 4th parameter is calculated.
@@ -36,7 +36,7 @@ vol = 150
 flow_rate = seq(0, 10, by = 0.5)
 duration = 0:60
 perc_fresh = outer(flow_rate, duration, function(flow_rate, duration){
-	flush_water(vol = vol, flow_rate = flow_rate, duration = duration)$perc_fresh
+	flush_water(vol = vol, flow_rate = flow_rate, duration = duration)
 })
 persp(flow_rate, duration, perc_fresh, xlab = 'Flow rate (LPM)', ylab = 'Duration (min)',
 zlab = '\% exchange', theta = 45, phi = 15, expand = 0.5, ticktype = 'detailed', nticks = 10)

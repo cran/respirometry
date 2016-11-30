@@ -9,7 +9,7 @@ closed(MO2, delta_pO2, duration, vol, temp = 25, sal = 35,
   atm_pres = 1013.25)
 }
 \arguments{
-\item{MO2}{whole-animal oxygen consumption rate (umol / hour).}
+\item{MO2}{whole-animal oxygen consumption rate (umol O2 / hour).}
 
 \item{delta_pO2}{desired change in pO2 (\% air saturation).}
 
@@ -26,6 +26,9 @@ closed(MO2, delta_pO2, duration, vol, temp = 25, sal = 35,
 \description{
 Returns the unknown parameter given 3 of 4 parameters to calculate respiration rate in a closed respirometer. This is useful both for basic closed respirometry setups, and also for the closed measurement phase of intermittent respirometry.
 }
+\note{
+If there are more than two O2 observations, consider using \code{\link{calc_MO2}}.
+}
 \examples{
 # I've read in the literature that my animal has an SMR of 200 umol/h. How large of a
 # respirometer do I want if I want it to breathe down to 80\% air saturation in 30 minutes?
@@ -36,8 +39,8 @@ closed(MO2 = 200, delta_pO2 = 100 - 80, duration = 30) # returns respirometer vo
 closed(MO2 = 1000, delta_pO2 = 10, vol = 50) # returns the duration to breathe down the O2
 
 # How does animal size affect how long my measurement periods last?
-mass_range = seq(100, 400, 50)
-dur_range = (closed(MO2 = scale_MO2(mass_1 = 100, MO2_1 = 400, mass_2 = mass_range)$MO2_2,
+mass_range <- seq(100, 400, 50)
+dur_range <- (closed(MO2 = scale_MO2(mass_1 = 100, MO2_1 = 400, mass_2 = mass_range),
  delta_pO2 = 20, vol = 10))
 plot(mass_range, dur_range, type = 'b')
 
@@ -50,6 +53,6 @@ closed(delta_pO2 = conv_o2(o2 = 0.44, from = 'mg_per_l', to = 'percent_a.s.'), d
 Matthew A. Birk, \email{matthewabirk@gmail.com}
 }
 \seealso{
-\code{\link{flush_water}}
+\code{\link{flush_water}}, \code{\link{calc_MO2}}
 }
 

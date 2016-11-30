@@ -6,7 +6,7 @@
 #' @param flow_rate rate of water flow into the respirometer (liters / minute).
 #' @param duration duration of the flush (minutes).
 #' @param perc_fresh percent of the respirometer volume that is new flushed water.
-#' @param plot logical. Plot the percent exchanged as a function of flow rate and duration to see what effect would result if the rate or duration are changed.
+#' @param plot logical. Plot the percent exchanged as a function of flow rate and duration to see what effect would result if the rate or duration are changed. All parameters must only have a single value.
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @references Steffensen JF. 1989. Some errors in respirometry of aquatic breathers: How to avoid and correct for them. Fish Physiol Biochem. 6:49–59. Equation 5.
@@ -27,7 +27,7 @@
 #' flow_rate = seq(0, 10, by = 0.5)
 #' duration = 0:60
 #' perc_fresh = outer(flow_rate, duration, function(flow_rate, duration){
-#' 	flush_water(vol = vol, flow_rate = flow_rate, duration = duration)$perc_fresh
+#' 	flush_water(vol = vol, flow_rate = flow_rate, duration = duration)
 #' })
 #' persp(flow_rate, duration, perc_fresh, xlab = 'Flow rate (LPM)', ylab = 'Duration (min)',
 #' zlab = '% exchange', theta = 45, phi = 15, expand = 0.5, ticktype = 'detailed', nticks = 10)
@@ -39,23 +39,24 @@ flush_water = function(vol, flow_rate, duration, perc_fresh, plot = FALSE){
   if(sum(missing(vol), missing(flow_rate), missing(duration), missing(perc_fresh)) != 1) stop('3 of 4 of the parameters must be provided.')
   if(missing(vol)){
   	vol = flow_rate / (-log(-perc_fresh + 1) / duration)
-  	result = list(vol = vol)
+  	result = vol
   }
   if(missing(flow_rate)){
   	flow_rate = -log(-perc_fresh + 1) / duration * vol
-  	result = list(flow_rate = flow_rate)
+  	result = flow_rate
   }
   if(missing(duration)){
   	D = flow_rate / vol
   	duration = log(-perc_fresh + 1) / -D
-  	result = list(duration = duration)
+  	result = duration
   }
   if(missing(perc_fresh)){
     D = flow_rate / vol
     perc_fresh = 1 - exp(-D * duration)
-    result = list(perc_fresh = perc_fresh)
+    result = perc_fresh
   }
 	if(plot == TRUE){
+		if(any(sapply(c('vol', 'flow_rate', 'duration', 'perc_fresh'), function(i) length(get(i))) != 1)) stop('All parameters may only have a single value when plot = TRUE.')
 		graphics::layout(mat = matrix(1:2, ncol = 2))
 		FR_range = seq(flow_rate - flow_rate / 2, flow_rate + flow_rate / 2, length.out = 100)
 		D_range = FR_range / vol

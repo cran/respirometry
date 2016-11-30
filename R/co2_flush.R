@@ -15,10 +15,10 @@
 #' 
 #' @return moles of CO2 gas to be added to the flush reservoir.
 #' 
-#' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @note It is assummed that the entire reservoir is drained into the respirometer during the flush. It is also assumed that all of the CO2 added dissolves and remains in solution. This can be achieved (almost completely) by bubbling CO2 according to Jokiel et al. 2014.
+#' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @references Jokiel PL, Bahr KD, Rodgers KS. 2014. Low-cost, high-flow mesocosm system for simulating ocean acidification with CO2 gas. Limnol Oceanogr Methods. 12:313–322.
-#' @seealso \code{\link{co2_rate}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}
+#' @seealso \code{\link{co2_add}}, \code{\link{co2_rate}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}
 #' 
 #' @examples
 #' # I want the respirometer to have a pCO2 = 1000 uatm. It currently has a pH of 7.6 and is 90 L.

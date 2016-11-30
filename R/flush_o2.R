@@ -25,31 +25,30 @@
 flush_o2 = function(resp_vol, flow_rate, duration, resp_o2, flush_o2, final_o2){
 	if(sum(missing(resp_vol), missing(flow_rate), missing(duration), missing(resp_o2), missing(flush_o2), missing(final_o2)) != 1) stop('5 of 6 of the parameters must be provided.')
 	if(missing(resp_vol)){
-		resp_vol = flush_water(flow_rate = flow_rate, duration = duration, perc_fresh = (final_o2 - resp_o2) / (flush_o2 - resp_o2))$vol
-		result = list(resp_vol = resp_vol)
+		resp_vol = flush_water(flow_rate = flow_rate, duration = duration, perc_fresh = (final_o2 - resp_o2) / (flush_o2 - resp_o2))
+		return(resp_vol)
 	}
 	if(missing(flow_rate)){
-		flow_rate = flush_water(vol = resp_vol, duration = duration, perc_fresh = (final_o2 - resp_o2) / (flush_o2 - resp_o2))$flow_rate
-		result = list(flow_rate = flow_rate)
+		flow_rate = flush_water(vol = resp_vol, duration = duration, perc_fresh = (final_o2 - resp_o2) / (flush_o2 - resp_o2))
+		return(flow_rate)
 	}
 	if(missing(duration)){
-		duration = flush_water(vol = resp_vol, flow_rate = flow_rate, perc_fresh = (final_o2 - resp_o2) / (flush_o2 - resp_o2))$duration
-		result = list(duration = duration)
+		duration = flush_water(vol = resp_vol, flow_rate = flow_rate, perc_fresh = (final_o2 - resp_o2) / (flush_o2 - resp_o2))
+		return(duration)
 	}
 	if(missing(resp_o2)){
-		perc_fresh = flush_water(vol = resp_vol, flow_rate = flow_rate, duration = duration)$perc_fresh
+		perc_fresh = flush_water(vol = resp_vol, flow_rate = flow_rate, duration = duration)
 		resp_o2 = (perc_fresh * flush_o2 - final_o2) / (perc_fresh - 1)
-		result = list(resp_o2 = resp_o2)
+		return(resp_o2)
 	}
 	if(missing(flush_o2)){
-		perc_fresh = flush_water(vol = resp_vol, flow_rate = flow_rate, duration = duration)$perc_fresh
+		perc_fresh = flush_water(vol = resp_vol, flow_rate = flow_rate, duration = duration)
 		flush_o2 = 1 / perc_fresh * (final_o2 - resp_o2) + resp_o2
-		result = list(flush_o2 = flush_o2)
+		return(flush_o2)
 	}
 	if(missing(final_o2)){
-		perc_flush = flush_water(vol = resp_vol, flow_rate = flow_rate, duration = duration)$perc_fresh
+		perc_flush = flush_water(vol = resp_vol, flow_rate = flow_rate, duration = duration)
 		final_o2 = resp_o2 * (1 - perc_flush) + flush_o2 * perc_flush
-		result = list(final_o2 = final_o2)
+		return(final_o2)
 	}
-	return(result)
 }

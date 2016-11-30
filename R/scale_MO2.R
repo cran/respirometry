@@ -15,7 +15,7 @@
 #' @param b scaling coefficient for MO2. Default is 0.75.
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @seealso \code{\link{Q10}}
+#' @seealso \code{\link{Q10}}, \code{\link{calc_b}}
 #' 
 #' @examples
 #' # I know a species has an SMR of 800 umol O2/h at 200 g.
@@ -27,17 +27,17 @@
 #' 
 #' # A 100 g individual at 10 *C has an MO2 of 1270 umol/h. How much
 #' # would a 250 g individual likely consume at 14 *C?
-#' Q10(Q10 = 2, R1 = scale_MO2(mass_1 = 100, MO2_1 = 1270, mass_2 = 250)$MO2_2, T1 = 10, T2 = 14)
+#' Q10(Q10 = 2, R1 = scale_MO2(mass_1 = 100, MO2_1 = 1270, mass_2 = 250), T1 = 10, T2 = 14)
 #' 
 #' # Visualize MO2 scaling by mass and temperature:
-#' mass = seq(10, 200, 10)
-#' temp = 10:25
-#' base_mass = 50
-#' base_temp = 20
-#' base_MO2 = 750
-#' mo2 = outer(mass, temp, function(mass, temp){
+#' mass <- seq(10, 200, 10)
+#' temp <- 10:25
+#' base_mass <- 50
+#' base_temp <- 20
+#' base_MO2 <- 750
+#' mo2 <- outer(mass, temp, function(mass, temp){
 #' 	scale_MO2(mass_1 = base_mass, mass_2 = mass, MO2_1 = Q10(Q10 = 2, R1 = base_MO2,
-#' 	 T1 = base_temp, T2 = temp)$R2)$MO2_2
+#' 	 T1 = base_temp, T2 = temp))
 #' })
 #' persp(mass, temp, mo2, xlab = 'Mass (g)', ylab = 'Temperature (*C)', zlab = 'MO2 (umol / hr)',
 #'  theta = 35, phi = 15, expand = 0.5, ticktype = 'detailed', nticks = 10)
@@ -50,22 +50,21 @@ scale_MO2 = function(mass_1, MO2_1, mass_2, MO2_2, b = 0.75){
 	if(missing(mass_1)){
 		b0 = MO2_2 / mass_2 ^ b
 		mass_1 = (MO2_1 / b0) ^ (1/b)
-		result = list(mass_1 = mass_1)
+		return(mass_1)
 	}
 	if(missing(MO2_1)){
 		b0 = MO2_2 / mass_2 ^ b
 		MO2_1 = b0 * mass_1 ^ b
-		result = list(MO2_1 = MO2_1)
+		return(MO2_1)
 	}
 	if(missing(mass_2)){
 		b0 = MO2_1 / mass_1 ^ b
 		mass_2 = (MO2_2 / b0) ^ (1/b)
-		result = list(mass_2 = mass_2)
+		return(mass_2)
 	}
 	if(missing(MO2_2)){
 		b0 = MO2_1 / mass_1 ^ b
 		MO2_2 = b0 * mass_2 ^ b
-		result = list(MO2_2 = MO2_2)
+		return(MO2_2)
 	}
-	return(result)
 }

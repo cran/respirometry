@@ -20,10 +20,12 @@ conv_o2(o2 = 100, from = "percent_a.s.", to = "all", temp = 25,
 \item{mmHg}{}
 \item{inHg}{}
 \item{mg_per_l}{}
+\item{ug_per_l}{}
 \item{umol_per_l}{}
 \item{mmol_per_l}{}
 \item{ml_per_l}{}
 \item{mg_per_kg}{}
+\item{ug_per_kg}{}
 \item{umol_per_kg}{}
 \item{mmol_per_kg}{}
 \item{ml_per_kg}{}

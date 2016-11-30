@@ -2,7 +2,7 @@
 #' 
 #' @description Returns the unknown parameter given 3 of 4 parameters to calculate respiration rate in a closed respirometer. This is useful both for basic closed respirometry setups, and also for the closed measurement phase of intermittent respirometry.
 #' 
-#' @param MO2 whole-animal oxygen consumption rate (umol / hour).
+#' @param MO2 whole-animal oxygen consumption rate (umol O2 / hour).
 #' @param delta_pO2 desired change in pO2 (\% air saturation).
 #' @param duration desired duration to reach \code{delta_pO2} (minutes).
 #' @param vol volume of the respirometer (liter).
@@ -10,8 +10,9 @@
 #' @param sal salinity (psu). Default is 35 psu.
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
 #' 
+#' @note If there are more than two O2 observations, consider using \code{\link{calc_MO2}}.
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @seealso \code{\link{flush_water}}
+#' @seealso \code{\link{flush_water}}, \code{\link{calc_MO2}}
 #' 
 #' @examples
 #' # I've read in the literature that my animal has an SMR of 200 umol/h. How large of a
@@ -23,8 +24,8 @@
 #' closed(MO2 = 1000, delta_pO2 = 10, vol = 50) # returns the duration to breathe down the O2
 #'
 #' # How does animal size affect how long my measurement periods last?
-#' mass_range = seq(100, 400, 50)
-#' dur_range = (closed(MO2 = scale_MO2(mass_1 = 100, MO2_1 = 400, mass_2 = mass_range)$MO2_2,
+#' mass_range <- seq(100, 400, 50)
+#' dur_range <- (closed(MO2 = scale_MO2(mass_1 = 100, MO2_1 = 400, mass_2 = mass_range),
 #'  delta_pO2 = 20, vol = 10))
 #' plot(mass_range, dur_range, type = 'b')
 #' 

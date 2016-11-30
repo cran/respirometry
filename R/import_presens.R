@@ -21,7 +21,7 @@
 #' It is very important to note that the PreSens fiber optics O2 transmitters that are supported with this function (except the Fibox 4) DO NOT account for salinity (i.e. they assume salinity = 0 ppt). If the water sample measured was not fresh water, the oxygen concentrations (e.g. mg per liter or umol per liter) are incorrect in the PreSens txt file. This function corrects these O2 concentrations based on the salinity value defined by the \code{sal} argument. Absolute partial pressures (i.e. hPa and torr) will also be slightly different due to the slight influence of salinity on water's vapor pressure. This difference is typically ~0.05\% of the recorded value.
 #'
 #' @param file a character string. The filepath for the file to be read.
-#' @param o2_unit a character string. The unit of O2 measurement to be output in the data.frame. Options are described in \code{\link{conv_o2}}.
+#' @param o2_unit a character string. The unit of O2 measurement to be output in the data frame. Options are described in \code{\link{conv_o2}}.
 #' @param date a character string. The date format to be passed to \code{\link{strptime}}.
 #' @param sal salinity of water sample (psu). Default is 35 psu. Ignored for Fibox 4 files since salinity is provided by the file.
 #' @param all_cols logical. For Fibox 4 files only. Should all columns (including calibration data and serial numbers) be output?
@@ -39,8 +39,8 @@
 #' \item{ERROR_CODE}{Error code from transmitter. See PreSens user manual for translation of error code.}
 #' }
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @note Oxygen conversions are estimates based on the \code{\link[marelac]{marelac}} package and therefore differ slightly from the conversions provided by PreSens.
-#' @seealso \code{\link{import_witrox}}, \code{\link{conv_o2}}
+#' @note Oxygen conversions are based on \code{\link{conv_o2}} and therefore differ slightly from the conversions provided by PreSens.
+#' @seealso \code{\link{import_firesting}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
 #' @examples
 #' \dontrun{
 #' 
@@ -58,16 +58,17 @@
 
 import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal = 35, all_cols = FALSE)
 {
-  raw = readLines(file)
-  raw = gsub(pattern = '\xb0|\xa9|\xfc\xbe\x8e\x93\xa0\xbc', replacement = ' ', raw) # replace non ASCII characters
-  raw = raw[sapply(raw, nchar) > 0] # remove blank rows
+	raw = readChar(file, nchars = file.info(file)$size, useBytes = TRUE)
+	raw = gsub(pattern = '\xb0|\xa9|\xfc\xbe\x8e\x93\xa0\xbc', replacement = ' ', raw) # replace non ASCII characters
+	raw = strsplit(raw, split = '\r\n', fixed = T)[[1]]
+	raw = raw[sapply(raw, nchar) > 0] # remove blank rows
   
   ########################## FIBOX 3 TYPE FILE ##################################
   
   if(length(grep('DESCRIPTION', raw[1])) == 1){ # this is a Fibox 3 type file
   	f = suppressWarnings(raw[grep('logtime|Logtime', raw):length(raw)]) # start dataframe from one row below the word 'logtime'
   	f = gsub(pattern = ' ', replacement = '', f)
-  	f = strsplit(f, split = ';')
+  	f = strsplit(f, split = ';', fixed = TRUE)
   	f = as.data.frame(matrix(unlist(f), ncol = 8, byrow = TRUE), stringsAsFactors = FALSE)
   	if(!(o2_unit %in% names(conv_o2()))) stop('the o2_unit argument is not an acceptable unit', call. = FALSE)
   	atm_pres = suppressWarnings(as.numeric(stats::na.omit(as.numeric(unlist(strsplit(raw[grep('Pressure', raw)], ' |;'))))))
@@ -109,7 +110,7 @@ import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal
   
   if(length(grep('Date;Time;User;', raw[1])) == 1){ # this is a Fibox 4 type file
   	f = gsub(pattern = ' ', replacement = '', raw)
-  	f = strsplit(f, split = ';')
+  	f = strsplit(f, split = ';', fixed = TRUE)
   	f[[length(f)]] = NULL
   	f = as.data.frame(matrix(unlist(f), ncol = length(f[[1]]), byrow = TRUE), stringsAsFactors = FALSE)
   	colnames(f) = as.character(f[1, ])
@@ -136,7 +137,7 @@ import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal
   	if(n_o2_units > 1) message(paste('Multiple units of O2 were recorded. All values were converted to', o2_unit))
   	if(any(f$ERROR_CODE != '0')) warning('Errors recorded during trial! Check ERROR_CODE column', call. = FALSE)
   	row.names(f) = NULL
-  	if(all_cols == FALSE) f = f[, c('TIME', 'DURATION', 'O2', 'PHASE', 'AMPLITUDE', 'TEMP', 'ATM_PRES', 'SAL', 'ERROR_CODE')]
+  	if(!all_cols) f = f[, c('TIME', 'DURATION', 'O2', 'PHASE', 'AMPLITUDE', 'TEMP', 'ATM_PRES', 'SAL', 'ERROR_CODE')]
   }
   return(f)
 }

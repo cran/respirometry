@@ -23,17 +23,17 @@
 #' 
 #' # A 100 g individual at 10 *C has an MO2 of 1270 umol/h. How much
 #' # would a 250 g individual likely consume at 14 *C?
-#' Q10(Q10 = 2, R1 = scale_MO2(mass_1 = 100, MO2_1 = 1270, mass_2 = 250)$MO2_2, T1 = 10, T2 = 14)
+#' Q10(Q10 = 2, R1 = scale_MO2(mass_1 = 100, MO2_1 = 1270, mass_2 = 250), T1 = 10, T2 = 14)
 #' 
 #' # Visualize MO2 scaling by mass and temperature:
-#' mass = seq(10, 200, 10)
-#' temp = 10:25
-#' base_mass = 50
-#' base_temp = 20
-#' base_MO2 = 750
-#' mo2 = outer(mass, temp, function(mass, temp){
+#' mass <- seq(10, 200, 10)
+#' temp <- 10:25
+#' base_mass <- 50
+#' base_temp <- 20
+#' base_MO2 <- 750
+#' mo2 <- outer(mass, temp, function(mass, temp){
 #' 	scale_MO2(mass_1 = base_mass, mass_2 = mass, MO2_1 = Q10(Q10 = 2, R1 = base_MO2,
-#' 	 T1 = base_temp, T2 = temp)$R2)$MO2_2
+#' 	 T1 = base_temp, T2 = temp))
 #' })
 #' persp(mass, temp, mo2, xlab = 'Mass (g)', ylab = 'Temperature (*C)', zlab = 'MO2 (umol / hr)',
 #'  theta = 35, phi = 15, expand = 0.5, ticktype = 'detailed', nticks = 10)
@@ -50,23 +50,23 @@ Q10 = function(Q10, R1, R2, T1, T2){
   if(sum(q10, r2, r1, t2, t1) < 4) stop('Four parameters are needed')
   if(sum(q10, r2, r1, t2, t1) == 5) stop('All parameters already provided. Nothing to calculate...')
   if(q10 == F){
-    Q10 = list(Q10 = (R2 / R1)^(10 / (T2 - T1)))
+    Q10 = (R2 / R1)^(10 / (T2 - T1))
     return(Q10)
   }
   if(r2 == F){
-    R2 = list(R2 = Q10^((T2 - T1) / 10) * R1)
+    R2 = Q10^((T2 - T1) / 10) * R1
     return(R2)
   }
   if(r1 == F){
-    R1 = list(R1 = Q10^((T1 - T2) / 10) * R2)
+    R1 = Q10^((T1 - T2) / 10) * R2
     return(R1)
   }
   if(t2 == F){
-    T2 = list(T2 = 10 / log(Q10, base = R2 / R1) + T1)
+    T2 = 10 / log(Q10, base = R2 / R1) + T1
     return(T2)
   }
-  if(t1==F){
-    T1 = list(T1 = 10 / log(Q10, base = R1 / R2) + T2)
+  if(t1 == F){
+    T1 = 10 / log(Q10, base = R1 / R2) + T2
     return(T1)
   }
 }

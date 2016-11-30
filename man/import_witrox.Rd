@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{import_witrox}
 \alias{import_witrox}
-\title{Import data from a Loligo Systems Witrox transmitter}
+\title{Import data from a Loligo Systems Witrox O2 transmitter}
 \usage{
 import_witrox(file, o2_unit = "percent_a.s.",
   date = "\%m/\%d/\%Y \%I:\%M:\%S \%p", overwrite_sal = NULL,
@@ -12,7 +12,7 @@ import_witrox(file, o2_unit = "percent_a.s.",
 \arguments{
 \item{file}{a character string. The filepath for the file to be read.}
 
-\item{o2_unit}{a character string. The unit of O2 measurement to be output in the data.frame. Options are described in \code{\link{conv_o2}}}
+\item{o2_unit}{a character string. The unit of O2 measurement to be output in the data frame. Options are described in \code{\link{conv_o2}}.}
 
 \item{date}{a character string. The date format to be passed to \code{\link{strptime}}.}
 
@@ -46,9 +46,6 @@ The following Loligo Systems fiber optic O2 transmitters are supported:
 }
 If you would like support for the Witrox 1, email me a data file from this device.
 }
-\note{
-Oxygen conversions are estimates based on the \code{\link[marelac]{marelac}} package.
-}
 \examples{
 \dontrun{
 file <- system.file('extdata', 'witrox_file.txt', package = 'respirometry')
@@ -59,7 +56,7 @@ import_witrox(file, o2_unit = 'umol_per_l')
 import_witrox(file, o2_unit = 'umol_per_kg', overwrite_sal = 35)
 
 # I want each channel as a separate data frame.
-data_list = import_witrox(file, split_channels = TRUE)
+data_list <- import_witrox(file, split_channels = TRUE)
 data_list$CH_3 # here's the channel 3 data frame.
 }
 
@@ -68,6 +65,6 @@ data_list$CH_3 # here's the channel 3 data frame.
 Matthew A. Birk, \email{matthewabirk@gmail.com}
 }
 \seealso{
-\code{\link{import_presens}}, \code{\link{conv_o2}}
+\code{\link{import_firesting}}, \code{\link{import_presens}}, \code{\link{conv_o2}}
 }
 

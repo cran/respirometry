@@ -11,7 +11,7 @@ import_presens(file, o2_unit = "percent_a.s.", date = "\%d/\%m/\%y",
 \arguments{
 \item{file}{a character string. The filepath for the file to be read.}
 
-\item{o2_unit}{a character string. The unit of O2 measurement to be output in the data.frame. Options are described in \code{\link{conv_o2}}.}
+\item{o2_unit}{a character string. The unit of O2 measurement to be output in the data frame. Options are described in \code{\link{conv_o2}}.}
 
 \item{date}{a character string. The date format to be passed to \code{\link{strptime}}.}
 
@@ -50,7 +50,7 @@ If you would like support for another PreSens O2 meter, email the package mainta
 It is very important to note that the PreSens fiber optics O2 transmitters that are supported with this function (except the Fibox 4) DO NOT account for salinity (i.e. they assume salinity = 0 ppt). If the water sample measured was not fresh water, the oxygen concentrations (e.g. mg per liter or umol per liter) are incorrect in the PreSens txt file. This function corrects these O2 concentrations based on the salinity value defined by the \code{sal} argument. Absolute partial pressures (i.e. hPa and torr) will also be slightly different due to the slight influence of salinity on water's vapor pressure. This difference is typically ~0.05\% of the recorded value.
 }
 \note{
-Oxygen conversions are estimates based on the \code{\link[marelac]{marelac}} package and therefore differ slightly from the conversions provided by PreSens.
+Oxygen conversions are based on \code{\link{conv_o2}} and therefore differ slightly from the conversions provided by PreSens.
 }
 \examples{
 \dontrun{
@@ -69,6 +69,6 @@ import_presens(file = file, date = '\%d-\%b-\%Y')
 Matthew A. Birk, \email{matthewabirk@gmail.com}
 }
 \seealso{
-\code{\link{import_witrox}}, \code{\link{conv_o2}}
+\code{\link{import_firesting}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
 }
 

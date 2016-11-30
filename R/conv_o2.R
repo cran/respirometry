@@ -15,10 +15,12 @@
 #' \item{mmHg}{}
 #' \item{inHg}{}
 #' \item{mg_per_l}{}
+#' \item{ug_per_l}{}
 #' \item{umol_per_l}{}
 #' \item{mmol_per_l}{}
 #' \item{ml_per_l}{}
 #' \item{mg_per_kg}{}
+#' \item{ug_per_kg}{}
 #' \item{umol_per_kg}{}
 #' \item{mmol_per_kg}{}
 #' \item{ml_per_kg}{}
@@ -49,10 +51,12 @@ conv_o2 = function(o2 = 100, from = "percent_a.s.", to = "all", temp = 25, sal =
 	if(from == 'mmHg') perc_a.s. = measurements::conv_unit(o2, 'mmHg', 'atm') * 100 / (air_pres - marelac::vapor(S = sal, t = temp)) / marelac::atmComp('O2')
 	if(from == 'inHg') perc_a.s. = measurements::conv_unit(o2, 'inHg', 'atm') * 100 / (air_pres - marelac::vapor(S = sal, t = temp)) / marelac::atmComp('O2')
 	if(from == 'mg_per_l') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') / 1e-6 / marelac::molweight('O2') / 1e3
+	if(from == 'ug_per_l') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') / 1e-6 / marelac::molweight('O2') / 1e6
 	if(from == 'umol_per_l') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2')
 	if(from == 'mmol_per_l') perc_a.s. = o2 * 1000 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2')
 	if(from == 'ml_per_l') perc_a.s. = measurements::conv_unit(o2, 'ml', 'l') / marelac::molvol(t = temp, P = air_pres, species = 'O2', quantity = 1 / measurements::conv_unit(100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2'), 'mol', 'umol'))
 	if(from == 'mg_per_kg') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') / 1e-6 / marelac::molweight('O2') / 1e3 * (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
+	if(from == 'ug_per_kg') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') / 1e-6 / marelac::molweight('O2') / 1e3 * (as.numeric(seacarb::rho(S = sal, T = temp)) / 1e6)
 	if(from == 'umol_per_kg') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
 	if(from == 'mmol_per_kg') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * (as.numeric(seacarb::rho(S = sal, T = temp)))
 	if(from == 'ml_per_kg') perc_a.s. = measurements::conv_unit(o2, 'ml', 'l') / marelac::molvol(t = temp, P = air_pres, species = 'O2', quantity = 1 / measurements::conv_unit(100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2'), 'mol', 'umol')) * (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
@@ -66,10 +70,12 @@ conv_o2 = function(o2 = 100, from = "percent_a.s.", to = "all", temp = 25, sal =
 	if(to == 'mmHg' | to == 'all') x$mmHg = measurements::conv_unit((air_pres - marelac::vapor(S = sal, t = temp)) * marelac::atmComp('O2') * perc_a.s. / 100, 'atm', 'mmHg')
 	if(to == 'inHg' | to == 'all') x$inHg = measurements::conv_unit((air_pres - marelac::vapor(S = sal, t = temp)) * marelac::atmComp('O2') * perc_a.s. / 100, 'atm', 'inHg')
 	if(to == 'mg_per_l' | to == 'all') x$mg_per_l = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * 1e-6 * marelac::molweight('O2') * 1e3 * perc_a.s. / 100
+	if(to == 'ug_per_l' | to == 'all') x$ug_per_l = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * 1e-6 * marelac::molweight('O2') * 1e6 * perc_a.s. / 100
 	if(to == 'umol_per_l' | to == 'all') x$umol_per_l = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100
 	if(to == 'mmol_per_l' | to == 'all') x$mmol_per_l = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100 / 1000
 	if(to == 'ml_per_l' | to == 'all') x$ml_per_l = measurements::conv_unit(as.numeric(marelac::molvol(t = temp, P = air_pres, species = 'O2', quantity = measurements::conv_unit(marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100, 'umol', 'mol'))), 'l', 'ml')
 	if(to == 'mg_per_kg' | to == 'all') x$mg_per_kg = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * 1e-6 * marelac::molweight('O2') * 1e3 * perc_a.s. / 100 / (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
+	if(to == 'ug_per_kg' | to == 'all') x$ug_per_kg = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * 1e-6 * marelac::molweight('O2') * 1e3 * perc_a.s. / 100 / (as.numeric(seacarb::rho(S = sal, T = temp)) / 1e6)
 	if(to == 'umol_per_kg' | to == 'all') x$umol_per_kg = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100 / (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
 	if(to == 'mmol_per_kg' | to == 'all') x$mmol_per_kg = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100 / 1000 / (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
 	if(to == 'ml_per_kg' | to == 'all') x$ml_per_kg = measurements::conv_unit(as.numeric(marelac::molvol(t = temp, P = air_pres, species = 'O2', quantity = measurements::conv_unit(marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100, 'umol', 'mol'))), 'l', 'ml') / (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
@@ -80,10 +86,12 @@ conv_o2 = function(o2 = 100, from = "percent_a.s.", to = "all", temp = 25, sal =
 	attr(x$mmHg, 'names') = NULL
 	attr(x$inHg, 'names') = NULL
 	attr(x$mg_per_l, 'names') = NULL
+	attr(x$ug_per_l, 'names') = NULL
 	attr(x$umol_per_l, 'names') = NULL
 	attr(x$mmol_per_l, 'names') = NULL
 	attr(x$ml_per_l, 'names') = NULL
 	attr(x$mg_per_kg, 'names') = NULL
+	attr(x$ug_per_kg, 'names') = NULL
 	attr(x$umol_per_kg, 'names') = NULL
 	attr(x$mmol_per_kg, 'names') = NULL
 	attr(x$ml_per_kg, 'names') = NULL
