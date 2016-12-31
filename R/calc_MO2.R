@@ -10,6 +10,7 @@
 #' @param temp temperature (°C). Default is 25 °C.
 #' @param sal salinity (psu). Default is 35 psu.
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
+#' @param good_data logical vector of whether O2 observations are "good" measurements and should be included in analysis. Default is that all observations are \code{TRUE}.
 #'
 #' @return A data frame with seven columns is returned:
 #' \describe{
@@ -35,6 +36,11 @@
 #' (mo2_5_min <- calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
 #' bin_width = 5, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL))
 #' 
+#' # what if measurements from the 10 to 12 minute marks can't be trusted?
+#' bad_data = o2_data$DURATION >= 10 & o2_data$DURATION <= 12
+#' (mo2_5_min <- calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
+#' bin_width = 5, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL, good_data = !bad_data))
+#' 
 #' # easily make a Pcrit plot
 #' plot(mo2_5_min$MEAN_O2, mo2_5_min$MO2)
 #' 
@@ -48,10 +54,11 @@
 #' @encoding UTF-8
 #' @export
 
-calc_MO2 = function(duration, o2, o2_unit = 'percent_a.s.', bin_width, vol, temp = 25, sal = 35, atm_pres = 1013.25){
+calc_MO2 = function(duration, o2, o2_unit = 'percent_a.s.', bin_width, vol, temp = 25, sal = 35, atm_pres = 1013.25, good_data = TRUE){
 	if(missing(bin_width)) stop('"bin_width" must be provided. If MO2 should be calculated from one observation to the next, set "bin_width" to 0.')
-	data = data.frame(duration, o2)
-	data$umol_o2 = conv_o2(o2 = data$o2, from = o2_unit, to = 'umol_per_l', temp = temp, sal = sal, atm_pres = atm_pres)
+	data = data.frame(duration, o2, temp, sal, atm_pres, good = good_data)
+	data = data[good_data, ]
+	data$umol_o2 = conv_o2(o2 = data$o2, from = o2_unit, to = 'umol_per_l', temp = data$temp, sal = data$sal, atm_pres = data$atm_pres)
 	if(bin_width != 0){
 		data$bin = floor(data$duration / bin_width)
 		mo2s = data.frame(

@@ -6,7 +6,7 @@
 \title{Calculate metabolic rate}
 \usage{
 calc_MO2(duration, o2, o2_unit = "percent_a.s.", bin_width, vol, temp = 25,
-  sal = 35, atm_pres = 1013.25)
+  sal = 35, atm_pres = 1013.25, good_data = TRUE)
 }
 \arguments{
 \item{duration}{numeric vector of the timepoint for each observation (minutes).}
@@ -24,6 +24,8 @@ calc_MO2(duration, o2, o2_unit = "percent_a.s.", bin_width, vol, temp = 25,
 \item{sal}{salinity (psu). Default is 35 psu.}
 
 \item{atm_pres}{atmospheric pressure (mbar). Default is 1013.25 mbar.}
+
+\item{good_data}{logical vector of whether O2 observations are "good" measurements and should be included in analysis. Default is that all observations are \code{TRUE}.}
 }
 \value{
 A data frame with seven columns is returned:
@@ -51,6 +53,11 @@ o2_data <- na.omit(import_witrox(file, split_channels = TRUE)$CH_4)
 # calculate MO2
 (mo2_5_min <- calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
 bin_width = 5, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL))
+
+# what if measurements from the 10 to 12 minute marks can't be trusted?
+bad_data = o2_data$DURATION >= 10 & o2_data$DURATION <= 12
+(mo2_5_min <- calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
+bin_width = 5, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL, good_data = !bad_data))
 
 # easily make a Pcrit plot
 plot(mo2_5_min$MEAN_O2, mo2_5_min$MO2)

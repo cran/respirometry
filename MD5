@@ -1,9 +1,9 @@
-b01e89a8eb49b71fba88558b06a00ab5 *DESCRIPTION
+1247dbcc59cae7f78093ab8ea76f55b3 *DESCRIPTION
 c2483b86146c607450bab65d365dbd83 *NAMESPACE
-cb7226689ea13bff964ac1bf6316a834 *NEWS
+abf47284f9b0d557194492fd5653cd71 *NEWS
 a3843393e56634f1a1d44d126fe5bc7c *R/Q10.R
 ad63afd2234353e11797d752c9086feb *R/RQ.R
-13f29ae89f78a43d1ec71933fa6cb876 *R/calc_MO2.R
+47beee9080f870cee6d8788634034603 *R/calc_MO2.R
 794128f0e520ec5a44425c88c613cdd5 *R/calc_b.R
 d23190ea70011fa2ab3180f5d64b57f1 *R/closed.R
 0ae50fb059790ee4cd0ce5b9f6972f0b *R/co2_add.R
@@ -18,7 +18,7 @@ a9bedb6296d11f4147f28c2eaa09ab0b *R/correct_bubble.R
 95361332612df0dae98ff62ca37ac459 *R/flush_water.R
 d6ad99815fdbf83478a97f90da438338 *R/goal_flush_pH.R
 27849a4b1b223e54767be3b82834953a *R/guess_TA.R
-df00eac8a8c9f2a93b0977db0973c780 *R/guess_when.R
+1996f5bf1904d9db56d7cc7511f15b4f *R/guess_when.R
 8aa643bf9a75f61481bba0714d236e4d *R/import_firesting.R
 b717924c6ea994201c6158020aa3ab97 *R/import_presens.R
 68092a5e0ad69a9eb441c38f435a7830 *R/import_witrox.R
@@ -36,7 +36,7 @@ e1b8d73b462e2059a519db6cc6c441ac *R/scale_MO2.R
 1fb03d9c89cb729344e130da821a3960 *inst/extdata/witrox_file.txt
 c0fe1729682dac759bd01ebbe4ffc8c4 *man/Q10.Rd
 19f6587a2e3c9609918ed219ffada68d *man/RQ.Rd
-7ec4d90e104ea7cf637b61ca2c238943 *man/calc_MO2.Rd
+6faa01c3a709976721c8e41f24b086f0 *man/calc_MO2.Rd
 0bf8a5e018ee86944cd8846b7b8a9b2c *man/calc_b.Rd
 c7d1668fa19926d33e89747394e1f67d *man/closed.Rd
 e32cdb40f421d04855b0e49761bce1e0 *man/co2_add.Rd
@@ -51,7 +51,7 @@ c7b784444d853b69d6791b194185aec2 *man/conv_resp_unit.Rd
 eb08f1b8f1dfe363ef2e2265dac705ad *man/flush_water.Rd
 f6095a3508f9746a6622dc9170396638 *man/goal_flush_pH.Rd
 39bd66497482d428ba0ff62b71aad4a9 *man/guess_TA.Rd
-4a8f711e3ef9071c019f76bf3cffce86 *man/guess_when.Rd
+2a9ff2060df673eb415f67df10252d26 *man/guess_when.Rd
 700ad4708aa5ae45b6f824bc99e879c2 *man/import_firesting.Rd
 8acfa91e6ad2991f39d8a927f934b311 *man/import_presens.Rd
 2fd70cbceedbd1e335bbee2bd0a59106 *man/import_witrox.Rd
