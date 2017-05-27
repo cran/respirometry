@@ -43,13 +43,12 @@ guess_TA(sal = 30, extend = FALSE) # do not extrapolate TA
 guess_TA(sal = 25, extend = TRUE) # will not extrapolate with sal > 5 psu out of bounds
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \references{
 Lee K, Tong LT, Millero FJ, Sabine CL, Dickson AG, Goyet C, Park G-H, Wanninkhof R, Feely RA, Key RM. 2006. Global relationships of total alkalinity with salinity and temperature in surface waters of the world’s oceans. Geophys Res Lett. 33:L19605.
 }
 \seealso{
 \code{\link{predict_pH}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

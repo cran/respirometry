@@ -12,4 +12,3 @@ Provides tools to enable the researcher to more precisely conduct respirometry e
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}
 }
-

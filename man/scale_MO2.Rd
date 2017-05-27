@@ -53,10 +53,9 @@ persp(mass, temp, mo2, xlab = 'Mass (g)', ylab = 'Temperature (*C)', zlab = 'MO2
  theta = 35, phi = 15, expand = 0.5, ticktype = 'detailed', nticks = 10)
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{Q10}}, \code{\link{calc_b}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

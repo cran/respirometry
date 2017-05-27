@@ -42,10 +42,9 @@ predict_pH(start_o2 = 75, end_o2 = 50, start_pH = 7.96, temp = 15, sal = 33, RQ 
 predict_pH(start_o2 = 75, end_o2 = 100, start_pH = 8.013536) # reverse the order
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link[seacarb]{carb}}, \code{\link{guess_TA}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

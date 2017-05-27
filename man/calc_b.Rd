@@ -33,10 +33,9 @@ calc_b(mass = mass, MO2 = msMO2)
 calc_b(mass = mass, MO2 = msMO2, plot = "log")
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{scale_MO2}}, \code{\link{calc_MO2}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

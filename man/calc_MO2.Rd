@@ -6,7 +6,7 @@
 \title{Calculate metabolic rate}
 \usage{
 calc_MO2(duration, o2, o2_unit = "percent_a.s.", bin_width, vol, temp = 25,
-  sal = 35, atm_pres = 1013.25, good_data = TRUE)
+  sal = 35, atm_pres = 1013.25, time, pH, good_data = TRUE)
 }
 \arguments{
 \item{duration}{numeric vector of the timepoint for each observation (minutes).}
@@ -25,15 +25,22 @@ calc_MO2(duration, o2, o2_unit = "percent_a.s.", bin_width, vol, temp = 25,
 
 \item{atm_pres}{atmospheric pressure (mbar). Default is 1013.25 mbar.}
 
-\item{good_data}{logical vector of whether O2 observations are "good" measurements and should be included in analysis. Default is that all observations are \code{TRUE}.}
+\item{time}{(optional). Numeric vector of timestamp observations.}
+
+\item{pH}{(optional). Numeric vector of pH observations.}
+
+\item{good_data}{logical vector of whether O2 observations are "good" measurements and should be included in analysis. Linear regressions will not be fit over bins that include "bad" data. Bins will be split at bad data points. Default is that all observations are \code{TRUE}.}
 }
 \value{
-A data frame with seven columns is returned:
+A data frame is returned:
 \describe{
-\item{MEAN_O2}{Mean O2 value of the bin in the unit chosen by \code{o2_unit}).}
-\item{O2_RANGE}{Range of O2 values in the bin.}
-\item{MEAN_DURATION}{Mean duration of the bin (minutes).}
+\item{DUR_MEAN}{Mean duration of the bin (minutes).}
 \item{DUR_RANGE}{Range of duration timepoints in the bin.}
+\item{TIME_MEAN}{Exists only if the parameter \code{time} has values. Mean timestamp of the bin.}
+\item{TIME_RANGE}{Exists only if the parameter \code{time} has values. Range of timestamps in the bin.}
+\item{PH_MEAN}{Exists only if the parameter \code{pH} has values. Mean pH of the bin. Averaged using \code{mean_pH()}.}
+\item{O2_MEAN}{Mean O2 value of the bin in the unit chosen by \code{o2_unit}).}
+\item{O2_RANGE}{Range of O2 values in the bin.}
 \item{MO2}{Metabolic rate (umol O2 / hour).}
 \item{R2}{Coefficient of determination for the linear regression fit to calculate MO2.}
 \item{N}{Number of observations in the bin.}
@@ -60,7 +67,7 @@ bad_data = o2_data$DURATION >= 10 & o2_data$DURATION <= 12
 bin_width = 5, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL, good_data = !bad_data))
 
 # easily make a Pcrit plot
-plot(mo2_5_min$MEAN_O2, mo2_5_min$MO2)
+plot(mo2_5_min$O2_MEAN, mo2_5_min$MO2)
 
 # I want to express MO2 in mg per min instead.
 (mo2_5_min$MO2 <- conv_resp_unit(value = mo2_5_min$MO2, from = 'umol_O2 / hr', to = 'mg_O2 / min'))
@@ -70,10 +77,9 @@ calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
 bin_width = Inf, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL)
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{calc_b}}, \code{\link{closed}}, \code{\link{scale_MO2}}, \code{\link{conv_resp_unit}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

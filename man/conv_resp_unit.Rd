@@ -42,10 +42,9 @@ to = "umol_O2 / cm2 / um / kPa / hr", temp = 20)
 # gill diffusion with whole animal MO2.
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link[measurements]{conv_multiunit}}, \code{\link{conv_o2}}, \code{\link[seacarb]{rho}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

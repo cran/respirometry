@@ -40,10 +40,9 @@ Calculates the pH of a flush reservoir that is needed to achieve the goal pCO2 a
 goal_flush_pH(goal_pco2 = 1000, resp_pH = 7.6, resp_vol = 90, flush_vol = 200)
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{co2_rate}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

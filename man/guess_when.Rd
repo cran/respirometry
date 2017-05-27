@@ -32,10 +32,9 @@ guess_when(past_o2 = rnorm(n = 10, mean = 100:91, sd = 5), past_time = 1:10, goa
 # when signal:noise is low.
 
 }
+\seealso{
+\code{\link{predict_pH}}, \code{\link{predict_nh3}}
+}
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}
 }
-\seealso{
-\code{\link{predict_pH}}, \code{\link{predict_NH4}}
-}
-

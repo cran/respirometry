@@ -41,13 +41,12 @@ max_MO2(flow_rate = 1)
 scale_MO2(mass_1 = 300, MO2_1 = 2000, MO2_2 = max_mo2) # I can almost support a 1 kg individual!
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \references{
 Steffensen JF. 1989. Some errors in respirometry of aquatic breathers: How to avoid and correct for them. Fish Physiol Biochem. 6:49–59. Equation 8.
 }
 \seealso{
 \code{\link{min_flow}}, \code{\link{flush_water}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

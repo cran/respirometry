@@ -65,10 +65,9 @@ import_presens(file = file, date = '\%d-\%b-\%Y')
 }
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{import_firesting}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

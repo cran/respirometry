@@ -39,13 +39,12 @@ min_flow(MO2 = 1000)
 min_flow(MO2 = 1000, min_pO2 = 75, pO2_in = 90, temp = 10, sal = 0)
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \references{
 Steffensen JF. 1989. Some errors in respirometry of aquatic breathers: How to avoid and correct for them. Fish Physiol Biochem. 6:49–59. Equation 8.
 }
 \seealso{
 \code{\link{max_MO2}}, \code{\link{flush_water}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

@@ -47,10 +47,9 @@ RQ(o2 = o2_observations, o2_unit = 'kPa', DIC = DIC_observations)
 
 RQ(o2 = o2_observations, o2_unit = 'kPa', pH = pH_observations, TA = 2032)
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{conv_o2}}, \code{\link{guess_TA}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

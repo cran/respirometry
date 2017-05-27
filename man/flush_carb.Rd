@@ -40,10 +40,9 @@ flush_carb(resp_vol = 90, flow_rate = 10, duration = 3, resp_pH = 7.8, flush_pH 
 flush_carb(resp_vol = 90, flow_rate = 10, duration = 3, resp_pH = 7.8, flush_pH = 8.1)$pH
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link[seacarb]{carb}}, \code{\link{flush_water}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

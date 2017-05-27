@@ -11,7 +11,7 @@
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @note Viewing the plot can be valuable if the O2 consumption or production is not linear.
-#' @seealso \code{\link{predict_pH}}, \code{\link{predict_NH4}}
+#' @seealso \code{\link{predict_pH}}, \code{\link{predict_nh3}}
 #' 
 #' @examples
 #' guess_when(past_o2 = rnorm(n = 10, mean = 100:91), past_time = 1:10, goal_o2 = 75, plot = FALSE)

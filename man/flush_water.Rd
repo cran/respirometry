@@ -42,13 +42,12 @@ persp(flow_rate, duration, perc_fresh, xlab = 'Flow rate (LPM)', ylab = 'Duratio
 zlab = '\% exchange', theta = 45, phi = 15, expand = 0.5, ticktype = 'detailed', nticks = 10)
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \references{
 Steffensen JF. 1989. Some errors in respirometry of aquatic breathers: How to avoid and correct for them. Fish Physiol Biochem. 6:49–59. Equation 5.
 }
 \seealso{
 \code{\link{flush_carb}}, \code{\link{min_flow}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

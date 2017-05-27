@@ -29,6 +29,7 @@ conv_o2(o2 = 100, from = "percent_a.s.", to = "all", temp = 25,
 \item{umol_per_kg}{}
 \item{mmol_per_kg}{}
 \item{ml_per_kg}{}
+\item{volumes_percent}{}
 }}
 
 \item{to}{a single string either describing the unit to which the conversion should be conducted (options are the same as in \code{from}), or the string "all" to return all units.}
@@ -43,7 +44,7 @@ conv_o2(o2 = 100, from = "percent_a.s.", to = "all", temp = 25,
 Unfortunately, a consensus on the best way to express how much oxygen is in water has not been formed to date. Until then, this function converts between all commonly used forms of dissolved O2 measurements.
 }
 \details{
-Conversions are based on relationships and values from the package \code{\link[marelac]{marelac}}.
+Conversions are based on relationships and values from the package \code{\link[marelac]{marelac}} which utilizes saturation values from Weiss 1970.
 }
 \examples{
 conv_o2(o2 = 50)
@@ -52,7 +53,9 @@ conv_o2(o2 = 1:50, from = "umol_per_l", to = "ml_per_l", temp = 10, sal = 0,
 conv_o2()[c('mmHg','kPa')]
 
 }
+\references{
+Weiss R. 1970. The solubility of nitrogen, oxygen, and argon in water and seawater. Deep-Sea Research. 17:721-735.
+}
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}
 }
-

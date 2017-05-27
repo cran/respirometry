@@ -42,13 +42,12 @@ It is assumed that all of the CO2 added dissolves and remains in solution. This 
 co2_rate(goal_pco2 = 1000, init_pH = 8.1, flow_rate = 3)
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \references{
 Jokiel PL, Bahr KD, Rodgers KS. 2014. Low-cost, high-flow mesocosm system for simulating ocean acidification with CO2 gas. Limnol Oceanogr Methods. 12:313–322.
 }
 \seealso{
 \code{\link{co2_add}}, \code{\link{flush_carb}}, \code{\link[seacarb]{carb}}, \code{\link{peri_pump}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

@@ -77,10 +77,9 @@ data_list$CH_3 # here's the channel 3 data frame.
 }
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{import_presens}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

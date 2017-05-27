@@ -24,10 +24,9 @@ Since pH is on a logarithmic scale, averaging pH values directly does not provid
 mean_pH(c(7, 8)) # 7.26 rather than 7.5!
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \references{
 Boutilier RG, Shelton G. 1980. The statistical treatment of hydrogen ion concentration and pH. J Exp Biol. 84:335–339.
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

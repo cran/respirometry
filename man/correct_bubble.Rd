@@ -38,10 +38,9 @@ correct_bubble(resp_vol = 50, bubble_vol = 1, temp = 10, sal = 0)
 # in calculating MO2, a volume of 63.8 L should be used rather than the true 50 L.
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link[marelac]{molvol}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

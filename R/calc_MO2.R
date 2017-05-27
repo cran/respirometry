@@ -10,14 +10,19 @@
 #' @param temp temperature (°C). Default is 25 °C.
 #' @param sal salinity (psu). Default is 35 psu.
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
-#' @param good_data logical vector of whether O2 observations are "good" measurements and should be included in analysis. Default is that all observations are \code{TRUE}.
+#' @param time (optional). Numeric vector of timestamp observations.
+#' @param pH (optional). Numeric vector of pH observations.
+#' @param good_data logical vector of whether O2 observations are "good" measurements and should be included in analysis. Linear regressions will not be fit over bins that include "bad" data. Bins will be split at bad data points. Default is that all observations are \code{TRUE}.
 #'
-#' @return A data frame with seven columns is returned:
+#' @return A data frame is returned:
 #' \describe{
-#' \item{MEAN_O2}{Mean O2 value of the bin in the unit chosen by \code{o2_unit}).}
-#' \item{O2_RANGE}{Range of O2 values in the bin.}
-#' \item{MEAN_DURATION}{Mean duration of the bin (minutes).}
+#' \item{DUR_MEAN}{Mean duration of the bin (minutes).}
 #' \item{DUR_RANGE}{Range of duration timepoints in the bin.}
+#' \item{TIME_MEAN}{Exists only if the parameter \code{time} has values. Mean timestamp of the bin.}
+#' \item{TIME_RANGE}{Exists only if the parameter \code{time} has values. Range of timestamps in the bin.}
+#' \item{PH_MEAN}{Exists only if the parameter \code{pH} has values. Mean pH of the bin. Averaged using \code{mean_pH()}.}
+#' \item{O2_MEAN}{Mean O2 value of the bin in the unit chosen by \code{o2_unit}).}
+#' \item{O2_RANGE}{Range of O2 values in the bin.}
 #' \item{MO2}{Metabolic rate (umol O2 / hour).}
 #' \item{R2}{Coefficient of determination for the linear regression fit to calculate MO2.}
 #' \item{N}{Number of observations in the bin.}
@@ -42,7 +47,7 @@
 #' bin_width = 5, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL, good_data = !bad_data))
 #' 
 #' # easily make a Pcrit plot
-#' plot(mo2_5_min$MEAN_O2, mo2_5_min$MO2)
+#' plot(mo2_5_min$O2_MEAN, mo2_5_min$MO2)
 #' 
 #' # I want to express MO2 in mg per min instead.
 #' (mo2_5_min$MO2 <- conv_resp_unit(value = mo2_5_min$MO2, from = 'umol_O2 / hr', to = 'mg_O2 / min'))
@@ -54,33 +59,66 @@
 #' @encoding UTF-8
 #' @export
 
-calc_MO2 = function(duration, o2, o2_unit = 'percent_a.s.', bin_width, vol, temp = 25, sal = 35, atm_pres = 1013.25, good_data = TRUE){
+calc_MO2 = function(duration, o2, o2_unit = 'percent_a.s.', bin_width, vol, temp = 25, sal = 35, atm_pres = 1013.25, time, pH, good_data = TRUE){
 	if(missing(bin_width)) stop('"bin_width" must be provided. If MO2 should be calculated from one observation to the next, set "bin_width" to 0.')
+	
 	data = data.frame(duration, o2, temp, sal, atm_pres, good = good_data)
-	data = data[good_data, ]
+		if(methods::hasArg(time)) data$time = time
+		if(methods::hasArg(pH)) data$pH = pH
 	data$umol_o2 = conv_o2(o2 = data$o2, from = o2_unit, to = 'umol_per_l', temp = data$temp, sal = data$sal, atm_pres = data$atm_pres)
+	
 	if(bin_width != 0){
 		data$bin = floor(data$duration / bin_width)
+		data$bin = unlist(by(data, data$bin, function(i){ # split bins by bad data
+		  breaks = rle(i$good)[['lengths']]
+		  paste0(i$bin, rep(letters[1:length(breaks)], breaks))
+		  }))
+		inter1 = by(data, data$bin, function(i) sum(i$good) != 0) # identify bad bins
+		data = data[data$bin %in% names(inter1)[inter1], ] # remove bad bins
+		
 		mo2s = data.frame(
-			MEAN_O2 = as.numeric(tapply(data$o2, data$bin, mean, na.rm = TRUE)),
-			O2_RANGE = sapply(tapply(data$o2, data$bin, range, na.rm = TRUE), function(i) paste(rev(i), collapse = ' - ')),
-			MEAN_DURATION = as.numeric(tapply(data$duration, data$bin, mean, na.rm = TRUE)),
-			DUR_RANGE = sapply(tapply(data$duration, data$bin, range, na.rm = TRUE), function(i) paste(signif(i, 2), collapse = ' - ')),
-			MO2 = as.vector(-by(data, data$bin, function(i) stats::coef(stats::lm(umol_o2 ~ duration, data = i))['duration'])) * 60 * vol,
-			R2 = as.vector(by(data, data$bin, function(i) summary(stats::lm(umol_o2 ~ duration, data = i))$r.squared)),
-			N = as.numeric(table(data$bin)))
-		return(mo2s)
+			DUR_MEAN = as.numeric(tapply(data$duration, data$bin, mean, na.rm = TRUE)),
+			DUR_RANGE = sapply(tapply(data$duration, data$bin, range, na.rm = TRUE), function(i) paste(i, collapse = ' - '))
+		)
+		if(methods::hasArg(time)){
+			mo2s$TIME_MEAN = as.POSIXct(tapply(data$time, data$bin, mean, na.rm = TRUE), origin = '1970-01-01')
+			mo2s$TIME_RANGE = sapply(tapply(data$time, data$bin, range, na.rm = TRUE), function(i){
+				i = as.character(i)
+				if(lubridate::date(i[1]) == lubridate::date(i[2])) i[2] = strftime(i[2], format='%T') 
+				paste(i, collapse = ' - ')
+			})
+		}
+		if(methods::hasArg(pH)) mo2s$PH_MEAN = as.numeric(tapply(data$pH, data$bin, mean_pH, na.rm = TRUE))
+		mo2s$O2_MEAN = as.numeric(tapply(data$o2, data$bin, mean, na.rm = TRUE))
+		mo2s$O2_RANGE = sapply(tapply(data$o2, data$bin, range, na.rm = TRUE), function(i) paste(rev(i), collapse = ' - '))
+		mo2s$MO2 = as.vector(-by(data, data$bin, function(i) stats::coef(stats::lm(umol_o2 ~ duration, data = i))['duration'])) * 60 * vol
+		mo2s$R2 = as.vector(by(data, data$bin, function(i) summary(stats::lm(umol_o2 ~ duration, data = i))$r.squared))
+		mo2s$N = as.numeric(table(data$bin))
+		
+		mo2s = mo2s[order(mo2s$DUR_MEAN), ]
+		row.names(mo2s) = NULL
 	}
 	
 	if(bin_width == 0){
+	  data = data[good_data, ]
+	  
 		mo2s = data.frame(
-			MEAN_O2 = utils::head(data$o2, -1) + diff(data$o2) / 2,
-			O2_RANGE = paste(data$o2[1:(nrow(data) - 1)], data$o2[2:nrow(data)], sep = ' - '),
-			MEAN_DURATION = utils::head(data$duration, -1) + diff(data$duration) / 2,
-			DUR_RANGE = paste(signif(data$duration[1:(nrow(data) - 1)], 3), signif(data$duration[2:nrow(data)], 3), sep = ' - '),
-			MO2 = -diff(data$umol_o2) / diff(data$duration) * 60 * vol,
-			R2 = NA,
-			N = 2)
-		return(mo2s)
+			DUR_MEAN = utils::head(data$duration, -1) + diff(data$duration) / 2,
+			DUR_RANGE = paste(data$duration[1:(nrow(data) - 1)], data$duration[2:nrow(data)], sep = ' - '))
+		if(methods::hasArg(time)){
+			mo2s$TIME_MEAN = utils::head(data$time, -1) + diff(data$time) / 2
+			mo2s$TIME_RANGE = sapply(1:(nrow(data) - 1), function(i){
+				i = as.character(data[i:(i + 1), 'time'])
+				if(lubridate::date(i[1]) == lubridate::date(i[2])) i[2] = strftime(i[2], format='%T') 
+				paste(i, collapse = ' - ')
+			})
+		}
+		if(methods::hasArg(pH)) mo2s$PH_MEAN = utils::head(data$pH, -1) + diff(data$pH) / 2
+			mo2s$O2_MEAN = utils::head(data$o2, -1) + diff(data$o2) / 2
+			mo2s$O2_RANGE = paste(data$o2[1:(nrow(data) - 1)], data$o2[2:nrow(data)], sep = ' - ')
+			mo2s$MO2 = -diff(data$umol_o2) / diff(data$duration) * 60 * vol
+	    mo2s$R2 = NA
+			mo2s$N = 2
 	}
+	return(mo2s)
 }

@@ -49,10 +49,9 @@ closed(delta_pO2 = conv_o2(o2 = 0.44, from = 'mg_per_l', to = 'percent_a.s.'), d
  vol = 30)
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{flush_water}}, \code{\link{calc_MO2}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}

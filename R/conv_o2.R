@@ -3,7 +3,7 @@
 #' @description Unfortunately, a consensus on the best way to express how much oxygen is in water has not been formed to date. Until then, this function converts between all commonly used forms of dissolved O2 measurements.
 #'
 #' @details
-#' Conversions are based on relationships and values from the package \code{\link[marelac]{marelac}}.
+#' Conversions are based on relationships and values from the package \code{\link[marelac]{marelac}} which utilizes saturation values from Weiss 1970.
 #'
 #' @param o2 a numeric vector of the O2 value(s). Default is 100.
 #' @param from a string describing the unit used to measure \code{o2}. Default is "percent_a.s." Options are:\itemize{
@@ -24,6 +24,7 @@
 #' \item{umol_per_kg}{}
 #' \item{mmol_per_kg}{}
 #' \item{ml_per_kg}{}
+#' \item{volumes_percent}{}
 #' }
 #' @param to a single string either describing the unit to which the conversion should be conducted (options are the same as in \code{from}), or the string "all" to return all units.
 #' @param temp temperature (°C). Default is 25 °C.
@@ -31,6 +32,7 @@
 #' @param atm_pres atmospheric pressure (mbar). Default is 1013.25 mbar.
 #'
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
+#' @references Weiss R. 1970. The solubility of nitrogen, oxygen, and argon in water and seawater. Deep-Sea Research. 17:721-735.
 #'
 #' @examples
 #' conv_o2(o2 = 50)
@@ -43,6 +45,11 @@
 
 conv_o2 = function(o2 = 100, from = "percent_a.s.", to = "all", temp = 25, sal = 35, atm_pres = 1013.25){
 	air_pres = measurements::conv_unit(atm_pres, 'mbar', 'bar')
+	
+	all_units = c('percent_a.s.', 'percent_o2', 'hPa', 'kPa', 'torr', 'mmHg', 'inHg', 'mg_per_l', 'ug_per_l', 'umol_per_l', 'mmol_per_l', 'ml_per_l', 'mg_per_kg', 'ug_per_kg', 'umol_per_kg', 'mmol_per_kg', 'ml_per_kg', 'volumes_percent')
+	if(!(from %in% all_units)) stop('the \'from\' argument is not an acceptable unit.')
+	if(!(to %in% c(all_units, 'all'))) stop('the \'to\' argument is not an acceptable unit.')	
+	
 	if(from == 'percent_a.s.') perc_a.s. = o2
 	if(from == 'percent_o2') perc_a.s. = o2 / marelac::atmComp('O2')
 	if(from == 'hPa') perc_a.s. = measurements::conv_unit(o2, 'hPa', 'atm') * 100 / (air_pres - marelac::vapor(S = sal, t = temp)) / marelac::atmComp('O2')
@@ -60,6 +67,8 @@ conv_o2 = function(o2 = 100, from = "percent_a.s.", to = "all", temp = 25, sal =
 	if(from == 'umol_per_kg') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
 	if(from == 'mmol_per_kg') perc_a.s. = o2 * 100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * (as.numeric(seacarb::rho(S = sal, T = temp)))
 	if(from == 'ml_per_kg') perc_a.s. = measurements::conv_unit(o2, 'ml', 'l') / marelac::molvol(t = temp, P = air_pres, species = 'O2', quantity = 1 / measurements::conv_unit(100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2'), 'mol', 'umol')) * (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
+	if(from == 'volumes_percent') perc_a.s. = measurements::conv_unit(o2, 'ml', 'l') / marelac::molvol(t = temp, P = air_pres, species = 'O2', quantity = 1 / measurements::conv_unit(100 / marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2'), 'mol', 'umol')) * 10
+	
 	
 	x = list()
 	if(to == 'percent_a.s.' | to == 'all') x$percent_a.s. = perc_a.s.
@@ -79,6 +88,8 @@ conv_o2 = function(o2 = 100, from = "percent_a.s.", to = "all", temp = 25, sal =
 	if(to == 'umol_per_kg' | to == 'all') x$umol_per_kg = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100 / (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
 	if(to == 'mmol_per_kg' | to == 'all') x$mmol_per_kg = marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100 / 1000 / (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
 	if(to == 'ml_per_kg' | to == 'all') x$ml_per_kg = measurements::conv_unit(as.numeric(marelac::molvol(t = temp, P = air_pres, species = 'O2', quantity = measurements::conv_unit(marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100, 'umol', 'mol'))), 'l', 'ml') / (as.numeric(seacarb::rho(S = sal, T = temp)) / 1000)
+	if(to == 'volumes_percent' | to == 'all') x$volumes_percent = measurements::conv_unit(as.numeric(marelac::molvol(t = temp, P = air_pres, species = 'O2', quantity = measurements::conv_unit(marelac::gas_satconc(S = sal, t = temp, P = air_pres, species = 'O2') * perc_a.s. / 100, 'umol', 'mol'))), 'l', 'ml') / 10
+	
 	attr(x$percent_o2, 'names') = NULL
 	attr(x$hPa, 'names') = NULL
 	attr(x$kPa, 'names') = NULL
@@ -95,6 +106,7 @@ conv_o2 = function(o2 = 100, from = "percent_a.s.", to = "all", temp = 25, sal =
 	attr(x$umol_per_kg, 'names') = NULL
 	attr(x$mmol_per_kg, 'names') = NULL
 	attr(x$ml_per_kg, 'names') = NULL
+	attr(x$volumes_percent, 'names') = NULL
 	if(to != 'all') x = unlist(x, use.names = FALSE)
 	return(x)
 }

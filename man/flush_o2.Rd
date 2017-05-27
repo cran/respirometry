@@ -31,10 +31,9 @@ flush_o2(resp_vol = 90, flow_rate = 10, duration = 3, resp_o2 = 15, flush_o2 = 2
 flush_o2(resp_vol = 20, flow_rate = 2, resp_o2 = 75, flush_o2 = 99, final_o2 = 95)
 
 }
-\author{
-Matthew A. Birk, \email{matthewabirk@gmail.com}
-}
 \seealso{
 \code{\link{flush_water}}, \code{\link{flush_carb}}
 }
-
+\author{
+Matthew A. Birk, \email{matthewabirk@gmail.com}
+}
