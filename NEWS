@@ -1,4 +1,9 @@
 -------------------------------------------------
+version 0.5.0, 2017-11-01
+- import_firesting():	now supports "Firesting Logger" software and 1st generation FireStingO2 meter
+- Q10():			option added to return an nls object with the model fit if vectors are provided
+- Q10():			fixed a bug where the returned value was 1 when the first two elements of T_vec were identical
+-------------------------------------------------
 version 0.4.0, 2017-05-27
 - calc_MO2():			parameter added: "pH" which allows pH data to be summarized along with oxygen and duration data for each bin
 - calc_MO2():			parameter added: "time" to include time mean and range in output

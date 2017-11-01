@@ -5,7 +5,7 @@
 \alias{Q10}
 \title{Parameters of Q10 Temperature Coefficient}
 \usage{
-Q10(Q10, R1, R2, T1, T2, R_vec, T_vec)
+Q10(Q10, R1, R2, T1, T2, R_vec, T_vec, model = FALSE)
 }
 \arguments{
 \item{Q10}{factor by which rate changes due to 10 °C increase in temperature.}
@@ -21,6 +21,8 @@ Q10(Q10, R1, R2, T1, T2, R_vec, T_vec)
 \item{R_vec}{a vector of rate values.}
 
 \item{T_vec}{a vector of temperature values (in °C).}
+
+\item{model}{logical. If \code{TRUE}, then a list is returned which includes an exponential model of \code{R_vec} and \code{T_vec} fit by \code{stats::nls()}.}
 }
 \description{
 Calculates parameters from Q10 temperature coefficient for chemical or biological systems. This function can be used in two ways. 1. if four of the first five parameters are given (\code{Q10}, \code{R1}, \code{R2}, \code{T1}, \code{T2}) then the fifth parameter is returned, or 2. if \code{R_vec} and \code{T_vec} are given, then the best Q10 for those data is returned.

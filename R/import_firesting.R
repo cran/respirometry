@@ -5,8 +5,9 @@
 #' The following FireSting fiber optic O2 transmitters are supported:
 #' \itemize{
 #' \item{FireStingO2}{}
+#' \item{FireStingO2 (1st generation)}{}
 #' }
-#' If you would like support for the Piccolo2, FireStingO2-Mini, TeX4, or any OEM instruments, email me a data file from the device. If you have files from the deprecated software program FireSting Logger that you would like to be compatible, email me a file.
+#' If you would like support for the Piccolo2, FireStingO2-Mini, TeX4, or any OEM instruments, email me a data file from the device.
 #'
 #' @param file a character string. The filepath for the file to be read.
 #' @param o2_unit a character string. The unit of O2 measurement to be output in the data frame. Options are described in \code{\link{conv_o2}}.
@@ -65,16 +66,37 @@ import_firesting = function(file, o2_unit = 'percent_a.s.', date = '%m/%d/%Y %X'
 	raw = strsplit(raw, split = '\r\n', fixed = T)[[1]]
 	raw = raw[sapply(raw, nchar) > 0] # remove blank rows
 	f = strsplit(raw, split = '\t', fixed = TRUE)
-	sals = as.numeric(sapply(f[grep('Settings:', f[1:50]) + 1:4], '[', 11))
+	sals = as.numeric(sapply(f[grep('Settings:', f[1:50]) + 1:4], '[', grep('Salinity', f[[grep('Settings:', f[1:50])]])))
 	if(is.null(overwrite_sal)) overwrite_sal = sals
 	if(length(overwrite_sal) == 1) overwrite_sal = rep(overwrite_sal, length(sals))
 	orig_o2_units = sapply(f[grep('Settings:', f[1:50]) + 1:4], '[', 3)
-	f = f[(grep('HH:MM:SS', f[1:50], fixed = TRUE) - 1):length(f)]
-	if(length(unique(sapply(f, length))) != 1) f = lapply(f, function(i) i[-length(f[[1]])])
+	software_version = paste(f[[2]], collapse = ' ')
+	if(grepl('Firesting Logger', software_version)){
+		atm_pres = as.numeric(sapply(f[grep('Settings:', f[1:50]) + 1:4], '[', grep('Press.', f[[grep('Settings:', f[1:50])]])))
+		date_start = f[[grep('Date:', f[1:50])]][2]
+	}
+	f = f[(utils::tail(grep('Time', f[1:50], fixed = TRUE), 1) - 1):length(f)]
+	if(grepl('Firesting Logger', software_version)){
+		f[[1]][21] = ''
+		if(length(unique(sapply(f, length))) != 1){
+			inter1 = which(sapply(f, length) != 21)
+			f = f[-c(inter1, utils::tail(inter1, 1) + 1:2)]
+		}
+	}
+	if(grepl('Pyro Oxygen Logger', software_version)){
+		if(length(unique(sapply(f, length))) != 1) f = lapply(f, function(i) i[-length(f[[1]])])
+	}
 	f = as.data.frame(matrix(unlist(f), ncol = length(f[[1]]), byrow = TRUE), stringsAsFactors = FALSE)
 	n_channels = max(as.numeric(gsub('^Ch\\s?(\\d)', '\\1', f[2, grep('^Ch\\s?\\d', f[2, ])])))
 	channel_names = paste('CH', 1:n_channels, sep = '_')
-	colnames(f) = c('DATE', 'TIME', 'DURATION', 'COMMENT', paste('CH', 1:n_channels, 'O2', sep = '_'), paste('CH', 1:n_channels, 'TEMP', sep = '_'), 'ATM_PRES', 'HUMIDITY', 'PROBE_TEMP', 'INTERNAL_TEMP', 'ANALOG_IN', paste('CH', 1:n_channels, 'PHASE', sep = '_'), paste('CH', 1:n_channels, 'INTENSITY', sep = '_'), paste('CH', 1:n_channels, 'AMB_LIGHT', sep = '_'))
+	if(grepl('Firesting Logger', software_version)){
+		colnames(f) = c('TIME', 'COMMENT', 'TEMP', paste('CH', 1:n_channels, 'O2', sep = '_'), '', paste('CH', 1:n_channels, 'PHASE', sep = '_'), '', paste('CH', 1:n_channels, 'INTENSITY', sep = '_'), paste('CH', 1:n_channels, 'AMB_LIGHT', sep = '_'))
+		
+	}
+	if(grepl('Pyro Oxygen Logger', software_version)){
+		colnames(f) = c('DATE', 'TIME', 'DURATION', 'COMMENT', paste('CH', 1:n_channels, 'O2', sep = '_'), paste('CH', 1:n_channels, 'TEMP', sep = '_'), 'ATM_PRES', 'HUMIDITY', 'PROBE_TEMP', 'INTERNAL_TEMP', 'ANALOG_IN', paste('CH', 1:n_channels, 'PHASE', sep = '_'), paste('CH', 1:n_channels, 'INTENSITY', sep = '_'), paste('CH', 1:n_channels, 'AMB_LIGHT', sep = '_'))
+		
+	}
 	f = f[-(1:2), ]
 	if(!(o2_unit %in% c(names(conv_o2()), 'raw', 'dphi'))) stop('the o2_unit argument is not an acceptable unit', call. = FALSE)
 	o2_cols = grep('^CH_\\d_O2$', colnames(f))
@@ -89,24 +111,43 @@ import_firesting = function(file, o2_unit = 'percent_a.s.', date = '%m/%d/%Y %X'
 		'ug/l (ppb)' = 'ug_per_l'
 	)
 	f[f == '---'] = NA
-	f[, -c(1, 2, 4)] = sapply((1:ncol(f))[-c(1, 2, 4)], function(i) as.numeric(f[, i])) # all except date, time, and comment
+	f[, -which(colnames(f) %in% c('DATE', 'TIME', 'COMMENT'))] = sapply((1:ncol(f))[-which(colnames(f) %in% c('DATE', 'TIME', 'COMMENT'))], function(i) as.numeric(f[, i])) # all except date, time, and comment
 	f[, o2_cols] = sapply(o2_cols, function(i){
 		if(orig_o2_units[which(i == o2_cols)] %in% c('raw', 'dphi')){
 			warning('The O2 values in channel ', gsub('CH_(\\d)_O2', '\\1', colnames(f)[i]), ' are expressed in either "raw" or "dphi" and cannot be converted to ', o2_unit)
 			return(f[, i])
 		}
-		inter1 = conv_o2(o2 = f[, i], from = o2_string_options[[orig_o2_units[which(i == o2_cols)]]], to = o2_unit, temp = f[, i + n_channels], sal = sals[which(i == o2_cols)], atm_pres = f$ATM_PRES)
-		inter1 = inter1 / conv_o2(to = o2_unit, temp = f[, i + n_channels], sal = sals[which(i == o2_cols)], atm_pres = f$ATM_PRES) * conv_o2(to = o2_unit, temp = f[, i + n_channels], sal = overwrite_sal[which(i == o2_cols)], atm_pres = f$ATM_PRES)
-		return(inter1)
+		if(grepl('Firesting Logger', software_version)){
+			inter1 = conv_o2(o2 = f[, i], from = o2_string_options[[orig_o2_units[which(i == o2_cols)]]], to = o2_unit, temp = f$TEMP, sal = sals[which(i == o2_cols)], atm_pres = atm_pres[which(i == o2_cols)])
+			inter1 = inter1 / conv_o2(to = o2_unit, temp = f$TEMP, sal = sals[which(i == o2_cols)], atm_pres = atm_pres[which(i == o2_cols)]) * conv_o2(to = o2_unit, temp = f$TEMP, sal = overwrite_sal[which(i == o2_cols)], atm_pres = atm_pres[which(i == o2_cols)])
+			return(inter1)
+		}
+		if(grepl('Pyro Oxygen Logger', software_version)){
+			inter1 = conv_o2(o2 = f[, i], from = o2_string_options[[orig_o2_units[which(i == o2_cols)]]], to = o2_unit, temp = f[, i + n_channels], sal = sals[which(i == o2_cols)], atm_pres = f$ATM_PRES)
+			inter1 = inter1 / conv_o2(to = o2_unit, temp = f[, i + n_channels], sal = sals[which(i == o2_cols)], atm_pres = f$ATM_PRES) * conv_o2(to = o2_unit, temp = f[, i + n_channels], sal = overwrite_sal[which(i == o2_cols)], atm_pres = f$ATM_PRES)
+			return(inter1)
+		}
 	})
+	if(grepl('Firesting Logger', software_version)) f$DATE = date_start
 	f$TIME = strptime(paste(f$DATE, f$TIME), format = date)
 	f$DATE = NULL
-	o2_cols = grep('^CH_\\d_O2$', colnames(f))
+	if(grepl('Firesting Logger', software_version)){
+		inter1 = c(0, which(diff(f$TIME) < 0), nrow(f))
+		inter2 = lapply(1:(length(inter1) - 1), function(i){
+			f[(inter1[i] + 1):inter1[i + 1], 'TIME'] + lubridate::days(i - 1)
+		})
+		f$TIME = do.call(c, inter2)
+		f$DURATION = as.numeric(difftime(time1 = f$TIME, time2 = f[1, 'TIME'], units = 'sec'))
+	}
 	f$DURATION = f$DURATION / 60 # convert from secs to mins
+	if(grepl('Firesting Logger', software_version)) f = f[, colnames(f) != '']
+	
+	o2_cols = grep('^CH_\\d_O2$', colnames(f))
 	for(i in rev(1:length(overwrite_sal))){
 		sal_list = list(overwrite_sal[i])
 		names(sal_list) = paste('CH', i, 'SAL', sep = '_')
-		f = data.frame(append(f, sal_list, after = grep(paste('CH', n_channels, 'TEMP', sep = '_'), colnames(f))))
+		if(grepl('Firesting Logger', software_version)) f = data.frame(append(f, sal_list, after = grep(paste('CH', n_channels, 'O2', sep = '_'), colnames(f))))
+		if(grepl('Pyro Oxygen Logger', software_version)) f = data.frame(append(f, sal_list, after = grep(paste('CH', n_channels, 'TEMP', sep = '_'), colnames(f))))
 	}
 	
 	f$COMMENT = as.character(f$COMMENT)

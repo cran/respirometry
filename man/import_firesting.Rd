@@ -56,8 +56,9 @@ Imports the standard txt file output from FireSting O2 transmitters and converts
 The following FireSting fiber optic O2 transmitters are supported:
 \itemize{
 \item{FireStingO2}{}
+\item{FireStingO2 (1st generation)}{}
 }
-If you would like support for the Piccolo2, FireStingO2-Mini, TeX4, or any OEM instruments, email me a data file from the device. If you have files from the deprecated software program FireSting Logger that you would like to be compatible, email me a file.
+If you would like support for the Piccolo2, FireStingO2-Mini, TeX4, or any OEM instruments, email me a data file from the device.
 }
 \note{
 Oxygen conversions are estimates based on the \code{\link[marelac]{marelac}} package.

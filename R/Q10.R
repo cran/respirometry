@@ -12,6 +12,7 @@
 #' @param T2 temperature 2 (in °C).
 #' @param R_vec a vector of rate values.
 #' @param T_vec a vector of temperature values (in °C).
+#' @param model logical. If \code{TRUE}, then a list is returned which includes an exponential model of \code{R_vec} and \code{T_vec} fit by \code{stats::nls()}.
 #'
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @seealso \code{\link{scale_MO2}}
@@ -46,7 +47,7 @@
 #' @encoding UTF-8
 #' @export
 
-Q10 = function(Q10, R1, R2, T1, T2, R_vec, T_vec){
+Q10 = function(Q10, R1, R2, T1, T2, R_vec, T_vec, model = FALSE){
   q10 = methods::hasArg(Q10)
   r2 = methods::hasArg(R2)
   r1 = methods::hasArg(R1)
@@ -59,7 +60,9 @@ Q10 = function(Q10, R1, R2, T1, T2, R_vec, T_vec){
   	guess_b = 0.1 * log(guess_q10) - 2e-5 # emperically determined relationship
   	mod = stats::nls(R_vec ~ a * exp(b * T_vec), data = dat, start = list(a = guess_a, b = guess_b))
   	mod_fit = data.frame(temp = dat$T_vec, fit_rate = stats::predict(mod, newdata = data.frame(T_vec = dat$T_vec)))
-  	return((mod_fit[2, 'fit_rate'] / mod_fit[1, 'fit_rate'])^(10 / (mod_fit[2, 'temp'] - mod_fit[1, 'temp'])))
+  	mod_fit = mod_fit[order(mod_fit$temp), ]
+  	inter = list(Q10 = (mod_fit[nrow(mod_fit), 'fit_rate'] / mod_fit[1, 'fit_rate'])^(10 / (mod_fit[nrow(mod_fit), 'temp'] - mod_fit[1, 'temp'])), model = mod)
+  	ifelse(test = model, yes = return(inter), no = return(inter$Q10))
   }
   else{
   	if(sum(q10, r2, r1, t2, t1) < 4) stop('Four parameters are needed')
