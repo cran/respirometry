@@ -1,9 +1,9 @@
-0172f24b01c0c1ff1ebd22728b49b337 *DESCRIPTION
+281b0a5386ded11ab4e45d9659a6086e *DESCRIPTION
 e2172c90fd18e880556280e52e27f183 *NAMESPACE
-4cff0784f5fe0f12f63b9b3815239890 *NEWS
-2b1192c49acb14da890962d3f8f09887 *R/Q10.R
+2c7ddfe476a65fe63faaacba53e92893 *NEWS
+16a62fc73af6b8a4ea149302973e3cb7 *R/Q10.R
 ad63afd2234353e11797d752c9086feb *R/RQ.R
-de847448d64a8dfe0f7ef08c59bf3a53 *R/calc_MO2.R
+bbcd458d47b673ae5814c1421863a2e4 *R/calc_MO2.R
 794128f0e520ec5a44425c88c613cdd5 *R/calc_b.R
 d23190ea70011fa2ab3180f5d64b57f1 *R/closed.R
 0ae50fb059790ee4cd0ce5b9f6972f0b *R/co2_add.R
@@ -20,7 +20,7 @@ d6ad99815fdbf83478a97f90da438338 *R/goal_flush_pH.R
 27849a4b1b223e54767be3b82834953a *R/guess_TA.R
 ed6070eb55a00a3af6c5f8f83b597d2e *R/guess_when.R
 0716bb36bd8012949e2a53235f6693bd *R/import_firesting.R
-b717924c6ea994201c6158020aa3ab97 *R/import_presens.R
+d0aa594c97ce2a1e1e356eb2364eea6d *R/import_presens.R
 4359973de5724f77418846992cfbf1d0 *R/import_witrox.R
 2d597ed8432f7168c56da7b2eebbaa68 *R/max_MO2.R
 f134578b3dcb4c833286180f1d3ab9af *R/mean_pH.R
@@ -33,10 +33,11 @@ e1b8d73b462e2059a519db6cc6c441ac *R/scale_MO2.R
 826eddbd78daf5b2eb768e642c672d82 *inst/extdata/fibox_3_file.txt
 7636934f404bb3e9fa22b8425769ccce *inst/extdata/fibox_4_file.csv
 389a3fa5f0a5e4aeef10399eb61278db *inst/extdata/firesting_file.txt
+624cd7b16835ffa6a52bd99e3eddb0a7 *inst/extdata/sdr_file.txt
 1fb03d9c89cb729344e130da821a3960 *inst/extdata/witrox_file.txt
-c421a587f6aa7cae3bafa919f53ff857 *man/Q10.Rd
+df477fdaa0fcfa8b62d7f37ab1f0723e *man/Q10.Rd
 e6fe49c19a3a7c3c149cc293f000f117 *man/RQ.Rd
-cdae23c18416c107e24e5f46c3c60b15 *man/calc_MO2.Rd
+d18b8e31ecf7602c61f2dbe5a1983182 *man/calc_MO2.Rd
 43fbe9074b44d6eebf2e1c31e2b178ba *man/calc_b.Rd
 ed202a8aa0d6f09da398864417ea0127 *man/closed.Rd
 910a2fbbde8799753914568a6dca7ff2 *man/co2_add.Rd
@@ -53,7 +54,7 @@ cebc09e5298ed6bb61bdebd0f1897f2a *man/flush_o2.Rd
 8e323bd3273a0978632e1907a01f5aaa *man/guess_TA.Rd
 bebd392b5d6963907ac75364f8d74c38 *man/guess_when.Rd
 622f4a081aefb03d5bb5e71ef161c666 *man/import_firesting.Rd
-8fd2852c6b4a540ad69a108e87fa3097 *man/import_presens.Rd
+cbd1c5c7b829c827008de1658c406ea8 *man/import_presens.Rd
 d79aebb2b1145a38322cb4ec0bfc51e7 *man/import_witrox.Rd
 44e92796a8703b9afb346a22e84db672 *man/max_MO2.Rd
 5f3312529e04b78220afed72ac5a9e37 *man/mean_pH.Rd

@@ -15,7 +15,7 @@ calc_MO2(duration, o2, o2_unit = "percent_a.s.", bin_width, vol, temp = 25,
 
 \item{o2_unit}{a string describing the unit used to measure \code{o2}. Default is "percent_a.s." Options are from \code{\link{conv_o2}}.}
 
-\item{bin_width}{numeric. A number defining how long of a period should be binned for each MO2 determination (minutes). If MO2 is to be calculated from one observation to the next (rather than binned observations), set \code{bin_width} to 0. To calculate one MO2 value from all observations, set \code{bin_width} to \code{Inf}.}
+\item{bin_width}{numeric or data frame. OPTION 1: A single number defining how long of a period should be binned for each MO2 determination (minutes). If MO2 is to be calculated from one observation to the next (rather than binned observations), set \code{bin_width} to 0. To calculate a single MO2 value from all observations, set \code{bin_width} to \code{Inf}. OPTION 2: A data frame with two numeric columns: "o2" and "width". Useful for Pcrit calculations or another application where bins of different widths are desired at different PO2s. For each row, set the "width" value to the bin duration (minutes) desired for observations <= the value in the "o2" column.}
 
 \item{vol}{volume of the respirometer (liter).}
 
@@ -47,7 +47,10 @@ A data frame is returned:
 }
 }
 \description{
-Calculates metabolic rate (MO2) given O2 measurements over time. Oxygen measurements are split into bins and MO2s are calculated from each bin (unless \code{bin_width} is set to \code{0}). The \code{bin_width} parameter defines the width of the bin in timed intervals (e.g. 15 minutes). Linear regressions are fit through each bin and the calculated MO2 is returned as the slope of the change in O2 over time.
+Calculates metabolic rate (MO2) given O2 measurements over time. Oxygen measurements are split into bins and MO2s are calculated from each bin (unless \code{bin_width} is set to \code{0}). The \code{bin_width} parameter defines the width of the bins in timed intervals (e.g. 15 minutes). Linear regressions are fit through each bin and the calculated MO2 is returned as the slope of the change in O2 over time.
+}
+\details{
+The \code{bin_width} seems to be an under-appreciated consideration when calculating metabolic rates if PO2 or time are interesting covariates. The wider the bins, the higher the precision of your calculated MO2 value (more observations to average over), but at a loss of resolution of an interesting covariate. The narrower the bins, the higher the resolution of the PO2 or time covariate, but at a cost of lower precision. If PO2 is a covariate of interest (e.g. during a Pcrit trial), consider using the data frame option of the \code{bin_width} parameter to vary the bin width depending on ambient PO2. For Pcrit trials, I have found good success using bins of 1/10th the trial duration at the highest PO2s (where good precision is important) and 1/100th the trial duration at the lowest PO2s (where good resolution is important).
 }
 \note{
 If only beginning and ending O2 observations are known, consider using \code{\link{closed}}. Both functions will work fine, but \code{\link{closed}} is simpler.
@@ -75,6 +78,14 @@ plot(mo2_5_min$O2_MEAN, mo2_5_min$MO2)
 # just endpoint measurement:
 calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
 bin_width = Inf, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL)
+
+# In my trial, observations above 77\% air saturation were really noisy, but much less noisy at
+# lower O2 values. I want to adjust my bin width based on the PO2 to obtain the best balance of
+# resolution and precision throughout the whole trial. Below 77\% a.s., use 4 minute bins. Above
+# 77\% a.s. use 10 minute bins.
+bins = data.frame(o2 = c(77, 100), width = c(4, 10))
+calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
+bin_width = bins, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL)
 
 }
 \seealso{

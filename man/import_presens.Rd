@@ -6,7 +6,7 @@
 \title{Import data from a PreSens O2 transmitter}
 \usage{
 import_presens(file, o2_unit = "percent_a.s.", date = "\%d/\%m/\%y",
-  sal = 35, all_cols = FALSE)
+  sal = 35, all_cols = FALSE, split_channels = FALSE)
 }
 \arguments{
 \item{file}{a character string. The filepath for the file to be read.}
@@ -18,6 +18,8 @@ import_presens(file, o2_unit = "percent_a.s.", date = "\%d/\%m/\%y",
 \item{sal}{salinity of water sample (psu). Default is 35 psu. Ignored for Fibox 4 files since salinity is provided by the file.}
 
 \item{all_cols}{logical. For Fibox 4 files only. Should all columns (including calibration data and serial numbers) be output?}
+
+\item{split_channels}{logical. For SDR SensorDish only. Should a list of data frames be returned with a separate data frame for each channel? Default is \code{FALSE}.}
 }
 \value{
 A data frame is returned.
@@ -25,12 +27,12 @@ A data frame is returned.
 \item{TIME}{Date and time, POSIXct format.}
 \item{DURATION}{Duration of measurement trial (minutes).}
 \item{O2}{Oxygen measurement in desired unit as determined by \code{o2_unit}.}
-\item{PHASE}{Phase recorded. Phase is inversely related to O2.}
-\item{AMPLITUDE}{Amplitude recorded. Amplitude is an indicator of the quality of the signal. A low amplitude warning is produced by the transmitter below 2500.}
+\item{PHASE}{Phase recorded. Phase is inversely related to O2. Not included in SDR SensorDish Reader files.}
+\item{AMPLITUDE}{Amplitude recorded. Amplitude is an indicator of the quality of the signal. A low amplitude warning is produced by the transmitter below 2500. Not included in SDR SensorDish Reader files.}
 \item{TEMP}{Temperature recorded or defined at beginning of measurement trial.}
 \item{ATM_PRES}{Atmospheric pressure (mbar).}
 \item{SAL}{Salinity (psu).}
-\item{ERROR_CODE}{Error code from transmitter. See PreSens user manual for translation of error code.}
+\item{ERROR_CODE}{Error code from transmitter. See PreSens user manual for translation of error code. Not included in SDR SensorDish Reader files.}
 }
 }
 \description{
@@ -45,6 +47,7 @@ The following PreSens fiber optic O2 transmitters are supported:
 \item{Fibox 3 LCD trace}{}
 \item{Microx TX3}{}
 \item{Microx TX3 trace}{}
+\item{SDR SensorDish Reader}{}
 }
 If you would like support for another PreSens O2 meter, email the package maintainer a data file from the device you would like supported.
 It is very important to note that the PreSens fiber optics O2 transmitters that are supported with this function (except the Fibox 4) DO NOT account for salinity (i.e. they assume salinity = 0 ppt). If the water sample measured was not fresh water, the oxygen concentrations (e.g. mg per liter or umol per liter) are incorrect in the PreSens txt file. This function corrects these O2 concentrations based on the salinity value defined by the \code{sal} argument. Absolute partial pressures (i.e. hPa and torr) will also be slightly different due to the slight influence of salinity on water's vapor pressure. This difference is typically ~0.05\% of the recorded value.
@@ -62,8 +65,12 @@ import_presens(file, o2_unit = 'umol_per_l', sal = 25)
 # Import a Fibox 4 file.
 file <- system.file('extdata', 'fibox_4_file.csv', package = 'respirometry')
 import_presens(file = file, date = '\%d-\%b-\%Y')
-}
 
+# Import an SDR SensorDish Reader file.
+file <- system.file('extdata', 'sdr_file.txt', package = 'respirometry')
+import_presens(file = file, date = '\%d.\%m.\%y\%X')
+
+}
 }
 \seealso{
 \code{\link{import_firesting}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}

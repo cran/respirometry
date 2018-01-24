@@ -1,11 +1,14 @@
 #' @title Calculate metabolic rate
 #' 
-#' @description Calculates metabolic rate (MO2) given O2 measurements over time. Oxygen measurements are split into bins and MO2s are calculated from each bin (unless \code{bin_width} is set to \code{0}). The \code{bin_width} parameter defines the width of the bin in timed intervals (e.g. 15 minutes). Linear regressions are fit through each bin and the calculated MO2 is returned as the slope of the change in O2 over time.
+#' @details
+#' The \code{bin_width} seems to be an under-appreciated consideration when calculating metabolic rates if PO2 or time are interesting covariates. The wider the bins, the higher the precision of your calculated MO2 value (more observations to average over), but at a loss of resolution of an interesting covariate. The narrower the bins, the higher the resolution of the PO2 or time covariate, but at a cost of lower precision. If PO2 is a covariate of interest (e.g. during a Pcrit trial), consider using the data frame option of the \code{bin_width} parameter to vary the bin width depending on ambient PO2. For Pcrit trials, I have found good success using bins of 1/10th the trial duration at the highest PO2s (where good precision is important) and 1/100th the trial duration at the lowest PO2s (where good resolution is important).
+#' 
+#' @description Calculates metabolic rate (MO2) given O2 measurements over time. Oxygen measurements are split into bins and MO2s are calculated from each bin (unless \code{bin_width} is set to \code{0}). The \code{bin_width} parameter defines the width of the bins in timed intervals (e.g. 15 minutes). Linear regressions are fit through each bin and the calculated MO2 is returned as the slope of the change in O2 over time.
 #' 
 #' @param duration numeric vector of the timepoint for each observation (minutes).
 #' @param o2 numeric vector of O2 observations.
 #' @param o2_unit a string describing the unit used to measure \code{o2}. Default is "percent_a.s." Options are from \code{\link{conv_o2}}.
-#' @param bin_width numeric. A number defining how long of a period should be binned for each MO2 determination (minutes). If MO2 is to be calculated from one observation to the next (rather than binned observations), set \code{bin_width} to 0. To calculate one MO2 value from all observations, set \code{bin_width} to \code{Inf}.
+#' @param bin_width numeric or data frame. OPTION 1: A single number defining how long of a period should be binned for each MO2 determination (minutes). If MO2 is to be calculated from one observation to the next (rather than binned observations), set \code{bin_width} to 0. To calculate a single MO2 value from all observations, set \code{bin_width} to \code{Inf}. OPTION 2: A data frame with two numeric columns: "o2" and "width". Useful for Pcrit calculations or another application where bins of different widths are desired at different PO2s. For each row, set the "width" value to the bin duration (minutes) desired for observations <= the value in the "o2" column.
 #' @param vol volume of the respirometer (liter).
 #' @param temp temperature (°C). Default is 25 °C.
 #' @param sal salinity (psu). Default is 35 psu.
@@ -56,6 +59,14 @@
 #' calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
 #' bin_width = Inf, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL)
 #' 
+#' # In my trial, observations above 77% air saturation were really noisy, but much less noisy at
+#' # lower O2 values. I want to adjust my bin width based on the PO2 to obtain the best balance of
+#' # resolution and precision throughout the whole trial. Below 77% a.s., use 4 minute bins. Above
+#' # 77% a.s. use 10 minute bins.
+#' bins = data.frame(o2 = c(77, 100), width = c(4, 10))
+#' calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,
+#' bin_width = bins, vol = 10, temp = o2_data$TEMP, sal = o2_data$SAL)
+#' 
 #' @encoding UTF-8
 #' @export
 
@@ -67,15 +78,65 @@ calc_MO2 = function(duration, o2, o2_unit = 'percent_a.s.', bin_width, vol, temp
 		if(methods::hasArg(pH)) data$pH = pH
 	data$umol_o2 = conv_o2(o2 = data$o2, from = o2_unit, to = 'umol_per_l', temp = data$temp, sal = data$sal, atm_pres = data$atm_pres)
 	
-	if(bin_width != 0){
-		data$bin = floor(data$duration / bin_width)
-		data$bin = unlist(by(data, data$bin, function(i){ # split bins by bad data
-		  breaks = rle(i$good)[['lengths']]
-		  paste0(i$bin, rep(letters[1:length(breaks)], breaks))
-		  }))
-		inter1 = by(data, data$bin, function(i) sum(i$good) != 0) # identify bad bins
-		data = data[data$bin %in% names(inter1)[inter1], ] # remove bad bins
-		
+	if(all(bin_width != 0)){
+		if(is.numeric(bin_width)){
+			data$bin = floor(data$duration / bin_width)
+			data$bin = unlist(by(data, data$bin, function(i){ # split bins by bad data
+				breaks = rle(i$good)[['lengths']]
+				paste0(i$bin, rep(letters[1:length(breaks)], breaks))
+			}))
+			inter1 = by(data, data$bin, function(i) sum(i$good) != 0) # identify bad bins
+			data = data[data$bin %in% names(inter1)[inter1], ] # remove bad bins
+		}
+		if(is.data.frame(bin_width)){
+			if(any(colnames(bin_width) != c('o2', 'width'))) stop('"bin_width" must be a data frame with two numeric columns: "o2" and "width".')
+			bin_width = bin_width[order(bin_width$o2), ]
+			
+			
+			
+			data$bin = NA
+			data_divided = list()
+			for(i in nrow(bin_width):1){
+			  inter1 = which(data$o2 <= bin_width[i, 'o2']) # get all data < bin width threshold
+			  data[inter1, 'bin'] = paste0(LETTERS[i], floor(data[inter1, 'duration'] / bin_width[i, 'width'])) # break into bins ignoring bad data
+			  data_divided[[i]] = data[inter1, ]
+			}
+			data = do.call(rbind, data_divided)
+			data = data[order(data$duration), ]
+			data_grouped = by(data, INDICES = data$bin, FUN = function(i){
+			  inter1 = rle(i$good)
+			  inter2 = c(1, cumsum(inter1[['lengths']]))
+			  inter3 = unique(i$bin)
+			  for(j in 1:length(inter1[['lengths']])){ # make sub-bins based on bad data
+			    i[birk::range_seq(inter2[c(j, j + 1)]), 'bin'] = paste0(inter3, letters[j])
+			  }
+			  return(i)
+			})
+			data = do.call(rbind, data_grouped)
+			data = data[order(data$duration), ]
+			if(any(!data$good)) data = data[!(data$bin %in% c(sort(unique(data$bin))[table(data$bin, data$good)[, 'FALSE'] > 1])), ] # get rid of bins with bad data
+			
+			
+			# PREVIOUS ATTEMPT
+			
+			# data$bin = NA
+			# data[which(!data$good), 'bin'] = 'BAD DATA'
+			# for(i in 1:nrow(data)){
+			#   first_obs = data[is.na(data$bin), ][1, ]
+			#   this_width = bin_width[which(first_obs$o2 <= bin_width$o2)[1], 'width']
+			#   bin_length = rle(is.na(data[which(data$duration >= first_obs$duration & data$duration < (first_obs$duration + this_width)), 'bin']))$lengths[1] - 1
+			#   data[which(data$duration == first_obs$duration):(which(data$duration == first_obs$duration) + bin_length), 'bin'] = i
+			#   if(!any(is.na(data$bin))) break
+			# }
+			
+			
+			
+			
+			
+			
+			
+		}
+	  data = data[data$good, ]
 		mo2s = data.frame(
 			DUR_MEAN = as.numeric(tapply(data$duration, data$bin, mean, na.rm = TRUE)),
 			DUR_RANGE = sapply(tapply(data$duration, data$bin, range, na.rm = TRUE), function(i) paste(i, collapse = ' - '))
@@ -91,15 +152,15 @@ calc_MO2 = function(duration, o2, o2_unit = 'percent_a.s.', bin_width, vol, temp
 		if(methods::hasArg(pH)) mo2s$PH_MEAN = as.numeric(tapply(data$pH, data$bin, mean_pH, na.rm = TRUE))
 		mo2s$O2_MEAN = as.numeric(tapply(data$o2, data$bin, mean, na.rm = TRUE))
 		mo2s$O2_RANGE = sapply(tapply(data$o2, data$bin, range, na.rm = TRUE), function(i) paste(rev(i), collapse = ' - '))
-		mo2s$MO2 = as.vector(-by(data, data$bin, function(i) stats::coef(stats::lm(umol_o2 ~ duration, data = i))['duration'])) * 60 * vol
-		mo2s$R2 = as.vector(by(data, data$bin, function(i) summary(stats::lm(umol_o2 ~ duration, data = i))$r.squared))
+		mo2s$MO2 = as.vector(-by(data, data$bin, function(i) if(any(!is.na(i$umol_o2))) stats::coef(stats::lm(umol_o2 ~ duration, data = i))['duration'] else NA)) * 60 * vol
+		mo2s$R2 = as.vector(by(data, data$bin, function(i) if(any(!is.na(i$umol_o2))) summary(stats::lm(umol_o2 ~ duration, data = i))$r.squared else NA))
 		mo2s$N = as.numeric(table(data$bin))
 		
 		mo2s = mo2s[order(mo2s$DUR_MEAN), ]
 		row.names(mo2s) = NULL
 	}
 	
-	if(bin_width == 0){
+	if(all(bin_width == 0)){
 	  data = data[good_data, ]
 	  
 		mo2s = data.frame(

@@ -10,6 +10,7 @@
 #' \item{Fibox 3 LCD trace}{}
 #' \item{Microx TX3}{}
 #' \item{Microx TX3 trace}{}
+#' \item{SDR SensorDish Reader}{}
 # \item{OXY-4 mini}{}
 # \item{OXY-4 micro}{}
 # \item{OXY-4 trace}{}
@@ -25,18 +26,20 @@
 #' @param date a character string. The date format to be passed to \code{\link{strptime}}.
 #' @param sal salinity of water sample (psu). Default is 35 psu. Ignored for Fibox 4 files since salinity is provided by the file.
 #' @param all_cols logical. For Fibox 4 files only. Should all columns (including calibration data and serial numbers) be output?
+#' @param split_channels logical. For SDR SensorDish only. Should a list of data frames be returned with a separate data frame for each channel? Default is \code{FALSE}.
+
 #'
 #' @return A data frame is returned.
 #' \describe{
 #' \item{TIME}{Date and time, POSIXct format.}
 #' \item{DURATION}{Duration of measurement trial (minutes).}
 #' \item{O2}{Oxygen measurement in desired unit as determined by \code{o2_unit}.}
-#' \item{PHASE}{Phase recorded. Phase is inversely related to O2.}
-#' \item{AMPLITUDE}{Amplitude recorded. Amplitude is an indicator of the quality of the signal. A low amplitude warning is produced by the transmitter below 2500.}
+#' \item{PHASE}{Phase recorded. Phase is inversely related to O2. Not included in SDR SensorDish Reader files.}
+#' \item{AMPLITUDE}{Amplitude recorded. Amplitude is an indicator of the quality of the signal. A low amplitude warning is produced by the transmitter below 2500. Not included in SDR SensorDish Reader files.}
 #' \item{TEMP}{Temperature recorded or defined at beginning of measurement trial.}
 #' \item{ATM_PRES}{Atmospheric pressure (mbar).}
 #' \item{SAL}{Salinity (psu).}
-#' \item{ERROR_CODE}{Error code from transmitter. See PreSens user manual for translation of error code.}
+#' \item{ERROR_CODE}{Error code from transmitter. See PreSens user manual for translation of error code. Not included in SDR SensorDish Reader files.}
 #' }
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @note Oxygen conversions are based on \code{\link{conv_o2}} and therefore differ slightly from the conversions provided by PreSens.
@@ -51,12 +54,16 @@
 #' # Import a Fibox 4 file.
 #' file <- system.file('extdata', 'fibox_4_file.csv', package = 'respirometry')
 #' import_presens(file = file, date = '%d-%b-%Y')
-#' }
+#' 
+#' # Import an SDR SensorDish Reader file.
+#' file <- system.file('extdata', 'sdr_file.txt', package = 'respirometry')
+#' import_presens(file = file, date = '%d.%m.%y%X')
 #'
+#' }
 #' @encoding UTF-8
 #' @export
 
-import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal = 35, all_cols = FALSE)
+import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal = 35, all_cols = FALSE, split_channels = FALSE)
 {
 	raw = readChar(file, nchars = file.info(file)$size, useBytes = TRUE)
 	raw = gsub(pattern = '\xb0|\xa9|\xfc\xbe\x8e\x93\xa0\xbc', replacement = ' ', raw) # replace non ASCII characters
@@ -139,5 +146,57 @@ import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal
   	row.names(f) = NULL
   	if(!all_cols) f = f[, c('TIME', 'DURATION', 'O2', 'PHASE', 'AMPLITUDE', 'TEMP', 'ATM_PRES', 'SAL', 'ERROR_CODE')]
   }
-  return(f)
+	
+	
+	
+	
+	
+	
+	
+	
+	########################## PLATE READER TYPE FILE ##################################
+	
+	if(length(grep('Measurement Name : ', raw[1])) == 1){ # this is a Plate Reader type file
+		f = gsub(pattern = ' ', replacement = '', raw)
+		f = strsplit(f, split = ';', fixed = TRUE)
+		o2_unit_measured = gsub('Parameter:Oxygen', '', f[[8]])
+		if(length(f[[19]]) - 1 == unique(sapply(f[20:length(f)], length))) f[[19]] = utils::head(f[[19]], n = length(f[[19]]) - 1) # If there are no errors then remove error column
+		f = as.data.frame(matrix(unlist(f[19:length(f)]), ncol = length(f[[19]]), byrow = TRUE), stringsAsFactors = FALSE)
+		colnames(f) = as.character(f[1, ])
+		f = f[-1, ]
+		f = f[, -which(colnames(f) %in% c('', 'T_internal[C]'))]
+		if(!(o2_unit %in% names(conv_o2()))) stop('the o2_unit argument is not an acceptable unit', call. = FALSE)
+		change_cols = which(colnames(f) %in% c('Date/Time', 'Time/Min.', 'Tm[C]', 'p[mbar]', 'Salinity[g/1000g]'))
+		colnames(f)[change_cols] = c('TIME', 'DURATION', 'TEMP', 'ATM_PRES', 'SAL')  	
+		o2_string_options = list(
+			'[[%]AirSaturation]' = 'percent_a.s.',
+			'[[%]O2]' = 'percent_o2',
+			'[hPa]' = 'hPa',
+			'[Torr]' = 'torr',
+			'[mg/L]' = 'mg_per_l',
+			'[umol/L]' = 'umol_per_l'
+		)
+		f[, -1] = sapply(colnames(f)[-1], function(i) as.numeric(f[, i]))
+		o2_cols = grep('\\d', colnames(f))
+		f[, o2_cols] = sapply(o2_cols, function(i) conv_o2(o2 = f[, i], from = o2_string_options[[o2_unit_measured]], to = o2_unit, temp = f$TEMP, sal = f$SAL, atm_pres = f$ATM_PRES))
+		f$TIME = strptime(f$TIME, date)
+		if(any(is.na(f$TIME))) stop(paste('The time record does not match', date, 'on at least some of the lines between', range(which(is.na(f$TIME)))[1], 'and', range(which(is.na(f$TIME)))[2]), call. = FALSE)
+		row.names(f) = NULL
+		if(split_channels){
+			channel_names = colnames(f)[o2_cols]
+			f = lapply(channel_names, function(i){
+				f_sub = f[, c(i, colnames(f)[-o2_cols])]
+				colnames(f_sub)[colnames(f_sub) == i] = 'O2'
+				f_sub = f_sub[, c('TIME', 'DURATION', 'O2', 'TEMP', 'SAL', 'ATM_PRES')]
+				if(any(is.na(f_sub$O2))){
+					f_sub = f_sub[birk::range_seq(which(is.na(f_sub$O2) == FALSE)), ]
+					f_sub$DURATION = as.numeric(difftime(time1 = f_sub$TIME, time2 = f_sub[1, 'TIME'], units = 'mins'))
+					row.names(f_sub) = NULL
+				}
+				return(f_sub)
+			})
+			names(f) = channel_names
+		}
+	}
+	return(f)
 }

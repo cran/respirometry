@@ -1,4 +1,9 @@
 -------------------------------------------------
+version 0.6.0, 2018-01-23
+- import_presens():		added support for PreSens SDR SensorDish Reader txt files
+- calc_MO2():			added support to enter a data frame as an argument for the "bin width" parameter
+- calc_MO2():			fixed an issue where an error would be returned if an entire bin was full of O2 = NA
+-------------------------------------------------
 version 0.5.0, 2017-11-01
 - import_firesting():	now supports "Firesting Logger" software and 1st generation FireStingO2 meter
 - Q10():			option added to return an nls object with the model fit if vectors are provided
