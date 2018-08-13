@@ -29,11 +29,12 @@
 
 calc_b = function(mass, MO2, plot = 'linear'){
 	if(!(plot %in% c('linear', 'log', 'none'))) stop('"plot" must be "linear", "log", or "none"')
-	b_model = stats::nls(MO2 ~ mass ^ b, start = list(b = 0.75))
+	b_model = tryCatch(stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = 1, b = 0.75)), error = function(e) stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = 1, b = -0.25)))
 	if(plot != 'none'){
 		plot_scale = switch(plot, linear = '', log = 'xy')
 		graphics::plot(mass, MO2, log = plot_scale)
-		graphics::lines(sort(mass), stats::predict(b_model)[order(mass)])
+		mass_range = birk::range_seq(mass, length.out = 1000)
+		graphics::lines(mass_range, stats::predict(b_model, newdata = data.frame(mass = mass_range)))
 	}
-	return(unname(stats::coef(b_model)))
+	return(unname(stats::coef(b_model)['b']))
 }

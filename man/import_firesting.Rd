@@ -5,8 +5,9 @@
 \alias{import_firesting}
 \title{Import data from a FireSting O2 transmitter}
 \usage{
-import_firesting(file, o2_unit = "percent_a.s.", date = "\%m/\%d/\%Y \%X",
-  overwrite_sal = NULL, keep_metadata = FALSE, drop_channels = TRUE,
+import_firesting(file, o2_unit = "percent_a.s.",
+  date = "\%m/\%d/\%Y \%X", overwrite_sal = NULL,
+  keep_metadata = FALSE, drop_channels = TRUE,
   split_channels = FALSE)
 }
 \arguments{
@@ -66,14 +67,10 @@ Oxygen conversions are estimates based on the \code{\link[marelac]{marelac}} pac
 \examples{
 \dontrun{
 file <- system.file('extdata', 'firesting_file.txt', package = 'respirometry')
-import_witrox(file, o2_unit = 'umol_per_l')
-
-# Oops. I forgot to change the salinity value when I calibrated
-# the instrument. Override the values in the file for 35 psu.
-import_witrox(file, o2_unit = 'umol_per_kg', overwrite_sal = 35)
+import_firesting(file, o2_unit = 'umol_per_l')
 
 # I want each channel as a separate data frame.
-data_list <- import_witrox(file, split_channels = TRUE)
+data_list <- import_firesting(file, split_channels = TRUE)
 data_list$CH_3 # here's the channel 3 data frame.
 }
 

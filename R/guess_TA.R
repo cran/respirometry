@@ -66,13 +66,13 @@ guess_TA = function(temp = 25, sal = 35, region = NULL, extend = TRUE){
   	TA = TA_df[, region]
   	if(extend == TRUE & any(is.na(TA[which(!is.na(temp) & !is.na(sal))]))){
   		TA = TA_ext_df[, region]
-  		message('Salinity is outside the bounds for which TA prediction was intended. Accuracy may be lessened.')
+  		message('Temperature and/or salinity are outside the bounds for which TA prediction was intended. Accuracy may be lessened.')
   	}
   } else {
   	TA = rowMeans(TA_df[, -(which(colnames(TA_df) %in% c('temp', 'sal')))], na.rm = TRUE)
   	if(extend == TRUE & any(is.na(TA[which(!is.na(temp) & !is.na(sal))]))){
   		TA = rowMeans(TA_ext_df[, -(which(colnames(TA_ext_df) %in% c('temp', 'sal')))], na.rm = TRUE)
-  		message('Salinity is outside the bounds for which TA prediction was intended. Accuracy may be lessened.')
+  		message('Temperature and/or salinity are outside the bounds for which TA prediction was intended. Accuracy may be lessened.')
   	}
   }
   return(TA) # umol/kg

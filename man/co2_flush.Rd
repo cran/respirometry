@@ -5,8 +5,9 @@
 \alias{co2_flush}
 \title{Calculate CO2 to add to flush reservoir}
 \usage{
-co2_flush(goal_pco2, resp_pH, resp_vol, flush_pH, flush_vol, flush_remain = 0,
-  temp = 25, sal = 35, TA = NULL, atm_pres = 1013.25)
+co2_flush(goal_pco2, resp_pH, resp_vol, flush_pH, flush_vol,
+  flush_remain = 0, temp = 25, sal = 35, TA = NULL,
+  atm_pres = 1013.25)
 }
 \arguments{
 \item{goal_pco2}{the desired pCO2 in the respirometer after the flush (uatm).}

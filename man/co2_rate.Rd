@@ -5,8 +5,8 @@
 \alias{co2_rate}
 \title{Calculate CO2 to add to a respirometer intake flow}
 \usage{
-co2_rate(goal_pco2, init_pH, flow_rate, temp = 25, sal = 35, TA = NULL,
-  atm_pres = 1013.25, MO2 = NULL, RQ = 1)
+co2_rate(goal_pco2, init_pH, flow_rate, temp = 25, sal = 35,
+  TA = NULL, atm_pres = 1013.25, MO2 = NULL, RQ = 1)
 }
 \arguments{
 \item{goal_pco2}{the desired pCO2 in the respirometer (uatm).}
