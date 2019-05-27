@@ -1,6 +1,6 @@
 #' @title Calculate the metabolic scaling coefficient, b
 #' 
-#' @description For most organisms, metabolic rate does not scale linearly, but rather according to a power function: \eqn{MO2 = b0 * M^b}. This function estimates the scaling coefficient, \code{b}, given MO2s from different sized individuals.
+#' @description For most organisms, metabolic rate does not scale linearly, but rather according to a power function: \eqn{MO2 = b0 * M^b}. This function estimates the scaling coefficient, \code{b}, and normalization constant, \code{b0}, given MO2s from different sized individuals.
 #' 
 #' @details
 #' \deqn{MO2 = b0 * M^b}
@@ -36,5 +36,7 @@ calc_b = function(mass, MO2, plot = 'linear'){
 		mass_range = birk::range_seq(mass, length.out = 1000)
 		graphics::lines(mass_range, stats::predict(b_model, newdata = data.frame(mass = mass_range)))
 	}
-	return(unname(stats::coef(b_model)['b']))
+	b = unname(stats::coef(b_model)['b'])
+	b0 = MO2 / mass ^ b
+	return(list(b = b, b0 = b0))
 }

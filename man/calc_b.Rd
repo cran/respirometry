@@ -15,7 +15,7 @@ calc_b(mass, MO2, plot = "linear")
 \item{plot}{a string defining what kind of plot to display. "linear" for linear axes, "log" for log10-scale axes, and "none" for no plot. Default is "linear".}
 }
 \description{
-For most organisms, metabolic rate does not scale linearly, but rather according to a power function: \eqn{MO2 = b0 * M^b}. This function estimates the scaling coefficient, \code{b}, given MO2s from different sized individuals.
+For most organisms, metabolic rate does not scale linearly, but rather according to a power function: \eqn{MO2 = b0 * M^b}. This function estimates the scaling coefficient, \code{b}, and normalization constant, \code{b0}, given MO2s from different sized individuals.
 }
 \details{
 \deqn{MO2 = b0 * M^b}

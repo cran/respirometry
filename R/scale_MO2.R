@@ -35,10 +35,10 @@
 #' desired_mass = 10
 #' 
 #' b = calc_b(mass = mass, MO2 = mo2)
-#' scale_MO2(mass_1 = mass, MO2_1 = mo2, mass_2 = desired_mass, b = b)
+#' scale_MO2(mass_1 = mass, MO2_1 = mo2, mass_2 = desired_mass, b = b$b)
 #' 
 #' plot(mass, mo2, ylab = 'Raw MO2') # before
-#' plot(mass, scale_MO2(mass_1 = mass, MO2_1 = mo2, mass_2 = 10, b = b),
+#' plot(mass, scale_MO2(mass_1 = mass, MO2_1 = mo2, mass_2 = 10, b = b$b),
 #' ylab = 'Mass-corrected MO2') # after
 #' 
 #' 

@@ -45,10 +45,10 @@ mo2 = c(44.8, 41, 36, 35, 35, 33.5, 34.5, 40, 30, 23, 27, 30, 25.6, 27.8, 28, 24
 desired_mass = 10
 
 b = calc_b(mass = mass, MO2 = mo2)
-scale_MO2(mass_1 = mass, MO2_1 = mo2, mass_2 = desired_mass, b = b)
+scale_MO2(mass_1 = mass, MO2_1 = mo2, mass_2 = desired_mass, b = b$b)
 
 plot(mass, mo2, ylab = 'Raw MO2') # before
-plot(mass, scale_MO2(mass_1 = mass, MO2_1 = mo2, mass_2 = 10, b = b),
+plot(mass, scale_MO2(mass_1 = mass, MO2_1 = mo2, mass_2 = 10, b = b$b),
 ylab = 'Mass-corrected MO2') # after
 
 

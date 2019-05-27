@@ -28,7 +28,8 @@
 #' \item{N}{Number of observations in the bin.}
 #' }
 #' 
-#' @note If only beginning and ending O2 observations are known, consider using \code{\link{closed}}. Both functions will work fine, but \code{\link{closed}} is simpler.
+#' @note Whole-animal MO2 is returned. If mass-specific MO2 is desired, the output from \code{calc_MO2} can be divided by the animal's mass.
+#' If only beginning and ending O2 observations are known, consider using \code{\link{closed}}. Both functions will work fine, but \code{\link{closed}} is simpler.
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @seealso \code{\link{make_bins}}, \code{\link{calc_b}}, \code{\link{closed}}, \code{\link{scale_MO2}}, \code{\link{conv_resp_unit}}
 #' 

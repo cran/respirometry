@@ -51,6 +51,7 @@ A data frame is returned:
 Calculates metabolic rate (MO2) given O2 measurements over time. Oxygen measurements are split into bins and MO2s are calculated from each bin (unless \code{bin_width} is set to \code{0}). The \code{bin_width} parameter defines the width of the bins in timed intervals (e.g. 15 minutes). Linear regressions are fit through each bin and the calculated MO2 is returned as the slope of the change in O2 over time.
 }
 \note{
+Whole-animal MO2 is returned. If mass-specific MO2 is desired, the output from \code{calc_MO2} can be divided by the animal's mass.
 If only beginning and ending O2 observations are known, consider using \code{\link{closed}}. Both functions will work fine, but \code{\link{closed}} is simpler.
 }
 \examples{
