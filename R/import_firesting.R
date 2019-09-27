@@ -62,13 +62,15 @@ import_firesting = function(file, o2_unit = 'percent_a.s.', date = '%m/%d/%Y %X'
 	raw = strsplit(raw, split = '\r+\n')[[1]]
 	raw = raw[sapply(raw, nchar) > 0] # remove blank rows
 	f = strsplit(raw, split = '\t', fixed = TRUE)
-	sals = as.numeric(sapply(f[grep('Settings:', f[1:50]) + 1:4], '[', grep('Salinity', f[[grep('Settings:', f[1:50])]])))
+	channels_calib = suppressWarnings(stats::na.omit(as.numeric(gsub('Ch ', '', sapply(f[grep('Settings:', f[1:50]) + 1:4], '[', 1)))))
+	n_channels_calib = length(channels_calib)
+	sals = as.numeric(sapply(f[grep('Settings:', f[1:50]) + 1:n_channels_calib], '[', grep('Salinity', f[[grep('Settings:', f[1:50])]])))
 	if(is.null(overwrite_sal)) overwrite_sal = sals
 	if(length(overwrite_sal) == 1) overwrite_sal = rep(overwrite_sal, length(sals))
-	orig_o2_units = sapply(f[grep('Settings:', f[1:50]) + 1:4], '[', 3)
+	orig_o2_units = sapply(f[grep('Settings:', f[1:50]) + 1:n_channels_calib], '[', 3)
 	software_version = paste(f[[2]], collapse = ' ')
 	if(grepl('Firesting Logger', software_version)){
-		atm_pres = as.numeric(sapply(f[grep('Settings:', f[1:50]) + 1:4], '[', grep('Press.', f[[grep('Settings:', f[1:50])]])))
+		atm_pres = as.numeric(sapply(f[grep('Settings:', f[1:50]) + 1:n_channels_calib], '[', grep('Press.', f[[grep('Settings:', f[1:50])]])))
 		date_start = f[[grep('Date:', f[1:50])]][2]
 	}
 	f = f[(utils::tail(grep('Time', f[1:50], fixed = TRUE), 1) - 1):length(f)]
@@ -96,6 +98,7 @@ import_firesting = function(file, o2_unit = 'percent_a.s.', date = '%m/%d/%Y %X'
 	f = f[-(1:2), ]
 	if(!(o2_unit %in% c(names(conv_o2()), 'raw', 'dphi'))) stop('the o2_unit argument is not an acceptable unit', call. = FALSE)
 	o2_cols = grep('^CH_\\d_O2$', colnames(f))
+	o2_cols = o2_cols[channels_calib]
 	o2_string_options = list(
 		'% air sat' = 'percent_a.s.',
 		'% O2' = 'percent_o2',
@@ -138,7 +141,7 @@ import_firesting = function(file, o2_unit = 'percent_a.s.', date = '%m/%d/%Y %X'
 	f$DURATION = f$DURATION / 60 # convert from secs to mins
 	if(grepl('Firesting Logger', software_version)) f = f[, colnames(f) != '']
 	
-	o2_cols = grep('^CH_\\d_O2$', colnames(f))
+	#o2_cols = grep('^CH_\\d_O2$', colnames(f))
 	for(i in rev(1:length(overwrite_sal))){
 		sal_list = list(overwrite_sal[i])
 		names(sal_list) = paste('CH', i, 'SAL', sep = '_')

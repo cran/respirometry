@@ -1,4 +1,7 @@
 -------------------------------------------------
+version 1.0.1, 2019-09-26
+- import_firesting():		now can tolerate files with less than four channels calibrated
+-------------------------------------------------
 version 1.0.0, 2019-05-24
 - calc_pcrit():			new function: Calculate Pcrit (hypoxia tolerance)
 - plot_pcrit():			new function: Plot Pcrit (hypoxia tolerance)
