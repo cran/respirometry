@@ -5,8 +5,16 @@
 \alias{RQ}
 \title{Calculate respiratory quotient}
 \usage{
-RQ(o2, o2_unit = "percent_a.s.", pH = NULL, TA = NULL, DIC = NULL,
-  temp = 25, sal = 35, atm_pres = 1013.25)
+RQ(
+  o2,
+  o2_unit = "percent_a.s.",
+  pH = NULL,
+  TA = NULL,
+  DIC = NULL,
+  temp = 25,
+  sal = 35,
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{o2}{a numeric vector of O2 values with a length of at least 2.}

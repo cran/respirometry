@@ -67,7 +67,7 @@ import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal
 {
 	raw = readChar(file, nchars = file.info(file)$size, useBytes = TRUE)
 	raw = gsub(pattern = '\xb0|\xa9|\xfc\xbe\x8e\x93\xa0\xbc', replacement = ' ', raw) # replace non ASCII characters
-	raw = strsplit(raw, split = '\r\n', fixed = T)[[1]]
+	raw = strsplit(raw, split = '\r*\n')[[1]]
 	raw = raw[sapply(raw, nchar) > 0] # remove blank rows
   
   ########################## FIBOX 3 TYPE FILE ##################################
@@ -115,15 +115,16 @@ import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal
   
   ########################## FIBOX 4 TYPE FILE ##################################
   
-  if(length(grep('Date;Time;User;', raw[1])) == 1){ # this is a Fibox 4 type file
+  if(length(grep('Date;Time;User;', raw[1:2])) == 1){ # this is a Fibox 4 type file
   	f = gsub(pattern = ' ', replacement = '', raw)
   	f = strsplit(f, split = ';', fixed = TRUE)
   	f[[length(f)]] = NULL
+  	if(grepl('ExportedwithPreSensDatamanager', f[[1]][1])) f = f[-1]
   	f = as.data.frame(matrix(unlist(f), ncol = length(f[[1]]), byrow = TRUE), stringsAsFactors = FALSE)
   	colnames(f) = as.character(f[1, ])
   	f = f[-1, ]
   	if(!(o2_unit %in% names(conv_o2()))) stop('the o2_unit argument is not an acceptable unit', call. = FALSE)
-  	main_cols = which(colnames(f) %in% c('Date', 'Time', 'deltat', 'Value', 'Phase', 'Amplitude', 'Temp', 'patm', 'Salinity', 'Error'))
+  	main_cols = which(colnames(f) %in% c('Date', 'Time', 'deltat', 'delta_t', 'Value', 'Phase', 'Amplitude', 'Temp', 'patm', 'Salinity', 'Error'))
   	colnames(f)[main_cols] = c('DATE', 'TIME', 'DURATION', 'O2', 'PHASE', 'AMPLITUDE', 'TEMP', 'ATM_PRES', 'SAL', 'ERROR_CODE')  	
   	o2_string_options = list(
   		'%a.s.' = 'percent_a.s.',
@@ -159,9 +160,9 @@ import_presens = function(file, o2_unit = 'percent_a.s.', date = '%d/%m/%y', sal
 	if(length(grep('Measurement Name : ', raw[1])) == 1){ # this is a Plate Reader type file
 		f = gsub(pattern = ' ', replacement = '', raw)
 		f = strsplit(f, split = ';', fixed = TRUE)
-		o2_unit_measured = gsub('Parameter:Oxygen', '', f[[8]])
-		if(length(f[[19]]) - 1 == unique(sapply(f[20:length(f)], length))) f[[19]] = utils::head(f[[19]], n = length(f[[19]]) - 1) # If there are no errors then remove error column
-		f = as.data.frame(matrix(unlist(f[19:length(f)]), ncol = length(f[[19]]), byrow = TRUE), stringsAsFactors = FALSE)
+		o2_unit_measured = gsub('Parameter:Oxygen', '', grep('Parameter:Oxygen', f[1:30], value = TRUE))
+		if(length(f[[32]]) - 1 == unique(sapply(f[33:length(f)], length))) f[[32]] = utils::head(f[[32]], n = length(f[[32]]) - 1) # If there are no errors then remove error column
+		f = as.data.frame(matrix(unlist(f[32:length(f)]), ncol = length(f[[32]]), byrow = TRUE), stringsAsFactors = FALSE)
 		colnames(f) = as.character(f[1, ])
 		f = f[-1, ]
 		f = f[, -which(colnames(f) %in% c('', 'T_internal[C]'))]

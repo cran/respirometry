@@ -5,8 +5,15 @@
 \alias{plot_pcrit}
 \title{Plot Pcrit (hypoxia tolerance)}
 \usage{
-plot_pcrit(po2, mo2, level = 0.95, iqr = 1.5, NLR_m = 0.065,
-  showNLRs = FALSE, ...)
+plot_pcrit(
+  po2,
+  mo2,
+  level = 0.95,
+  iqr = 1.5,
+  NLR_m = 0.065,
+  showNLRs = FALSE,
+  ...
+)
 }
 \arguments{
 \item{po2}{a vector of PO2 values. Any unit of measurement should work, but the NLR calculation was optimized using kPa. If the NLR metric is giving you trouble, try converting to kPa using \code{\link{conv_o2}}.}

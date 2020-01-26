@@ -5,8 +5,14 @@
 \alias{max_MO2}
 \title{Maximum MO2 supported by flow rate}
 \usage{
-max_MO2(flow_rate, min_pO2 = 90, pO2_in = 100, temp = 25, sal = 35,
-  atm_pres = 1013.25)
+max_MO2(
+  flow_rate,
+  min_pO2 = 90,
+  pO2_in = 100,
+  temp = 25,
+  sal = 35,
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{flow_rate}{water flow rate into respirometer (liters / min).}

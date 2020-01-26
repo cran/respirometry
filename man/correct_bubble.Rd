@@ -5,8 +5,7 @@
 \alias{correct_bubble}
 \title{Adjust respirometer volume for bubbles}
 \usage{
-correct_bubble(resp_vol, bubble_vol, temp = 25, sal = 35,
-  atm_pres = 1013.25)
+correct_bubble(resp_vol, bubble_vol, temp = 25, sal = 35, atm_pres = 1013.25)
 }
 \arguments{
 \item{resp_vol}{volume of the respirometer (liter).}

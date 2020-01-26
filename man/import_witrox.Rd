@@ -5,9 +5,14 @@
 \alias{import_witrox}
 \title{Import data from a Loligo Systems Witrox O2 transmitter}
 \usage{
-import_witrox(file, o2_unit = "percent_a.s.",
-  date = "\%m/\%d/\%Y \%I:\%M:\%S \%p", overwrite_sal = NULL,
-  drop_channels = TRUE, split_channels = FALSE)
+import_witrox(
+  file,
+  o2_unit = "percent_a.s.",
+  date = "\%m/\%d/\%Y \%I:\%M:\%S \%p",
+  overwrite_sal = NULL,
+  drop_channels = TRUE,
+  split_channels = FALSE
+)
 }
 \arguments{
 \item{file}{a character string. The filepath for the file to be read.}

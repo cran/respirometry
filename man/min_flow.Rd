@@ -5,8 +5,14 @@
 \alias{min_flow}
 \title{Minimum flow rate to support MO2}
 \usage{
-min_flow(MO2, min_pO2 = 90, pO2_in = 100, temp = 25, sal = 35,
-  atm_pres = 1013.25)
+min_flow(
+  MO2,
+  min_pO2 = 90,
+  pO2_in = 100,
+  temp = 25,
+  sal = 35,
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{MO2}{whole-animal oxygen consumption rate (umol / hour).}

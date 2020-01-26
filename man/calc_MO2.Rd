@@ -5,9 +5,19 @@
 \alias{calc_MO2}
 \title{Calculate metabolic rate}
 \usage{
-calc_MO2(duration, o2, o2_unit = "percent_a.s.", bin_width, vol,
-  temp = 25, sal = 35, atm_pres = 1013.25, time, pH,
-  good_data = TRUE)
+calc_MO2(
+  duration,
+  o2,
+  o2_unit = "percent_a.s.",
+  bin_width,
+  vol,
+  temp = 25,
+  sal = 35,
+  atm_pres = 1013.25,
+  time,
+  pH,
+  good_data = TRUE
+)
 }
 \arguments{
 \item{duration}{numeric vector of the timepoint for each observation (minutes).}

@@ -5,8 +5,16 @@
 \alias{predict_pH}
 \title{Predict pH post-respiration}
 \usage{
-predict_pH(start_o2 = 100, end_o2, start_pH, temp = 25, sal = 35,
-  RQ = 1, TA = NULL, all_carb = FALSE)
+predict_pH(
+  start_o2 = 100,
+  end_o2,
+  start_pH,
+  temp = 25,
+  sal = 35,
+  RQ = 1,
+  TA = NULL,
+  all_carb = FALSE
+)
 }
 \arguments{
 \item{start_o2}{pO2 at the start of the measurement (\% air saturation). Default is 100\% air saturation.}

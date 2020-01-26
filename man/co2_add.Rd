@@ -5,8 +5,15 @@
 \alias{co2_add}
 \title{Calculate CO2 to add to water}
 \usage{
-co2_add(goal_pco2, start_pH, vol, temp = 25, sal = 35, TA = NULL,
-  atm_pres = 1013.25)
+co2_add(
+  goal_pco2,
+  start_pH,
+  vol,
+  temp = 25,
+  sal = 35,
+  TA = NULL,
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{goal_pco2}{the desired pCO2 in the water (uatm).}

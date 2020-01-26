@@ -5,8 +5,7 @@
 \alias{closed}
 \title{Closed respirometry}
 \usage{
-closed(MO2, delta_pO2, duration, vol, temp = 25, sal = 35,
-  atm_pres = 1013.25)
+closed(MO2, delta_pO2, duration, vol, temp = 25, sal = 35, atm_pres = 1013.25)
 }
 \arguments{
 \item{MO2}{whole-animal oxygen consumption rate (umol O2 / hour).}

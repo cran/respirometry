@@ -5,8 +5,15 @@
 \alias{conv_resp_unit}
 \title{Convert units related to respirometry}
 \usage{
-conv_resp_unit(value, from, to, temp = 25, sal = 35,
-  atm_pres = 1013.25, o2_conc_base = "per_l")
+conv_resp_unit(
+  value,
+  from,
+  to,
+  temp = 25,
+  sal = 35,
+  atm_pres = 1013.25,
+  o2_conc_base = "per_l"
+)
 }
 \arguments{
 \item{value}{a numeric vector giving the measurement value in its original units.}

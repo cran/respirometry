@@ -5,10 +5,15 @@
 \alias{import_firesting}
 \title{Import data from a FireSting O2 transmitter}
 \usage{
-import_firesting(file, o2_unit = "percent_a.s.",
-  date = "\%m/\%d/\%Y \%X", overwrite_sal = NULL,
-  keep_metadata = FALSE, drop_channels = TRUE,
-  split_channels = FALSE)
+import_firesting(
+  file,
+  o2_unit = "percent_a.s.",
+  date = "\%m/\%d/\%Y \%X",
+  overwrite_sal = NULL,
+  keep_metadata = FALSE,
+  drop_channels = TRUE,
+  split_channels = FALSE
+)
 }
 \arguments{
 \item{file}{a character string. The filepath for the file to be read.}

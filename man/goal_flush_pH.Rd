@@ -5,8 +5,17 @@
 \alias{goal_flush_pH}
 \title{Calculate goal pH of a flush reservoir to achieve the post-flush goal pCO2}
 \usage{
-goal_flush_pH(goal_pco2, resp_pH, resp_vol, flush_vol, flush_remain = 0,
-  temp = 25, sal = 35, TA = NULL, atm_pres = 1013.25)
+goal_flush_pH(
+  goal_pco2,
+  resp_pH,
+  resp_vol,
+  flush_vol,
+  flush_remain = 0,
+  temp = 25,
+  sal = 35,
+  TA = NULL,
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{goal_pco2}{the desired pCO2 in the respirometer after the flush (uatm).}

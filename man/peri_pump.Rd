@@ -5,8 +5,14 @@
 \alias{peri_pump}
 \title{Calculate peristaltic pump gaseous flow rate}
 \usage{
-peri_pump(mol, species = "O2", temp = 25, reg_pres, reg_unit = "psi",
-  atm_pres = 1013.25)
+peri_pump(
+  mol,
+  species = "O2",
+  temp = 25,
+  reg_pres,
+  reg_unit = "psi",
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{mol}{number of moles to go through a peristaltic pump.}

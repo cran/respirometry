@@ -5,8 +5,17 @@
 \alias{flush_carb}
 \title{Estimate carbonate chemistry after a flush}
 \usage{
-flush_carb(resp_vol, flow_rate, duration, resp_pH, flush_pH, temp = 25,
-  sal = 35, TA = NULL, atm_pres = 1013.25)
+flush_carb(
+  resp_vol,
+  flow_rate,
+  duration,
+  resp_pH,
+  flush_pH,
+  temp = 25,
+  sal = 35,
+  TA = NULL,
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{resp_vol}{volume of the respirometer (liter).}

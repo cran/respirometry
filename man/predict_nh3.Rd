@@ -5,8 +5,15 @@
 \alias{predict_nh3}
 \title{Predict NH3 / NH4+ concentration post-respiration}
 \usage{
-predict_nh3(o2_drop = 10, o2_unit = "percent_a.s.", o2_nh4_ratio,
-  temp = 25, sal = 35, pH = 8.1, atm_pres = 1013.25)
+predict_nh3(
+  o2_drop = 10,
+  o2_unit = "percent_a.s.",
+  o2_nh4_ratio,
+  temp = 25,
+  sal = 35,
+  pH = 8.1,
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{o2_drop}{a numeric value or vector describing the change in O2. Default is 10.}

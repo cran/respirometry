@@ -5,8 +5,14 @@
 \alias{conv_o2}
 \title{Convert between units of oxygen partial pressure and concentration}
 \usage{
-conv_o2(o2 = 100, from = "percent_a.s.", to = "all", temp = 25,
-  sal = 35, atm_pres = 1013.25)
+conv_o2(
+  o2 = 100,
+  from = "percent_a.s.",
+  to = "all",
+  temp = 25,
+  sal = 35,
+  atm_pres = 1013.25
+)
 }
 \arguments{
 \item{o2}{a numeric vector of the O2 value(s). Default is 100.}

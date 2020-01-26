@@ -1,4 +1,7 @@
 -------------------------------------------------
+version 1.0.2, 2020-01-24
+- import_presens():		fixes an error when Fibox 4 files were exported with PreSens Datamanager
+-------------------------------------------------
 version 1.0.1, 2019-09-26
 - import_firesting():		now can tolerate files with less than four channels calibrated
 -------------------------------------------------

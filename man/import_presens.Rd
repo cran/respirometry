@@ -5,8 +5,14 @@
 \alias{import_presens}
 \title{Import data from a PreSens O2 transmitter}
 \usage{
-import_presens(file, o2_unit = "percent_a.s.", date = "\%d/\%m/\%y",
-  sal = 35, all_cols = FALSE, split_channels = FALSE)
+import_presens(
+  file,
+  o2_unit = "percent_a.s.",
+  date = "\%d/\%m/\%y",
+  sal = 35,
+  all_cols = FALSE,
+  split_channels = FALSE
+)
 }
 \arguments{
 \item{file}{a character string. The filepath for the file to be read.}

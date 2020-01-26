@@ -5,8 +5,14 @@
 \alias{make_bins}
 \title{Make time bins for MO2 calculations}
 \usage{
-make_bins(o2, duration, good_data = TRUE, min_o2_width = 1/100,
-  max_o2_width = 1/10, n_bins = 10)
+make_bins(
+  o2,
+  duration,
+  good_data = TRUE,
+  min_o2_width = 1/100,
+  max_o2_width = 1/10,
+  n_bins = 10
+)
 }
 \arguments{
 \item{o2}{numeric vector of O2 observations.}
