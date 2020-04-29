@@ -1,9 +1,13 @@
 -------------------------------------------------
+version 1.1.0, 2020-04-29
+- calc_b():					added a "method" parameter, which allows the user to use a linear regression of log10 values rather than the default nonlinear regression, if desired.
+- plot_pcrit():			allows plotting of just the MO2 v PO2 if Pcrit cannot be calculated.
+-------------------------------------------------
 version 1.0.2, 2020-01-24
-- import_presens():		fixes an error when Fibox 4 files were exported with PreSens Datamanager
+- import_presens():		fixes an error when Fibox 4 files were exported with PreSens Datamanager.
 -------------------------------------------------
 version 1.0.1, 2019-09-26
-- import_firesting():		now can tolerate files with less than four channels calibrated
+- import_firesting():		now can tolerate files with less than four channels calibrated.
 -------------------------------------------------
 version 1.0.0, 2019-05-24
 - calc_pcrit():			new function: Calculate Pcrit (hypoxia tolerance)

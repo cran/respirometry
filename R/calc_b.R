@@ -8,9 +8,11 @@
 #' 
 #' @param mass a vector of animal masses.
 #' @param MO2 a vector of metabolic rates.
+#' @param method a string defining which method of calculating scaling coefficients to use. Default is "nls", which utilizes a nonlinear least squares regression. If this does not fit your data well, "lm" may also be used, which calculates a linear regression of log10(\code{MO2}) ~ log10(\code{mass}) with slope and intercept equivalent to \code{b} and 10^\code{b0}, respectively.
 #' @param plot a string defining what kind of plot to display. "linear" for linear axes, "log" for log10-scale axes, and "none" for no plot. Default is "linear".
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
+#' @return Returns a list of 1) the \code{b} value, 2) a vector of \code{b0} values corresponding to the input \code{MO2} values, and 3) an average \code{b0} that can be used for summarizing the relationship with an equation.
 #' @seealso \code{\link{scale_MO2}}, \code{\link{calc_MO2}}
 #' 
 #' @examples
@@ -27,16 +29,28 @@
 #' @encoding UTF-8
 #' @export
 
-calc_b = function(mass, MO2, plot = 'linear'){
+calc_b = function(mass, MO2, method = 'nls', plot = 'linear'){
 	if(!(plot %in% c('linear', 'log', 'none'))) stop('"plot" must be "linear", "log", or "none"')
-	b_model = tryCatch(stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = 1, b = 0.75)), error = function(e) stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = 1, b = -0.25)))
+	if(!(method %in% c('nls', 'lm'))) stop('"method" must be "nls" or "lm"')
+	if(method == 'nls'){
+		b_model = tryCatch(stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = 1, b = 0.75)), error = function(e) stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = 1, b = -0.25)))
+		b = unname(stats::coef(b_model)['b'])
+		b0 = MO2 / mass ^ b
+		b0_avg = mean(b0, na.rm = TRUE)
+	}
+	if(method == 'lm'){
+		b_model = stats::lm(log10(MO2) ~ log10(mass))
+		b = unname(stats::coef(b_model)['log10(mass)'])
+		b0 = MO2 / mass ^ b
+		b0_avg = 10 ^ unname(stats::coef(b_model)['(Intercept)'])
+	}
 	if(plot != 'none'){
 		plot_scale = switch(plot, linear = '', log = 'xy')
 		graphics::plot(mass, MO2, log = plot_scale)
 		mass_range = birk::range_seq(mass, length.out = 1000)
-		graphics::lines(mass_range, stats::predict(b_model, newdata = data.frame(mass = mass_range)))
+		pred = stats::predict(b_model, newdata = data.frame(mass = mass_range))
+		if(method == 'lm') pred = 10 ^ pred
+		graphics::lines(mass_range, pred)
 	}
-	b = unname(stats::coef(b_model)['b'])
-	b0 = MO2 / mass ^ b
-	return(list(b = b, b0 = b0))
+	return(list(b = b, b0 = b0, b0_avg = b0_avg))
 }

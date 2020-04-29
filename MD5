@@ -1,11 +1,11 @@
-6e292b55ca3b99864c34ccb8f03a0e83 *DESCRIPTION
+926b62aa8a028950a344fa46803b51db *DESCRIPTION
 23a7784144c74bccf55e469e50eecb5e *NAMESPACE
-b316f0a47c5cdf0c7a5a0141c14891d1 *NEWS
+945a8e9095bb9d49e8a1802a62149f44 *NEWS
 16a62fc73af6b8a4ea149302973e3cb7 *R/Q10.R
 ad63afd2234353e11797d752c9086feb *R/RQ.R
 697109703e7ff8aeb70ae8083fdbdcb2 *R/calc_MO2.R
-9c7c7c66393314d0d6bde3e5140a09e7 *R/calc_b.R
-ccf185aa38f300544eac19c9153fe761 *R/calc_pcrit.R
+d4da53c02c53914066875c6f31e188ec *R/calc_b.R
+5049888371ccf18afe3dcd623c626b27 *R/calc_pcrit.R
 d23190ea70011fa2ab3180f5d64b57f1 *R/closed.R
 0ae50fb059790ee4cd0ce5b9f6972f0b *R/co2_add.R
 16a45ebaf9117a8b234ddd5991a5784e *R/co2_flush.R
@@ -41,7 +41,7 @@ aff34f5a756df079f49a4b87097f2f4d *inst/extdata/mo2_v_po2.csv
 df477fdaa0fcfa8b62d7f37ab1f0723e *man/Q10.Rd
 12554f92b8d3ade31009b6420b80d4f0 *man/RQ.Rd
 cac419a129e508ec05402b64bcc9af85 *man/calc_MO2.Rd
-6be27ce8aea942b5f844230a11d155d9 *man/calc_b.Rd
+a1ad359c80562b610f0792022dedb2fa *man/calc_b.Rd
 2ad51f46a93f5e419b95db702cd9bd4b *man/calc_pcrit.Rd
 7ec13bda9db79bc8f3bb623fbd280714 *man/closed.Rd
 a7d4e57456ff19197874348cccd2c072 *man/co2_add.Rd

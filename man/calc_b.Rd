@@ -5,14 +5,19 @@
 \alias{calc_b}
 \title{Calculate the metabolic scaling coefficient, b}
 \usage{
-calc_b(mass, MO2, plot = "linear")
+calc_b(mass, MO2, method = "nls", plot = "linear")
 }
 \arguments{
 \item{mass}{a vector of animal masses.}
 
 \item{MO2}{a vector of metabolic rates.}
 
+\item{method}{a string defining which method of calculating scaling coefficients to use. Default is "nls", which utilizes a nonlinear least squares regression. If this does not fit your data well, "lm" may also be used, which calculates a linear regression of log10(\code{MO2}) ~ log10(\code{mass}) with slope and intercept equivalent to \code{b} and 10^\code{b0}, respectively.}
+
 \item{plot}{a string defining what kind of plot to display. "linear" for linear axes, "log" for log10-scale axes, and "none" for no plot. Default is "linear".}
+}
+\value{
+Returns a list of 1) the \code{b} value, 2) a vector of \code{b0} values corresponding to the input \code{MO2} values, and 3) an average \code{b0} that can be used for summarizing the relationship with an equation.
 }
 \description{
 For most organisms, metabolic rate does not scale linearly, but rather according to a power function: \eqn{MO2 = b0 * M^b}. This function estimates the scaling coefficient, \code{b}, and normalization constant, \code{b0}, given MO2s from different sized individuals.

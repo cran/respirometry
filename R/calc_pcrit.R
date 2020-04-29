@@ -177,24 +177,29 @@ calc_pcrit = function(po2, mo2, level = 0.95, iqr = 1.5, NLR_m = 0.065){
 
 
 plot_pcrit = function(po2, mo2, level = 0.95, iqr = 1.5, NLR_m = 0.065, showNLRs = FALSE, ...){
-	l = pcrit_internal(po2, mo2, level, iqr, NLR_m)
-	inter1 = level
-	plot_pcrit_internal = function(l, level = inter1, main = paste0('Breakpoint = ', round(l$breakpoint, 3), '\nSub-PI = ', round(l$sub_PI, 3), '\n NLR (', l$best_mod, ') = ', round(ifelse(length(l$best_mod) > 0, l$nlr_pcrits[[l$best_mod]], NA), 3)), shade = TRUE, ...){
-		graphics::plot(l$model, res = TRUE, shade = shade, rug = FALSE, conf.level = level, main = main, ...)
-	}
-	plot_pcrit_internal(l, ...)
-	graphics::points(l$reg_data$po2, l$reg_data$mo2, pch = 16, ...)
-	graphics::lines(l$po2_range, l$pi_ll, lty = 2, col = 'red', ...)
-	graphics::lines(l$po2_range, l$pi_ul, lty = 2, col = 'red', ...)
-	graphics::points(x = l$sub_PI, y = l$conform[utils::tail(which(l$conform < l$pi_ll), 1)], col = 'red', pch = 16, ...)
-	if(length(l$best_mod) > 0) graphics::lines(po2, stats::predict(l$nlr_mods[[l$best_mod]], newdata = list(po2 = po2)) * l$nlr_normalize_factor, col = 'green', ...)
-	if(length(l$best_mod) > 0) graphics::points(x = l$nlr_pcrits[[l$best_mod]], y = stats::predict(l$nlr_mods[[l$best_mod]], newdata = data.frame(po2 = l$nlr_pcrits[[l$best_mod]])) * l$nlr_normalize_factor, col = 'green', pch = 16, ...)
-	if(showNLRs){
-		graphics::plot(po2, mo2, main = paste(sum(!is.na(l$nlr_mods)), 'of', length(l$nlr_mods), 'NLR models fit.'))
-		sapply(names(l$nlr_pcrits), function(i){
-			if(any(!is.na(l$nlr_mods[[i]]))) graphics::lines(po2, stats::predict(l$nlr_mods[[i]], newdata = list(po2 = po2)) * l$nlr_normalize_factor, col = which(names(l$nlr_pcrits) == i))
-		})
-		if(length(l$best_mod) > 0) graphics::lines(po2, stats::predict(l$nlr_mods[[l$best_mod]], newdata = list(po2 = po2)) * l$nlr_normalize_factor, lwd = 2, ...)
-		sapply(l$nlr_pcrits, function(i) graphics::abline(v = i, col = which(l$nlr_pcrits == i)))
-	}
+	tryCatch({
+		l = pcrit_internal(po2, mo2, level, iqr, NLR_m)
+		inter1 = level
+		plot_pcrit_internal = function(l, level = inter1, main = paste0('Breakpoint = ', round(l$breakpoint, 3), '\nSub-PI = ', round(l$sub_PI, 3), '\n NLR (', l$best_mod, ') = ', round(ifelse(length(l$best_mod) > 0, l$nlr_pcrits[[l$best_mod]], NA), 3)), shade = TRUE, ...){
+			graphics::plot(l$model, res = TRUE, shade = shade, rug = FALSE, conf.level = level, main = main, ...)
+		}
+		plot_pcrit_internal(l, ...)
+		graphics::points(l$reg_data$po2, l$reg_data$mo2, pch = 16, ...)
+		graphics::lines(l$po2_range, l$pi_ll, lty = 2, col = 'red', ...)
+		graphics::lines(l$po2_range, l$pi_ul, lty = 2, col = 'red', ...)
+		graphics::points(x = l$sub_PI, y = l$conform[utils::tail(which(l$conform < l$pi_ll), 1)], col = 'red', pch = 16, ...)
+		if(length(l$best_mod) > 0) graphics::lines(po2, stats::predict(l$nlr_mods[[l$best_mod]], newdata = list(po2 = po2)) * l$nlr_normalize_factor, col = 'green', ...)
+		if(length(l$best_mod) > 0) graphics::points(x = l$nlr_pcrits[[l$best_mod]], y = stats::predict(l$nlr_mods[[l$best_mod]], newdata = data.frame(po2 = l$nlr_pcrits[[l$best_mod]])) * l$nlr_normalize_factor, col = 'green', pch = 16, ...)
+		if(showNLRs){
+			graphics::plot(po2, mo2, main = paste(sum(!is.na(l$nlr_mods)), 'of', length(l$nlr_mods), 'NLR models fit.'))
+			sapply(names(l$nlr_pcrits), function(i){
+				if(any(!is.na(l$nlr_mods[[i]]))) graphics::lines(po2, stats::predict(l$nlr_mods[[i]], newdata = list(po2 = po2)) * l$nlr_normalize_factor, col = which(names(l$nlr_pcrits) == i))
+			})
+			if(length(l$best_mod) > 0) graphics::lines(po2, stats::predict(l$nlr_mods[[l$best_mod]], newdata = list(po2 = po2)) * l$nlr_normalize_factor, lwd = 2, ...)
+			sapply(l$nlr_pcrits, function(i) graphics::abline(v = i, col = which(l$nlr_pcrits == i)))
+		}
+	}, error = function(e){
+		graphics::plot(po2, mo2, main = 'Could not calculate a Pcrit. Plotting just the values...')
+	})
+	
 }
