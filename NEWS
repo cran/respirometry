@@ -1,4 +1,10 @@
 -------------------------------------------------
+version 1.2.0, 2020-08-14
+- calc_alpha():			new function: Calculate the oxygen supply capacity (alpha).
+- calc_pcrit():			added functionality to calculate Pcrit-alpha and Pcrit-LLO.
+- calc_pcrit():			added a "return_models" parameter to optionally return a list of converged model parameters for subsequent personalized analyses. Thanks to Stefan Mucha for the suggestion.
+- plot_pcrit():			added functionality to plot Pcrit-alpha and Pcrit-LLO.
+-------------------------------------------------
 version 1.1.0, 2020-04-29
 - calc_b():					added a "method" parameter, which allows the user to use a linear regression of log10 values rather than the default nonlinear regression, if desired.
 - plot_pcrit():			allows plotting of just the MO2 v PO2 if Pcrit cannot be calculated.

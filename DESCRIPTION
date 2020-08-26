@@ -1,8 +1,8 @@
 Package: respirometry
 Type: Package
 Title: Tools for Conducting and Analyzing Respirometry Experiments
-Version: 1.1.0
-Date: 2020-04-29
+Version: 1.2.0
+Date: 2020-08-14
 Author: Matthew A. Birk
 Maintainer: Matthew A. Birk <matthewabirk@gmail.com>
 Description: Provides tools to enable the researcher to more precisely conduct
@@ -18,8 +18,8 @@ Depends: PKNCA
 License: GPL-3
 LazyData: TRUE
 Encoding: UTF-8
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2020-04-29 14:29:46 UTC; matthewbirk
+Packaged: 2020-08-14 14:57:22 UTC; matthewbirk
 Repository: CRAN
-Date/Publication: 2020-04-29 15:30:06 UTC
+Date/Publication: 2020-08-26 16:10:24 UTC
