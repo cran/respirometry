@@ -58,7 +58,9 @@
 
 import_firesting = function(file, o2_unit = 'percent_a.s.', date = '%m/%d/%Y %X', overwrite_sal = NULL, keep_metadata = FALSE, drop_channels = TRUE, split_channels = FALSE){
 	raw = readChar(file, nchars = file.info(file)$size, useBytes = TRUE)
-	raw = gsub(pattern = '\xb0|\xa9|\xfc\xbe\x8e\x93\xa0\xbc', replacement = ' ', raw) # replace non ASCII characters
+	#raw = gsub(pattern = '\xb0|\xa9|\xfc\xbe\x8e\x93\xa0\xbc', replacement = ' ', raw) # replace non ASCII characters
+	Encoding(raw) = 'UTF-8'
+	raw = iconv(raw, 'UTF-8', 'UTF-8', sub = ' ')
 	raw = strsplit(raw, split = '\r+\n')[[1]]
 	raw = raw[sapply(raw, nchar) > 0] # remove blank rows
 	f = strsplit(raw, split = '\t', fixed = TRUE)

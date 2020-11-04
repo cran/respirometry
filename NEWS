@@ -1,4 +1,7 @@
 -------------------------------------------------
+version 1.2.1, 2020-11-04
+- import_*():			improved compatibility with importing data files containing non-UTF-8 characters.
+-------------------------------------------------
 version 1.2.0, 2020-08-14
 - calc_alpha():			new function: Calculate the oxygen supply capacity (alpha).
 - calc_pcrit():			added functionality to calculate Pcrit-alpha and Pcrit-LLO.

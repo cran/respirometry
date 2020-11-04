@@ -1,6 +1,6 @@
-f71e0fb3eaa6eb0283d2da22a0b79c0e *DESCRIPTION
+f663de36d669bf2182f0bff895c60962 *DESCRIPTION
 02fec50aa81fd1dc128409c69c3d8a3c *NAMESPACE
-35fc6cb4ff7d62c2e1ec5237538aa488 *NEWS
+6704e946f82e98c5bf2acb743daf0ffc *NEWS
 16a62fc73af6b8a4ea149302973e3cb7 *R/Q10.R
 ad63afd2234353e11797d752c9086feb *R/RQ.R
 697109703e7ff8aeb70ae8083fdbdcb2 *R/calc_MO2.R
@@ -21,9 +21,9 @@ a9bedb6296d11f4147f28c2eaa09ab0b *R/correct_bubble.R
 d6ad99815fdbf83478a97f90da438338 *R/goal_flush_pH.R
 c5d63dd815ca4467e961476244912727 *R/guess_TA.R
 ed6070eb55a00a3af6c5f8f83b597d2e *R/guess_when.R
-4358960f811661479ff9d5fbd1f51d28 *R/import_firesting.R
-49b07c1022f58f1c7a8c0028923117d4 *R/import_presens.R
-4359973de5724f77418846992cfbf1d0 *R/import_witrox.R
+fc204fc493f9c4536c7303cd6b436108 *R/import_firesting.R
+a32bb2d0cadcd67b42f08dfbb0e83f77 *R/import_presens.R
+02816aa749518c635177cdcf4d15553d *R/import_witrox.R
 7bd33234a4a517ae9873814d32b4198d *R/make_bins.R
 2d597ed8432f7168c56da7b2eebbaa68 *R/max_MO2.R
 f134578b3dcb4c833286180f1d3ab9af *R/mean_pH.R
