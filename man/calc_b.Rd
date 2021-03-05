@@ -5,7 +5,7 @@
 \alias{calc_b}
 \title{Calculate the metabolic scaling coefficient, b}
 \usage{
-calc_b(mass, MO2, method = "nls", plot = "linear")
+calc_b(mass, MO2, method = "nls", plot = "linear", b0_start = 1)
 }
 \arguments{
 \item{mass}{a vector of animal masses.}
@@ -15,6 +15,8 @@ calc_b(mass, MO2, method = "nls", plot = "linear")
 \item{method}{a string defining which method of calculating scaling coefficients to use. Default is "nls", which utilizes a nonlinear least squares regression. If this does not fit your data well, "lm" may also be used, which calculates a linear regression of log10(\code{MO2}) ~ log10(\code{mass}) with slope and intercept equivalent to \code{b} and 10^\code{b0}, respectively.}
 
 \item{plot}{a string defining what kind of plot to display. "linear" for linear axes, "log" for log10-scale axes, and "none" for no plot. Default is "linear".}
+
+\item{b0_start}{a single numeric value as the starting point for \code{b0} value determination using the "nls" method. The default is \code{1} and should work for most situations, but if the "nls" method is not working and you don't want to use the "lm" method, changing the starting \code{b0} value may help. Ignored when method = "lm".}
 }
 \value{
 Returns a list of 1) the \code{b} value, 2) a vector of \code{b0} values corresponding to the input \code{MO2} values, and 3) an average \code{b0} that can be used for summarizing the relationship with an equation.

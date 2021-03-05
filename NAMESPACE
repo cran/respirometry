@@ -2,6 +2,7 @@
 
 export(Q10)
 export(RQ)
+export(calc_E)
 export(calc_MO2)
 export(calc_alpha)
 export(calc_b)

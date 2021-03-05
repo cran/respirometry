@@ -12,10 +12,10 @@
 #' @param T2 temperature 2 (in °C).
 #' @param R_vec a vector of rate values.
 #' @param T_vec a vector of temperature values (in °C).
-#' @param model logical. If \code{TRUE}, then a list is returned which includes an exponential model of \code{R_vec} and \code{T_vec} fit by \code{stats::nls()}.
+#' @param model logical. If \code{TRUE}, then a list is returned which includes an linear model of \code{log10(R_vec)} and \code{T_vec} fit by \code{stats::lm()}.
 #'
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @seealso \code{\link{scale_MO2}}
+#' @seealso \code{\link{scale_MO2}}, \code{\link{calc_E}}
 #'
 #' @examples
 #' Q10(R1 = 5, R2 = 10, T1 = 10, T2 = 20) # Returns Q10; = 2
@@ -57,44 +57,39 @@
 #' @export
 
 Q10 = function(Q10, R1, R2, T1, T2, R_vec, T_vec, model = FALSE){
-  q10 = methods::hasArg(Q10)
-  r2 = methods::hasArg(R2)
-  r1 = methods::hasArg(R1)
-  t2 = methods::hasArg(T2)
-  t1 = methods::hasArg(T1)
-  if(methods::hasArg(R_vec) & methods::hasArg(T_vec)){
-  	dat = data.frame(R_vec, T_vec)
-  	guess_a = min(R_vec, na.rm = TRUE) * exp(-0.0693 * min(T_vec, na.rm = TRUE)) # emperically determined relationship
-  	guess_q10 = (max(R_vec, na.rm = TRUE) / min(R_vec, na.rm = TRUE))^(10 / diff(range(T_vec, na.rm = TRUE)))
-  	guess_b = 0.1 * log(guess_q10) - 2e-5 # emperically determined relationship
-  	mod = stats::nls(R_vec ~ a * exp(b * T_vec), data = dat, start = list(a = guess_a, b = guess_b))
-  	mod_fit = data.frame(temp = dat$T_vec, fit_rate = stats::predict(mod, newdata = data.frame(T_vec = dat$T_vec)))
-  	mod_fit = mod_fit[order(mod_fit$temp), ]
-  	inter = list(Q10 = (mod_fit[nrow(mod_fit), 'fit_rate'] / mod_fit[1, 'fit_rate'])^(10 / (mod_fit[nrow(mod_fit), 'temp'] - mod_fit[1, 'temp'])), model = mod)
-  	ifelse(test = model, yes = return(inter), no = return(inter$Q10))
-  }
-  else{
-  	if(sum(q10, r2, r1, t2, t1) < 4) stop('Four parameters are needed')
-  	if(sum(q10, r2, r1, t2, t1) == 5) stop('All parameters already provided. Nothing to calculate...')
-  	if(q10 == FALSE){
-  		Q10 = (R2 / R1)^(10 / (T2 - T1))
-  		return(Q10)
-  	}
-  	if(r2 == FALSE){
-  		R2 = Q10^((T2 - T1) / 10) * R1
-  		return(R2)
-  	}
-  	if(r1 == FALSE){
-  		R1 = Q10^((T1 - T2) / 10) * R2
-  		return(R1)
-  	}
-  	if(t2 == FALSE){
-  		T2 = 10 / log(Q10, base = R2 / R1) + T1
-  		return(T2)
-  	}
-  	if(t1 == FALSE){
-  		T1 = 10 / log(Q10, base = R1 / R2) + T2
-  		return(T1)
-  	}
-  }
+	q10 = methods::hasArg(Q10)
+	r2 = methods::hasArg(R2)
+	r1 = methods::hasArg(R1)
+	t2 = methods::hasArg(T2)
+	t1 = methods::hasArg(T1)
+	if(methods::hasArg(R_vec) & methods::hasArg(T_vec)){
+		dat = data.frame(R_vec, T_vec)
+		mod = stats::lm(log10(R_vec) ~ T_vec)
+		inter = list(Q10 = as.numeric(10 ^ (stats::coef(mod)['T_vec'] * 10)), model = mod)
+		ifelse(test = model, yes = return(inter), no = return(inter$Q10))
+	}
+	else{
+		if(sum(q10, r2, r1, t2, t1) < 4) stop('Four parameters are needed')
+		if(sum(q10, r2, r1, t2, t1) == 5) stop('All parameters already provided. Nothing to calculate...')
+		if(q10 == FALSE){
+			Q10 = (R2 / R1)^(10 / (T2 - T1))
+			return(Q10)
+		}
+		if(r2 == FALSE){
+			R2 = Q10^((T2 - T1) / 10) * R1
+			return(R2)
+		}
+		if(r1 == FALSE){
+			R1 = Q10^((T1 - T2) / 10) * R2
+			return(R1)
+		}
+		if(t2 == FALSE){
+			T2 = 10 / log(Q10, base = R2 / R1) + T1
+			return(T2)
+		}
+		if(t1 == FALSE){
+			T1 = 10 / log(Q10, base = R1 / R2) + T2
+			return(T1)
+		}
+	}
 }

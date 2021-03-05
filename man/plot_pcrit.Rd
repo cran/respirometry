@@ -8,6 +8,7 @@
 plot_pcrit(
   po2,
   mo2,
+  avg_top_n = 1,
   level = 0.95,
   iqr = 1.5,
   NLR_m = 0.065,
@@ -21,6 +22,8 @@ plot_pcrit(
 \item{po2}{a vector of PO2 values. Any unit of measurement should work, but the NLR calculation was optimized using kPa. If the NLR metric is giving you trouble, try converting to kPa using \code{\link{conv_o2}}.}
 
 \item{mo2}{a vector of metabolic rate values. Must be the same length and corresponding to \code{po2}.}
+
+\item{avg_top_n}{applies to the \code{alpha} metric only. A numeric value representing the number of top \eqn{\alpha0} (MO2/PO2) values to average together to estimate \eqn{\alpha}. Default is 1. We recommend no more than 3 to avoid diminishing the \eqn{\alpha} value with sub-maximal observations.}
 
 \item{level}{applies to the \code{Sub_PI} metric only. Percentage at which the prediction interval should be constructed. Default is 0.95.}
 
@@ -37,26 +40,38 @@ plot_pcrit(
 \item{...}{arguments to be passed to \code{\link[segmented]{plot.segmented}}.}
 }
 \value{
-A base graphic plot is created. The alpha, breakpoint, LLO, NLR, and sub-PI,  Pcrit values are shown in the title. The broken-stick regression is shown by black lines. The black inverted triangle represents the breakpoint Pcrit. The dashed red curves signify the prediction interval used for the sub-PI Pcrit metric. Black circles represent oxyregulating observations used in the generation of the prediction interval, while transparent circles represent both the oxyconforming observations and those observations outside the IQR threshold (defined by \code{iqr}). The gray bands represent the confidence interval (defaults to 95\% but will change with \code{level}). The green curve represents the best fitting NLR function and the green inverted triangle represents the NLR Pcrit (modified by \code{NLR_m}) The blue line represents alpha, which was fit based on the blue circle observation. The blue inverted triangle represents the Pcrit-alpha at \code{MR}. The purple inverted triangle represents the Pcrit-LLO at \code{MR}.
+A base graphic plot is created. The alpha, breakpoint, LLO, NLR, and sub-PI Pcrit values are shown in the title and on the plot by inverted triangles. 
+
+The broken-stick regression is shown by black lines. 
+
+The dashed red curves signify the prediction interval used for the sub-PI Pcrit metric. 
+
+Black circles represent oxyregulating observations used in the generation of the prediction interval, while transparent circles represent both the oxyconforming observations and those observations outside the IQR threshold (defined by \code{iqr}). 
+
+The gray bands represent the confidence interval (defaults to 95\% but will change with \code{level}). 
+
+The green curve represents the best fitting NLR function and the green inverted triangle represents the NLR Pcrit (modified by \code{NLR_m}) 
+
+The blue line represents alpha, which was fit based on the blue circle observation(s).
 
 If \code{showNLRs = TRUE}, then a second plot is generated which shows all the NLR functions that converged. Vertical lines represent the Pcrit values corresponding to each curve.
 
-Black = Michaelis-Menten
+    Black = Michaelis-Menten
 
-Red = Power
+    Red = Power
 
-Green = Hyperbola
+    Green = Hyperbola
 
-Blue = Pareto
+    Blue = Pareto
 
-Cyan = Weibull with intercept.
+    Cyan = Weibull with intercept.
 }
 \description{
-Creates a Pcrit plot (the threshold below which oxygen consumption rate can no longer be sustained) based on paired PO2 and MO2 values. Four Pcrit metrics are ploted: the traditional breakpoint metric (broken stick regression, black), the nonlinear regression metric (Marshall et al. 2013, green), the sub-prediction interval metric (Birk et al. 2019, red), the alpha-based Pcrit method (Seibel et al., in prep, blue), and the linear low O2 (LLO) method (Reemeyer & Rees 2019, purple). For details on how the Pcrit values are calculated, see \code{\link{calc_pcrit}}.
+Creates a Pcrit plot (the threshold below which oxygen consumption rate can no longer be sustained) based on paired PO2 and MO2 values. Five Pcrit metrics are plotted: the traditional breakpoint metric (broken stick regression, black), the nonlinear regression metric (Marshall et al. 2013, green), the sub-prediction interval metric (Birk et al. 2019, red), the alpha-based Pcrit method (Seibel et al., 2021, blue), and the linear low O2 (LLO) method (Reemeyer & Rees 2019, purple). For details on how the Pcrit values are calculated, see \code{\link{calc_pcrit}}.
 }
 \details{
 \describe{
-\item{Alpha Pcrit}{Alpha is calculated from \code{\link{calc_alpha}} and the Pcrit corresponding to \code{MR} is returned. This determine's the animal's oxygen supply capacity and calculates the Pcrit at any given metabolic rate of interest.}
+\item{Alpha Pcrit}{Alpha is calculated from \code{\link{calc_alpha}} and the Pcrit corresponding to \code{MR} is returned. This determine's the animal's oxygen supply capacity and calculates the Pcrit at any given metabolic rate of interest. If no \code{MR} is provided, then it defaults to the mean MO2 value from the oxyregulating portion of the curve (as defined by the broken-stick regression).}
 \item{Breakpoint Pcrit}{Data are fit to a broken-stick regression using \code{\link[segmented]{segmented}}.}
 \item{LLO Pcrit}{A subset of observations are chosen only from those with an MO2 < \code{MR}. Then, a linear model is fit through the observations and Pcrit is calculated as the PO2 at which the line reaches \code{MR}.}
 \item{NLR Pcrit}{Data are fit to the following functions: Michaelis-Menten, Power, Hyperbola, Pareto, and Weibull with intercept. Following the method developed by Marshall et al. 2013, the function that best fits the data (smallest AIC) is chosen and the Pcrit is determined as the PO2 at which the slope of the function is \code{NLR_m} (by default = 0.065 following the authors' suggestion).}
@@ -65,20 +80,20 @@ Creates a Pcrit plot (the threshold below which oxygen consumption rate can no l
 }
 \examples{
 mo2_data <- read.csv(system.file('extdata', 'mo2_v_po2.csv', package = 'respirometry'))
-plot_pcrit(po2 = mo2_data$po2, mo2 = mo2_data$mo2)
+plot_pcrit(po2 = mo2_data$po2, mo2 = mo2_data$mo2, avg_top_n = 3, MR = 2.2)
 
 par(mfrow = c(2, 1))
 plot_pcrit(po2 = mo2_data$po2, mo2 = mo2_data$mo2, showNLRs = TRUE)
 
 }
 \references{
-Marshall, Dustin J., Michael Bode, and Craig R. White. 2013. “Estimating Physiological Tolerances - a Comparison of Traditional Approaches to Nonlinear Regression Techniques.” Journal of Experimental Biology 216(12): 2176–82.
-
 Birk, Matthew A., K.A.S. Mislan, Karen F. Wishner, and Brad A. Seibel. 2019. “Metabolic Adaptations of the Pelagic Octopod Japetella Diaphana to Oxygen Minimum Zones.” Deep-Sea Research Part I 148: 123–31.
 
-Seibel et al. in prep.
+Marshall, Dustin J., Michael Bode, and Craig R. White. 2013. “Estimating Physiological Tolerances - a Comparison of Traditional Approaches to Nonlinear Regression Techniques.” Journal of Experimental Biology 216(12): 2176–82.
 
 Reemeyer, Jessica E., and Bernard B. Rees. 2019. “Standardizing the Determination and Interpretation of Pcrit in Fishes.” Journal of Experimental Biology 222(18): jeb210633.
+
+Seibel, B. A., A. Andres, M. A. Birk, A. L. Burns, C. T. Shaw, A. W. Timpe, C. J. Welsh. 2021. “Oxygen supply capacity breathes new life into the critical oxygen partial pressure (Pcrit).” Journal of Experimental Biology.
 }
 \seealso{
 \code{\link{calc_pcrit}}, \code{\link{calc_alpha}}

@@ -20,6 +20,7 @@
 #' \item{DUR_RANGE}{Range of duration timepoints in the bin.}
 #' \item{TIME_MEAN}{Exists only if the parameter \code{time} has values. Mean timestamp of the bin.}
 #' \item{TIME_RANGE}{Exists only if the parameter \code{time} has values. Range of timestamps in the bin.}
+#' \item{TEMP_MEAN}{Mean temperature of the bin.}
 #' \item{PH_MEAN}{Exists only if the parameter \code{pH} has values. Mean pH of the bin. Averaged using \code{mean_pH()}.}
 #' \item{O2_MEAN}{Mean O2 value of the bin in the unit chosen by \code{o2_unit}).}
 #' \item{O2_RANGE}{Range of O2 values in the bin.}
@@ -148,6 +149,9 @@ calc_MO2 = function(duration, o2, o2_unit = 'percent_a.s.', bin_width, vol, temp
 			})
 		}
 		if(methods::hasArg(pH)) mo2s$PH_MEAN = as.numeric(tapply(data$pH, data$bin, mean_pH, na.rm = TRUE))
+		
+		mo2s$TEMP_MEAN = as.numeric(tapply(data$temp, data$bin, mean, na.rm = TRUE))
+		
 		mo2s$O2_MEAN = as.numeric(tapply(data$o2, data$bin, mean, na.rm = TRUE))
 		mo2s$O2_RANGE = sapply(tapply(data$o2, data$bin, range, na.rm = TRUE), function(i) paste(rev(i), collapse = ' - '))
 		mo2s$MO2 = as.vector(-by(data, data$bin, function(i) if(any(!is.na(i$umol_o2))) stats::coef(stats::lm(umol_o2 ~ duration, data = i))['duration'] else NA)) * 60 * vol
@@ -173,6 +177,7 @@ calc_MO2 = function(duration, o2, o2_unit = 'percent_a.s.', bin_width, vol, temp
 			})
 		}
 		if(methods::hasArg(pH)) mo2s$PH_MEAN = utils::head(data$pH, -1) + diff(data$pH) / 2
+			mo2s$TEMP_MEAN = utils::head(data$temp, -1) + diff(data$temp) / 2
 			mo2s$O2_MEAN = utils::head(data$o2, -1) + diff(data$o2) / 2
 			mo2s$O2_RANGE = paste(data$o2[1:(nrow(data) - 1)], data$o2[2:nrow(data)], sep = ' - ')
 			mo2s$MO2 = -diff(data$umol_o2) / diff(data$duration) * 60 * vol

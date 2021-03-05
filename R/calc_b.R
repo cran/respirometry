@@ -10,6 +10,7 @@
 #' @param MO2 a vector of metabolic rates.
 #' @param method a string defining which method of calculating scaling coefficients to use. Default is "nls", which utilizes a nonlinear least squares regression. If this does not fit your data well, "lm" may also be used, which calculates a linear regression of log10(\code{MO2}) ~ log10(\code{mass}) with slope and intercept equivalent to \code{b} and 10^\code{b0}, respectively.
 #' @param plot a string defining what kind of plot to display. "linear" for linear axes, "log" for log10-scale axes, and "none" for no plot. Default is "linear".
+#' @param b0_start a single numeric value as the starting point for \code{b0} value determination using the "nls" method. The default is \code{1} and should work for most situations, but if the "nls" method is not working and you don't want to use the "lm" method, changing the starting \code{b0} value may help. Ignored when method = "lm".
 #' 
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @return Returns a list of 1) the \code{b} value, 2) a vector of \code{b0} values corresponding to the input \code{MO2} values, and 3) an average \code{b0} that can be used for summarizing the relationship with an equation.
@@ -29,16 +30,18 @@
 #' @encoding UTF-8
 #' @export
 
-calc_b = function(mass, MO2, method = 'nls', plot = 'linear'){
+calc_b = function(mass, MO2, method = 'nls', plot = 'linear', b0_start = 1){
 	if(!(plot %in% c('linear', 'log', 'none'))) stop('"plot" must be "linear", "log", or "none"')
 	if(!(method %in% c('nls', 'lm'))) stop('"method" must be "nls" or "lm"')
 	if(method == 'nls'){
-		b_model = tryCatch(stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = 1, b = 0.75)), error = function(e) stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = 1, b = -0.25)))
+		b_model = tryCatch(stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = b0_start, b = 0.75)), error = function(e) stats::nls(MO2 ~ b0 * mass ^ b, start = list(b0 = b0_start, b = -0.25)))
 		b = unname(stats::coef(b_model)['b'])
 		b0 = MO2 / mass ^ b
 		b0_avg = mean(b0, na.rm = TRUE)
 	}
 	if(method == 'lm'){
+		if(any(MO2 == 0)) MO2[which(MO2 == 0)] = NA
+		if(any(mass == 0)) mass[which(mass == 0)] = NA
 		b_model = stats::lm(log10(MO2) ~ log10(mass))
 		b = unname(stats::coef(b_model)['log10(mass)'])
 		b0 = MO2 / mass ^ b

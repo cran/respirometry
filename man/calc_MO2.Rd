@@ -49,6 +49,7 @@ A data frame is returned:
 \item{DUR_RANGE}{Range of duration timepoints in the bin.}
 \item{TIME_MEAN}{Exists only if the parameter \code{time} has values. Mean timestamp of the bin.}
 \item{TIME_RANGE}{Exists only if the parameter \code{time} has values. Range of timestamps in the bin.}
+\item{TEMP_MEAN}{Mean temperature of the bin.}
 \item{PH_MEAN}{Exists only if the parameter \code{pH} has values. Mean pH of the bin. Averaged using \code{mean_pH()}.}
 \item{O2_MEAN}{Mean O2 value of the bin in the unit chosen by \code{o2_unit}).}
 \item{O2_RANGE}{Range of O2 values in the bin.}

@@ -22,7 +22,7 @@ Q10(Q10, R1, R2, T1, T2, R_vec, T_vec, model = FALSE)
 
 \item{T_vec}{a vector of temperature values (in °C).}
 
-\item{model}{logical. If \code{TRUE}, then a list is returned which includes an exponential model of \code{R_vec} and \code{T_vec} fit by \code{stats::nls()}.}
+\item{model}{logical. If \code{TRUE}, then a list is returned which includes an linear model of \code{log10(R_vec)} and \code{T_vec} fit by \code{stats::lm()}.}
 }
 \description{
 Calculates parameters from Q10 temperature coefficient for chemical or biological systems. This function can be used in two ways. 1. if four of the first five parameters are given (\code{Q10}, \code{R1}, \code{R2}, \code{T1}, \code{T2}) then the fifth parameter is returned, or 2. if \code{R_vec} and \code{T_vec} are given, then the best Q10 for those data is returned.
@@ -68,7 +68,7 @@ persp(mass, temp, mo2, xlab = 'Mass (g)', ylab = 'Temperature (*C)', zlab = 'MO2
 
 }
 \seealso{
-\code{\link{scale_MO2}}
+\code{\link{scale_MO2}}, \code{\link{calc_E}}
 }
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}
