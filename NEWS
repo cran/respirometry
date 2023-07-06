@@ -1,12 +1,18 @@
 -------------------------------------------------
+version 1.4.0, 2023-07-06
+- adj_by_temp():		new function: Predict biological parameters at a new temperature.
+- Q10():				fixed an error in one of the examples
+- Q10():				improved documentation to be explicit that any temperature-dependent biological value could be used (e.g. Pcrit) and not just rates.
+- calc_MO2():			improved readability of the documentation
+-------------------------------------------------
 version 1.3.0, 2021-03-05
-- calc_E():			new function: Calculate E temperature coefficient.
-- calc_alpha():	includes an added parameter (avg_top_n) to calculate alpha based on the average of a defined number of observations rather than just the single highest value.
-- calc_b():	added a "b0_start" parameter so the user can adjust the starting b0 value for the "nls" method when working with a tricky dataset to converge. Thanks to Alyssa Andres for the suggestion.
-- calc_b():	can now handle 0 values in either the mass or MO2 parameters when using the "lm" mode.
-- calc_MO2():		added a TEMP_MEAN column to the output data frame so that temperature within bins is also included. Thanks to Britney Firth for the suggestion.
-- plot_pcrit():		improved the clarity of the plot by color coordinating the plot title.
-- Q10():		the method of Q10 determination was changed from a nonlinear regression of R_vec values to a linear regression of log10(R_vec) values. This improves the accuracy and speed of determining the best Q10 value.
+- calc_E():				new function: Calculate E temperature coefficient.
+- calc_alpha():			includes an added parameter (avg_top_n) to calculate alpha based on the average of a defined number of observations rather than just the single highest value.
+- calc_b():				added a "b0_start" parameter so the user can adjust the starting b0 value for the "nls" method when working with a tricky dataset to converge. Thanks to Alyssa Andres for the suggestion.
+- calc_b():				can now handle 0 values in either the mass or MO2 parameters when using the "lm" mode.
+- calc_MO2():			added a TEMP_MEAN column to the output data frame so that temperature within bins is also included. Thanks to Britney Firth for the suggestion.
+- plot_pcrit():			improved the clarity of the plot by color coordinating the plot title.
+- Q10():				the method of Q10 determination was changed from a nonlinear regression of R_vec values to a linear regression of log10(R_vec) values. This improves the accuracy and speed of determining the best Q10 value.
 -------------------------------------------------
 version 1.2.1, 2020-11-04
 - import_*():			improved compatibility with importing data files containing non-UTF-8 characters.
@@ -18,7 +24,7 @@ version 1.2.0, 2020-08-14
 - plot_pcrit():			added functionality to plot Pcrit-alpha and Pcrit-LLO.
 -------------------------------------------------
 version 1.1.0, 2020-04-29
-- calc_b():					added a "method" parameter, which allows the user to use a linear regression of log10 values rather than the default nonlinear regression, if desired.
+- calc_b():				added a "method" parameter, which allows the user to use a linear regression of log10 values rather than the default nonlinear regression, if desired.
 - plot_pcrit():			allows plotting of just the MO2 v PO2 if Pcrit cannot be calculated.
 -------------------------------------------------
 version 1.0.2, 2020-01-24

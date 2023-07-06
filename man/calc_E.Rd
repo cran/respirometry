@@ -8,7 +8,7 @@
 calc_E(x, temp)
 }
 \arguments{
-\item{x}{a numeric vector of rate values (e.g. MO2).}
+\item{x}{a numeric vector of rate values (e.g. MO2) or any other values (e.g. Pcrit).}
 
 \item{temp}{a numeric vector of temperature values (in Celsius).}
 }
@@ -26,7 +26,7 @@ calc_E(x = c(1, 2, 3), temp = c(10, 20, 30))
 Deutsch, Curtis et al. 2015. “Climate Change Tightens a Metabolic Constraint on Marine Habitats.” Science 348(6239): 1132–35.
 }
 \seealso{
-\code{\link{Q10}}
+\code{\link{Q10}}, \code{\link{adj_by_temp}}
 }
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}

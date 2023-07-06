@@ -3,19 +3,19 @@
 #' @description Calculates parameters from Q10 temperature coefficient for chemical or biological systems. This function can be used in two ways. 1. if four of the first five parameters are given (\code{Q10}, \code{R1}, \code{R2}, \code{T1}, \code{T2}) then the fifth parameter is returned, or 2. if \code{R_vec} and \code{T_vec} are given, then the best Q10 for those data is returned.
 #'
 #' @details
-#' \deqn{Q10 = (R2 / R1) ^ (10 / (T2 - T1))}
+#' \deqn{Q_{10} = (R_2 / R_1) ^ {\frac{10}{T_2 - T_1}}}
 #'
 #' @param Q10 factor by which rate changes due to 10 °C increase in temperature.
-#' @param R1 rate 1.
-#' @param R2 rate 2.
+#' @param R1 rate 1. Could also be Pcrit or any other temperature-dependent biological parameters.
+#' @param R2 rate 2. Could also be Pcrit or any other temperature-dependent biological parameters.
 #' @param T1 temperature 1 (in °C).
 #' @param T2 temperature 2 (in °C).
-#' @param R_vec a vector of rate values.
+#' @param R_vec a vector of temperature-dependent values, such as rates (e.g. MO2), Pcrit or other biological parameters.
 #' @param T_vec a vector of temperature values (in °C).
-#' @param model logical. If \code{TRUE}, then a list is returned which includes an linear model of \code{log10(R_vec)} and \code{T_vec} fit by \code{stats::lm()}.
+#' @param model logical. If \code{TRUE}, then a list is returned which includes an linear model of \code{log10(R_vec)} and \code{T_vec} fit by \code{stats::lm()}. Default is \code{FALSE}.
 #'
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @seealso \code{\link{scale_MO2}}, \code{\link{calc_E}}
+#' @seealso \code{\link{scale_MO2}}, \code{\link{calc_E}}, \code{\link{adj_by_temp}}
 #'
 #' @examples
 #' Q10(R1 = 5, R2 = 10, T1 = 10, T2 = 20) # Returns Q10; = 2
@@ -26,15 +26,6 @@
 #' 
 #' # I measured MO2 at a spectrum of temperatures. What Q10 value best fits my data?
 #' Q10(R_vec = c(1, 2, 5, NA, 18, 33), T_vec = c(0, 10, 20, 30, 40, 50))
-#' 
-#' # I want to see a plot of my data with a Q10 curve through them.
-#' T_vec = c(5, 13, 13, 20, 27) # dummy data
-#' R_vec = c(1, 3, 4, 9, 20)
-#' curve_x = data.frame(T_vec = seq(5, 30, by = 0.01))
-#' best_fit = Q10(R_vec = R_vec, T_vec = T_vec, model = TRUE)$model
-#' curve_y = predict(best_fit, newdata = curve_x)
-#' plot(T_vec, R_vec)
-#' lines(curve_x$T_vec, curve_y)
 #' 
 #' # A 100 g individual at 10 *C has an MO2 of 1270 umol/h. How much
 #' # would a 250 g individual likely consume at 14 *C?

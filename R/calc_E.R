@@ -5,12 +5,12 @@
 #' @details
 #' E is the slope of the relationship between \code{-ln(x)} and \code{1/(kB T)}, where \code{kB} is the Boltzmann constant expressed in eV/K.
 #'
-#' @param x a numeric vector of rate values (e.g. MO2).
+#' @param x a numeric vector of rate values (e.g. MO2) or any other values (e.g. Pcrit).
 #' @param temp a numeric vector of temperature values (in Celsius).
 #'
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @references Deutsch, Curtis et al. 2015. “Climate Change Tightens a Metabolic Constraint on Marine Habitats.” Science 348(6239): 1132–35.
-#' @seealso \code{\link{Q10}}
+#' @seealso \code{\link{Q10}}, \code{\link{adj_by_temp}}
 #'
 #' @examples
 #' calc_E(x = c(1, 2, 3), temp = c(10, 20, 30))
