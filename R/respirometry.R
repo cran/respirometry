@@ -6,5 +6,6 @@
 #' @docType package
 #' @name respirometry
 #' @encoding UTF-8
+"_PACKAGE"
 
 NULL

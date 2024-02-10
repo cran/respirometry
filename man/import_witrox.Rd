@@ -67,7 +67,7 @@ data_list$CH_3 # here's the channel 3 data frame.
 
 }
 \seealso{
-\code{\link{import_firesting}}, \code{\link{import_presens}}, \code{\link{conv_o2}}
+\code{\link{import_pyroscience_workbench}}, \code{\link{import_firesting}}, \code{\link{import_presens}}, \code{\link{conv_o2}}
 }
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}

@@ -43,7 +43,7 @@
 #' }
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @note Oxygen conversions are based on \code{\link{conv_o2}} and therefore differ slightly from the conversions provided by PreSens.
-#' @seealso \code{\link{import_firesting}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
+#' @seealso \code{\link{import_pyroscience_workbench}}, \code{\link{import_firesting}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
 #' @examples
 #' \dontrun{
 #' 

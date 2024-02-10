@@ -78,7 +78,8 @@ pcrit_internal = function(po2, mo2, avg_top_n = 1, level = 0.95, iqr = 1.5, NLR_
 	
 	mods = list(MM_mod, powr_mod, hyperbola_mod, pareto_mod, weibull_mod)
 	mod_names = c('MM_mod' = 'Michaelis-Menten', 'powr_mod' = 'Power', 'hyperbola_mod' = 'Hyperbola', 'pareto_mod' = 'Pareto', 'weibull_mod' = 'Weibull with intercept')
-	best_mod = mod_names[which.min(AIC(mods)$AIC)]
+	aic_vec = sapply(mods, FUN = AIC)
+	best_mod = mod_names[which.min(aic_vec)]
 
 	
 	nlr_pcrits = list('Michaelis-Menten' = MM_pcrit, 'Power' = powr_pcrit, 'Hyperbola' = hyperbola_pcrit, 'Pareto' = pareto_pcrit, 'Weibull with intercept' = weibull_pcrit)
@@ -180,7 +181,6 @@ pcrit_internal = function(po2, mo2, avg_top_n = 1, level = 0.95, iqr = 1.5, NLR_
 #' @encoding UTF-8
 #' @export
 #' @importFrom stats AIC
-#' @import PKNCA
 
 calc_pcrit = function(po2, mo2, avg_top_n = 1, level = 0.95, iqr = 1.5, NLR_m = 0.065, MR = NULL, mo2_threshold = Inf, return_models = FALSE){
 	l = pcrit_internal(po2, mo2, avg_top_n, level, iqr, NLR_m, MR = MR, mo2_threshold = mo2_threshold)
@@ -256,7 +256,6 @@ calc_pcrit = function(po2, mo2, avg_top_n = 1, level = 0.95, iqr = 1.5, NLR_m = 
 #' @inherit calc_pcrit details references
 #' @export
 #' @importFrom stats AIC
-#' @import PKNCA
 
 
 

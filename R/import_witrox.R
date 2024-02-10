@@ -28,7 +28,7 @@
 #' }
 #' If \code{split_channels = TRUE}, then "\code{CH_X_}" is removed from the column names and multiple data frames are returned in a list.
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
-#' @seealso \code{\link{import_firesting}}, \code{\link{import_presens}}, \code{\link{conv_o2}}
+#' @seealso \code{\link{import_pyroscience_workbench}}, \code{\link{import_firesting}}, \code{\link{import_presens}}, \code{\link{conv_o2}}
 #' @examples
 #' \dontrun{
 #' file <- system.file('extdata', 'witrox_file.txt', package = 'respirometry')

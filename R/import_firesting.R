@@ -1,6 +1,6 @@
-#' Import data from a FireSting O2 transmitter
+#' Import data from Pyro Oxygen Logger
 #'
-#' Imports the standard txt file output from FireSting O2 transmitters and converts the data into one or more data frames.
+#' Imports the standard txt file output from Pyroscience's deprecated Pyro Oxygen Logger software and converts the data into one or more data frames. If using the newer Pyroscience Workbench software, use \code{\link{import_pyroscience_workbench}} instead.
 #'
 #' The following FireSting fiber optic O2 transmitters are supported:
 #' \itemize{
@@ -42,10 +42,10 @@
 #' If \code{split_channels = TRUE}, then "\code{CH_X_}" is removed from the column names and multiple data frames are returned in a named list.
 #' @author Matthew A. Birk, \email{matthewabirk@@gmail.com}
 #' @note Oxygen conversions are estimates based on the \code{\link[marelac]{marelac}} package.
-#' @seealso \code{\link{import_presens}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
+#' @seealso \code{\link{import_pyroscience_workbench}}, \code{\link{import_presens}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
 #' @examples
 #' \dontrun{
-#' file <- system.file('extdata', 'firesting_file.txt', package = 'respirometry')
+#' file <- system.file('extdata', 'pyro_oxygen_logger_file.txt', package = 'respirometry')
 #' import_firesting(file, o2_unit = 'umol_per_l')
 #' 
 #' # I want each channel as a separate data frame.

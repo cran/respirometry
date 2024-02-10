@@ -79,7 +79,7 @@ import_presens(file = file, date = '\%d.\%m.\%y\%X')
 }
 }
 \seealso{
-\code{\link{import_firesting}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
+\code{\link{import_pyroscience_workbench}}, \code{\link{import_firesting}}, \code{\link{import_witrox}}, \code{\link{conv_o2}}
 }
 \author{
 Matthew A. Birk, \email{matthewabirk@gmail.com}

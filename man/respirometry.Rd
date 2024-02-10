@@ -3,6 +3,7 @@
 \docType{package}
 \encoding{UTF-8}
 \name{respirometry}
+\alias{respirometry-package}
 \alias{respirometry}
 \title{Tools for Conducting Respirometry Experiments}
 \description{
