@@ -3,9 +3,12 @@
 \encoding{UTF-8}
 \name{scale_MO2}
 \alias{scale_MO2}
+\alias{scale_mo2}
 \title{Mass-correct metabolic rate}
 \usage{
 scale_MO2(mass_1, MO2_1, mass_2, MO2_2, b = 0.75)
+
+scale_mo2(mass_1, MO2_1, mass_2, MO2_2, b = 0.75)
 }
 \arguments{
 \item{mass_1}{animal mass for \code{MO2_1}.}
@@ -19,7 +22,7 @@ scale_MO2(mass_1, MO2_1, mass_2, MO2_2, b = 0.75)
 \item{b}{scaling coefficient for MO2. Default is 0.75.}
 }
 \description{
-For most organisms, metabolic rate does not scale linearly, but rather according to a power function. This function estimates MO2 or size of an individual organism given the MO2 and size of another individual of a different size. To mass-correct your MO2 data, plug in your desired mass in \code{mass_2} and the output from \code{\link{calc_b}} to the \code{b} parameter.
+For most organisms, metabolic rate does not scale linearly, but rather according to a power curve. This function estimates MO2 or size of an individual organism given the MO2 and size of another individual of a different size. To mass-correct your MO2 data, plug in your desired mass in \code{mass_2} and the output from \code{\link{calc_b}} to the \code{b} parameter.
 }
 \details{
 \deqn{(MO2 = b0 * M^b)}

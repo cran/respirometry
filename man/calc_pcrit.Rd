@@ -8,6 +8,8 @@
 calc_pcrit(
   po2,
   mo2,
+  mo2_data,
+  method = "Breakpoint",
   avg_top_n = 1,
   level = 0.95,
   iqr = 1.5,
@@ -22,22 +24,26 @@ calc_pcrit(
 
 \item{mo2}{a vector of metabolic rate values. Must be the same length and corresponding to \code{po2}.}
 
-\item{avg_top_n}{applies to the \code{alpha} metric only. A numeric value representing the number of top \eqn{\alpha0} (MO2/PO2) values to average together to estimate \eqn{\alpha}. Default is 1. We recommend no more than 3 to avoid diminishing the \eqn{\alpha} value with sub-maximal observations.}
+\item{mo2_data}{for convenience, the output of \code{\link{calc_MO2}} can be entered here, as an alternative to specifying the \code{po2} and \code{mo2} parameters (optional).}
 
-\item{level}{applies to the \code{Sub_PI} metric only. Percentage at which the prediction interval should be constructed. Default is 0.95.}
+\item{method}{Over the years, many different methods of analysis have been proposed to quantify Pcrit. You must choose one of the following: Alpha, Breakpoint (default), LLO, NLR, Sub_PI, All. If in doubt, try "All".}
 
-\item{iqr}{applies to the \code{Sub_PI} metric only. Removes \code{mo2} observations that are this many interquartile ranges away from the mean value for the oxyregulating portion of the trial. If this filtering is not desired, set to infinity. To visualize which observations will be removed by this parameter, use \code{\link{plot_pcrit}}. Default is 1.5.}
+\item{avg_top_n}{applies to the \code{alpha} metric only (only when \code{method == "Alpha"} or \code{"All"}). A numeric value representing the number of top \eqn{\alpha0} (MO2/PO2) values to average together to estimate \eqn{\alpha}. Default is 1. We recommend no more than 3 to avoid diminishing the \eqn{\alpha} value with sub-maximal observations.}
 
-\item{NLR_m}{applies to the \code{NLR} metric only. Pcrit is defined as the PO2 at which the slope of the best fitting function equals \code{NLR_m} (after the MO2 data are normalized to the 90\% quantile). Default is 0.065.}
+\item{level}{applies to the \code{Sub_PI} metric only (only when \code{method == "Sub_PI"} or \code{"All"}). Percentage at which the prediction interval should be constructed. Default is 0.95.}
 
-\item{MR}{applies to the \code{alpha} and \code{LLO} metrics only. A numeric value for the metabolic rate at which \code{pcrit_alpha} and \code{pcrit_LLO} should be returned. If not supplied by the user, then the mean MO2 of the "oxyregulating" portion of the curve is applied for \code{pcrit_alpha} and \code{NA} is returned for \code{pcrit_LLO}.}
+\item{iqr}{applies to the \code{Sub_PI} metric only (only when \code{method == "Sub_PI"} or \code{"All"}). Removes \code{mo2} observations that are this many interquartile ranges away from the mean value for the oxyregulating portion of the trial. If this filtering is not desired, set to infinity. To visualize which observations will be removed by this parameter, use \code{\link{plot_pcrit}}. Default is 1.5.}
 
-\item{mo2_threshold}{applies to the \code{alpha} metric only. A single numeric value above which \code{mo2} values are ignored for \code{alpha} Pcrit estimation. Useful to removing obviously erroneous values. Default is \code{Inf}.}
+\item{NLR_m}{applies to the \code{NLR} metric only (only when \code{method == "NLR"} or \code{"All"}). Pcrit is defined as the PO2 at which the slope of the best fitting function equals \code{NLR_m} (after the MO2 data are normalized to the 90\% quantile). Default is 0.065.}
+
+\item{MR}{applies to the \code{alpha} and \code{LLO} metrics only (only when \code{method == "Alpha", "LLO"} or \code{"All"}). A numeric value for the metabolic rate at which \code{pcrit_alpha} and \code{pcrit_LLO} should be returned. If not supplied by the user, then the mean MO2 of the "oxyregulating" portion of the curve is applied for \code{pcrit_alpha} and \code{NA} is returned for \code{pcrit_LLO}.}
+
+\item{mo2_threshold}{applies to the \code{alpha} metric only (only when \code{method == "Alpha"} or \code{"All"}). A single numeric value above which \code{mo2} values are ignored for \code{alpha} Pcrit estimation. Useful to removing obviously erroneous values. Default is \code{Inf}.}
 
 \item{return_models}{logical. Should a list of model parameters be returned along with the converged Pcrit values? Default is \code{FALSE}.}
 }
 \value{
-If \code{return_models} is \code{FALSE} (default), a named numeric vector of Pcrit values calculated using the \code{Alpha}, \code{Breakpoint}, \code{LLO}, \code{NLR}, and \code{Sub_PI} metrics. If \code{return_models} is \code{TRUE}, then a list of converged Pcrit values, along with breakpoint function parameters, the \code{MR} value used for calculating Pcrit-alpha, a data frame of the "oxyregulating" portion of the curve, and NLR parameters are returned.
+If \code{return_models} is \code{FALSE} (default), a numeric Pcrit value is returned based on \code{method}. If \code{method == "All"}, a named numeric vector of Pcrit values calculated using the \code{Alpha}, \code{Breakpoint}, \code{LLO}, \code{NLR}, and \code{Sub_PI} metrics is returned. If \code{return_models} is \code{TRUE}, then a list of converged Pcrit values, along with breakpoint function parameters, the \code{MR} value used for calculating Pcrit-alpha, a data frame of the "oxyregulating" portion of the curve, and NLR parameters are returned.
 }
 \description{
 Calculates Pcrit (commonly understood as the threshold below which oxygen consumption rate can no longer be sustained) based on paired PO2 and MO2 values. Five Pcrit metrics are returned using many of the popular techniques for Pcrit calculation: the traditional breakpoint metric (broken stick regression), the nonlinear regression metric (Marshall et al. 2013), the sub-prediction interval metric (Birk et al. 2019), the alpha-based Pcrit method (Seibel et al. 2021), and the linear low O2 (LLO) method (Reemeyer & Rees 2019). To see the Pcrit values plotted, see \code{\link{plot_pcrit}}.
@@ -52,8 +58,11 @@ Calculates Pcrit (commonly understood as the threshold below which oxygen consum
 }
 }
 \examples{
-mo2_data <- read.csv(system.file('extdata', 'mo2_v_po2.csv', package = 'respirometry'))
-calc_pcrit(po2 = mo2_data$po2, mo2 = mo2_data$mo2)
+raw_data <- system.file('extdata/pcrit_run/', package = 'respirometry')
+o2_data <- import_pyroscience_workbench(folder = raw_data)
+mo2_data <- calc_MO2(duration = o2_data$DURATION, o2 = o2_data$CH_1_O2, bin_width = 10, vol = 3)
+calc_pcrit(mo2_data = mo2_data)
+calc_pcrit(po2 = mo2_data$O2_MEAN, mo2 = mo2_data$MO2, method = 'All', MR = 100)
 }
 \references{
 Birk, Matthew A., K.A.S. Mislan, Karen F. Wishner, and Brad A. Seibel. 2019. “Metabolic Adaptations of the Pelagic Octopod Japetella Diaphana to Oxygen Minimum Zones.” Deep-Sea Research Part I 148: 123–31.

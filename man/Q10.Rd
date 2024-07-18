@@ -3,9 +3,15 @@
 \encoding{UTF-8}
 \name{Q10}
 \alias{Q10}
+\alias{q10}
+\alias{calc_q10}
 \title{Parameters of Q10 Temperature Coefficient}
 \usage{
 Q10(Q10, R1, R2, T1, T2, R_vec, T_vec, model = FALSE)
+
+q10(Q10, R1, R2, T1, T2, R_vec, T_vec, model = FALSE)
+
+calc_q10(Q10, R1, R2, T1, T2, R_vec, T_vec, model = FALSE)
 }
 \arguments{
 \item{Q10}{factor by which rate changes due to 10 °C increase in temperature.}

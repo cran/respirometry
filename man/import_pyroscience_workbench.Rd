@@ -15,7 +15,7 @@ import_pyroscience_workbench(
 )
 }
 \arguments{
-\item{folder}{a character string. The filepath to the parent folder which contains ChannelData.}
+\item{folder}{a character string. The filepath to the parent folder (directory) which contains ChannelData.}
 
 \item{o2_unit}{a character string. The unit of O2 measurement to be output in the data frame. Options are described in \code{\link{conv_o2}}.}
 

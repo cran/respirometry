@@ -29,6 +29,7 @@ conv_o2(
 \item{ug_per_l}{}
 \item{umol_per_l}{}
 \item{mmol_per_l}{}
+\item{nmol_per_ml}{}
 \item{ml_per_l}{}
 \item{mg_per_kg}{}
 \item{ug_per_kg}{}

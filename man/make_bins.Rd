@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{make_bins}
 \alias{make_bins}
-\title{Make time bins for MO2 calculations}
+\title{Make time binning thresholds for MO2 calculations}
 \usage{
 make_bins(
   o2,
@@ -11,7 +11,7 @@ make_bins(
   good_data = TRUE,
   min_o2_width = 1/100,
   max_o2_width = 1/10,
-  n_bins = 10
+  n_thresholds = 10
 )
 }
 \arguments{
@@ -21,21 +21,21 @@ make_bins(
 
 \item{good_data}{logical vector of whether O2 observations are "good" measurements and should be included in analysis. Default is that all observations are \code{TRUE}.}
 
-\item{min_o2_width}{Default is 1/100th of the total "good" trial duration.}
+\item{min_o2_width}{The duration of the bins at the lowest O2 value, expressed as a proportion of the total "good" trial duration. Default is 1/100th of the total "good" trial duration.}
 
-\item{max_o2_width}{Default is 1/10th of the total "good" trial duration.}
+\item{max_o2_width}{The duration of the bins at the highest O2 value, expressed as a proportion of the total "good" trial duration. Default is 1/10th of the total "good" trial duration.}
 
-\item{n_bins}{Default is 10.}
+\item{n_thresholds}{Default is 10.}
 }
 \value{
-A data.frame with two columns is returned.
+A data.frame with \code{n_thresholds} rows and two columns is returned. Each row describes the threshold and the duration of observations that will be binned together at or above the corresponding O2 value.
 \describe{
-\item{o2}{The O2 value below which the corresponding bin width is applied.}
-\item{width}{The bin width at which all data below the corresponding O2 value will be binned.}
+\item{o2}{The various O2 thresholds at which bin widths change.}
+\item{width}{The bin width applied to values greater than the corresponding row's O2 value but less than the next greater O2 value.}
 }
 }
 \description{
-The width of time bins seems to be an under-appreciated consideration when calculating metabolic rates if PO2 or time are interesting covariates. The wider the bins, the higher the precision of your calculated MO2 value (more observations to average over), but at a loss of resolution of an interesting covariate. The narrower the bins, the higher the resolution of the PO2 or time covariate, but at a cost of lower precision. For Pcrit trials, I have found good success using bins of 1/10th the trial duration at the highest PO2s (where good precision is important) and 1/100th the trial duration at the lowest PO2s (where good resolution is important).
+The width of time bins seems to be an under-appreciated consideration when calculating metabolic rates if PO2 or time are interesting covariates. The wider the bins, the higher the precision of your calculated MO2 value (more observations to average over), but at a loss of resolution of an interesting covariate. The narrower the bins, the higher the resolution of the PO2 or time covariate, but at a cost of lower precision. For Pcrit trials, I have found good success using bins of 1/10th the trial duration at the highest PO2s (where good precision is important) and 1/100th the trial duration at the lowest PO2s (where good resolution is important). Thus, these are the defaults, but can be changed as desired.
 }
 \examples{
 # get O2 data
@@ -46,10 +46,10 @@ o2_data <- na.omit(import_witrox(file, split_channels = TRUE)$CH_4)
 
 make_bins(o2 = o2_data$O2, duration = o2_data$DURATION) # creates the default 10 bins. At the
 # highest O2 levels, bin widths are 21.783/10 = 2.1783 mins and at the lowest O2 levels, bin
-# widths are 0.21783 mins.
+# widths are 21.783/100 = 0.21783 mins.
 
 bins <- make_bins(o2 = o2_data$O2, duration = o2_data$DURATION, min_o2_width = 1/20,
-max_o2_width = 1/3, n_bins = 5) # creates 5 bins. At the highest O2 levels, bin widths are
+max_o2_width = 1/3, n_thresholds = 5) # creates 5 bins. At the highest O2 levels, bin widths are
 # 21.783/3 = 7.261 mins and at the lowest O2 levels, bin widths are 21.783/20 = 1.089 mins.
 
 (mo2 <- calc_MO2(duration = o2_data$DURATION, o2 = o2_data$O2,

@@ -24,7 +24,7 @@ conv_nh4(n_waste, from = "umol_NH4", to = "all")
 Ammonia or nitrogen excretion can be measured in a variety of ways. Convert between different measurements.
 }
 \details{
-The sum of NH4+ and NH3 species are considered. Conversions are based on relationships and values from the package \code{\link[marelac]{marelac}}.
+The sum of NH4+ and NH3 species are considered (i.e. TAN). Conversions are based on relationships and values from the package \code{\link[marelac]{marelac}}.
 }
 \examples{
 conv_nh4(n_waste = 100)
