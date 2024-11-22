@@ -1,6 +1,6 @@
-d7ec8394e65256de2cdbb29e713c4409 *DESCRIPTION
+7045ef9c37ab3976875afec1a7a9667c *DESCRIPTION
 3e659947b193739bd26e8f239e2eb3db *NAMESPACE
-342e8fdf180a232ddb4507ae70e2539e *NEWS
+801e585710f601f137032f6e023420bf *NEWS
 816d10f7be9721a2a45b88ed081c907f *R/Q10.R
 ad63afd2234353e11797d752c9086feb *R/RQ.R
 4772b2c220fd65a5daf4fc00f9a50146 *R/adj_by_temp.R
@@ -23,7 +23,7 @@ a9bedb6296d11f4147f28c2eaa09ab0b *R/correct_bubble.R
 d6ad99815fdbf83478a97f90da438338 *R/goal_flush_pH.R
 c5d63dd815ca4467e961476244912727 *R/guess_TA.R
 ed6070eb55a00a3af6c5f8f83b597d2e *R/guess_when.R
-cd1262d43344b835beef95b47fcb6dc8 *R/import_firesting.R
+e13f627011f535b9682792e871bb28da *R/import_firesting.R
 9210430aa5012a1be3de19096f56c100 *R/import_presens.R
 36430d8d4c44a65615006df142fd1cb4 *R/import_pyroscience_workbench.R
 91ab28d5f428ae90c9171df49703f63c *R/import_witrox.R
