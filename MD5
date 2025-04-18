@@ -1,11 +1,11 @@
-7045ef9c37ab3976875afec1a7a9667c *DESCRIPTION
+e648116aa5aa19dc6f52e59f7844fdfc *DESCRIPTION
 3e659947b193739bd26e8f239e2eb3db *NAMESPACE
-801e585710f601f137032f6e023420bf *NEWS
+9bcc6a08019f0c9953325549bb578583 *NEWS
 816d10f7be9721a2a45b88ed081c907f *R/Q10.R
 ad63afd2234353e11797d752c9086feb *R/RQ.R
 4772b2c220fd65a5daf4fc00f9a50146 *R/adj_by_temp.R
 17e1dcaa58ba36a9b1d99a80bb5eaace *R/calc_E.R
-fbb6636ca40451c32aeb08ecd490d0c8 *R/calc_MO2.R
+504532ed0ef387830e3b0dcd2796d5d3 *R/calc_MO2.R
 a8a93bcdb16616e2d79b81548e80d599 *R/calc_alpha.R
 b80881db9a7669b98aedde4cb230c19a *R/calc_b.R
 d4e928007e594800901a7972c285bab4 *R/calc_pcrit.R
@@ -26,7 +26,7 @@ ed6070eb55a00a3af6c5f8f83b597d2e *R/guess_when.R
 e13f627011f535b9682792e871bb28da *R/import_firesting.R
 9210430aa5012a1be3de19096f56c100 *R/import_presens.R
 36430d8d4c44a65615006df142fd1cb4 *R/import_pyroscience_workbench.R
-91ab28d5f428ae90c9171df49703f63c *R/import_witrox.R
+6f9f8f1f55c98fe7be333413e2941428 *R/import_witrox.R
 61f2f77f80b07dda79ca776d09d9720e *R/make_bins.R
 7c5302357d85ba86d45f44e4bc170cfc *R/max_MO2.R
 f134578b3dcb4c833286180f1d3ab9af *R/mean_pH.R
@@ -54,7 +54,7 @@ a57d04c49490a129ac46fdd78e5eb8d7 *man/Q10.Rd
 12554f92b8d3ade31009b6420b80d4f0 *man/RQ.Rd
 e3bb916029c616289fdaddfa3510c5bf *man/adj_by_temp.Rd
 8d823a48f363ebab431442e0c7468597 *man/calc_E.Rd
-35595e563d192345878a551cb3add8ce *man/calc_MO2.Rd
+b7b2895f92da65f3ca602fc6aec28da6 *man/calc_MO2.Rd
 175e5cfebfbc7422319b1ab633033d4c *man/calc_alpha.Rd
 c6db0a84060250b074fda32a0ef240a6 *man/calc_b.Rd
 f8868a62fa92a0b76a6389902d00ce59 *man/calc_pcrit.Rd

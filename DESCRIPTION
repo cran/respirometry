@@ -1,8 +1,8 @@
 Package: respirometry
 Type: Package
 Title: Tools for Conducting and Analyzing Respirometry Experiments
-Version: 2.0.1
-Date: 2024-11-22
+Version: 2.0.2
+Date: 2025-04-17
 Authors@R: 
 	person(given = c("Matthew", "A."),
 		family = "Birk",
@@ -22,8 +22,8 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2024-11-22 19:34:48 UTC; matthewbirk
+Packaged: 2025-04-18 02:31:42 UTC; matthewbirk
 Author: Matthew A. Birk [aut, cre] (<https://orcid.org/0000-0003-0407-4077>)
 Maintainer: Matthew A. Birk <matthewabirk@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-11-22 20:30:01 UTC
+Date/Publication: 2025-04-18 08:20:02 UTC
